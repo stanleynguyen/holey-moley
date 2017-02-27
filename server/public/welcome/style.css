@@ -1,0 +1,36 @@
+body {
+  background-color: #ea9232;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+}
+
+.logo {
+  margin: 50px;
+}
+
+.welcome .btn {
+  margin: 10px 0;
+  padding: 10px 0;
+  background-color: #e87d34;
+}
+
+.welcome .btn span {
+  padding: 5px;
+  text-transform: uppercase;
+  background-color: #e54e35;
+  display: block;
+  font-size: 30px;
+}
+
+.welcome .modal {
+  bottom: 0;
+}
+
+.welcome .modal-footer .btn {
+  font-size: 25px;
+}

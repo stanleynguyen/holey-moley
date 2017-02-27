@@ -1,0 +1,186 @@
+@font-face {
+  font-family: MoonFlower;
+  src: url('/assets/fonts/Moon Flower Bold.ttf');
+}
+
+@font-face {
+  font-family: BigNoodle;
+  src: url('/assets/fonts/big_noodle_titling.ttf');
+}
+
+* {
+  font-family: MoonFlower;
+  letter-spacing: 1px;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+}
+
+h2 {
+  -webkit-margin-before: 0;
+  -webkit-margin-after: 0;
+}
+
+button {
+  border: none;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.container {
+  max-width: 480px;
+  margin: auto;
+  position: relative;
+  min-height: 80vh;
+}
+
+.img-fluid {
+  max-width: 100%;
+  height: auto;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  overflow: auto;
+  background-color: rgb(0,0,0);
+  background-color: rgba(0,0,0,0.4);
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.modal-header {
+  padding: 10px 16px;
+  background-color: #e54e35;
+  font-size: 25px;
+}
+
+.modal-body {
+  padding: 2px 16px;
+  background-color: #e87d34;
+  font-size: 25px;
+}
+
+.modal-footer {
+  padding: 2px 16px;
+  background-color: #e54e35;
+  font-size: 25px;
+}
+
+.modal-content {
+  width: 100%;
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
+  -webkit-animation-name: animatebottom;
+  -webkit-animation-duration: 0.4s;
+  animation-name: animatebottom;
+  animation-duration: 0.4s
+}
+
+@-webkit-keyframes animatebottom {
+    from {margin-bottom: -300px; opacity: 0} 
+    to {margin-bottom: 0; opacity: 1}
+}
+
+@keyframes animatetop {
+    from {margin-bottom: -300px; opacity: 0}
+    to {margin-bottom: 0; opacity: 1}
+}
+
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover, .close:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.form-group li {
+  margin: 10px auto;
+}
+.form-group {
+  padding: 0;
+  display: block;
+  list-style: none;
+  margin: 10px 0 0 0;
+}
+.form-group label{
+  margin:0 0 3px 0;
+  padding:0px;
+  display:block;
+  font-weight: bold;
+}
+.form-group input[type=text], 
+.form-group input[type=date],
+.form-group input[type=datetime],
+.form-group input[type=number],
+.form-group input[type=search],
+.form-group input[type=time],
+.form-group input[type=url],
+.form-group input[type=email],
+.form-group input[type=password],
+textarea, 
+select{
+  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  border:1px solid #BEBEBE;
+  padding: 7px;
+  margin:0px;
+  -webkit-transition: all 0.30s ease-in-out;
+  -moz-transition: all 0.30s ease-in-out;
+  -ms-transition: all 0.30s ease-in-out;
+  -o-transition: all 0.30s ease-in-out;
+  outline: none; 
+  font-size: 17px;
+  font-family: sans-serif;
+}
+.form-group input[type=text]:focus, 
+.form-group input[type=date]:focus,
+.form-group input[type=datetime]:focus,
+.form-group input[type=number]:focus,
+.form-group input[type=search]:focus,
+.form-group input[type=time]:focus,
+.form-group input[type=url]:focus,
+.form-group input[type=email]:focus,
+.form-group textarea:focus, 
+.form-group select:focus{
+  -moz-box-shadow: 0 0 8px #88D5E9;
+  -webkit-box-shadow: 0 0 8px #88D5E9;
+  box-shadow: 0 0 8px #88D5E9;
+  border: 1px solid #88D5E9;
+}
+.form-group .field-divided{
+  width: 49%;
+}
+
+.form-group .field-long{
+  width: 100%;
+}
+.form-group .field-select{
+  width: 100%;
+}
+.form-group .field-textarea{
+  height: 100px;
+}
+
+.form-group .required{
+  color:red;
+}

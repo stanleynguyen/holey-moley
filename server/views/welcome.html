@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<head>
+  <title>Holey Moley</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="/assets/common.css" />
+  <link rel="stylesheet" href="/assets/welcome/style.css" />
+</head>
+<body>
+  <div class="container welcome">
+    <img class="img-fluid logo" src="/assets/images/start_image.svg" />
+    <button class="btn" id="btn__login"><span class="text-center">login</span></button>
+    <button class="btn" id="btn__register"><span class="text-center">register</span></button>
+    <div id="modal__login" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <span class="close">&times;</span>
+          <h2>Login</h2>
+        </div>
+        <form id="form__login">
+          <div class="modal-body">
+            <ul class="form-group">
+              <li>
+                <label>Username</label>
+                <input type="text" name="username" class="field-long" />
+              </li>
+              <li>
+                <label>Password</label>
+                <input type="password" name="password" class="field-long" />
+              </li>
+            </ul>
+          </div>
+          <div class="modal-footer">
+            <button type="submit" class="btn full-width">LOGIN</button>
+          </div>
+        </form>
+      </div>
+    </div>
+    <div id="modal__register" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <span class="close">&times;</span>
+          <h2>Registration</h2>
+        </div>
+        <form id="form__register">
+          <div class="modal-body">
+            <ul class="form-group">
+              <li>
+                <label>Username</label>
+                <input type="text" name="username" class="field-long" />
+              </li>
+              <li>
+                <label>Password</label>
+                <input type="password" name="password" class="field-long" />
+              </li>
+              <li>
+                <label>Confirm Password</label>
+                <input type="password" name="confirm-password" class="field-long" />
+              </li>
+            </ul>
+          </div>
+          <div class="modal-footer">
+            <button type="submit" class="btn full-width">REGISTER</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  
+  <script src="/assets/welcome/script.js"></script>
+</body>

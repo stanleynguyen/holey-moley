@@ -1,0 +1,144 @@
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #bfe5ae;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.container {
+  max-width: 480px;
+  margin: auto;
+  position: relative;
+  min-height: 80vh;
+}
+
+.game {
+  margin-top: 120px;
+}
+
+.img-fluid {
+  max-width: 100%;
+  height: auto;
+}
+
+.row {
+  position: relative;
+}
+
+.row:not(:first-of-type) {
+  margin-top: -50px;
+}
+
+.background {
+  position: relative;
+}
+
+.mole {
+  max-width: 25%;
+  position: absolute;
+  margin: auto 3.5% auto 2%;
+  top: 30px;
+  transition: all .4s;
+}
+
+.mole.up {
+  top: -100px;
+}
+
+.foreground {
+  position: relative;
+  margin-top: -30px;
+}
+
+#row-1 .mole {
+  z-index: 1;
+}
+
+#row-1 .foreground {
+  z-index: 2;
+}
+
+#row-2 .background {
+  z-index: 3;
+}
+
+#row-2 .mole {
+  z-index: 4;
+}
+
+#row-2 .foreground {
+  z-index: 5;
+}
+#row-3 .background {
+  z-index: 6;
+}
+
+#row-3 .mole {
+  z-index: 7;
+}
+
+#row-3 .foreground {
+  z-index: 8;
+}
+
+#mole-2, #mole-5, #mole-8 {
+  left: 36%;
+}
+
+#mole-3, #mole-6, #mole-9 {
+  left: 72%;
+}
+
+.footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  z-index: 10;
+  height: auto;
+  display: flex;
+}
+
+.items-box {
+  width: 70%;
+  background: url('/assets/footer.png') center center no-repeat;
+  background-size: cover;
+  height: 120px;
+  padding: 10px;
+  display: flex;
+  justify-content: space-around;
+}
+
+.item {
+  flex: 1 1;
+  max-width: 30%;
+}
+
+.item.off {
+  filter: grayscale(90%);
+}
+
+.mana-bar {
+  width: 11%;
+  height: 120px;
+  margin: auto 2%;
+  position: relative;
+}
+
+.mana {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 0;
+  background-color: #5d92ff;
+  border-radius: 5px;
+}
+
+.heart-bar {
+  width: 9%;
+  height: 120px;
+  margin: auto 3%;
+  position: relative;
+}

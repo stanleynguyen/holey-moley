@@ -12,9 +12,9 @@ mongoose.Promise = global.Promise;
 const routes = require('./routes');
 const app = express();
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(express.static('./template'));
+app.use('/assets', express.static('./public'));
 
-app.use('*', routes);
+app.use('/', routes);
 
 const server = http.createServer(app);
 socket(server);

@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <head>
   <title>Holey Moley</title>
+  <link rel="stylesheet" href="/assets/common.css" />
   <link rel="stylesheet" href="/style.css"  />
 </head>
 <body>
   <div class="container">
-    <h2 class="text-center">Score: <span id="score">0</span></h2>
+    <h2 class="text-center">Score: <span id="score-board">0</span></h2>
     <div class="game">
       <div class="row" id="row-1">
         <img class="img-fluid background" src="/assets/background.png" />
@@ -30,14 +31,14 @@
       </div>
       <div class="footer">
         <div class="heart-bar">
-          <img class="img-fluid heart" src="/assets/heart.png" />
-          <img class="img-fluid heart" src="/assets/heart.png" />
-          <img class="img-fluid heart" src="/assets/heart.png" />
+          <img class="img-fluid heart" src="/assets/game_heart.svg" />
+          <img class="img-fluid heart" src="/assets/game_heart.svg" />
+          <img class="img-fluid heart" src="/assets/game_heart.svg" />
         </div>
         <div class="items-box">
-          <img class="img-fluid item off" src="/assets/activeBomb.png" data-cost="80" />
-          <img class="img-fluid item off" src="/assets/activeFreeze.png" data-cost="50" />
-          <img class="img-fluid item off" src="/assets/activeBomb.png" data-cost="80" />
+          <img class="img-fluid item off" src="/assets/game_health.svg" data-cost="100" data-id="health" />
+          <img class="img-fluid item off" src="/assets/game_freeze.svg" data-cost="50" data-id="freeze" />
+          <img class="img-fluid item off" src="/assets/game_bomb.svg" data-cost="80" data-id="bomb" />
         </div>
         <div class="mana-bar">
           <div class="mana"></div>

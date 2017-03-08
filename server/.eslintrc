@@ -17,7 +17,8 @@
   "rules": {
     "indent": [
       "error",
-      2
+      2,
+      { "SwitchCase": 1 }
     ],
     "linebreak-style": [
       "error",
@@ -36,6 +37,7 @@
     "require": true,
     "process": true,
     "global": true,
-    "module": true
+    "module": true,
+    "io": true
   }
 }

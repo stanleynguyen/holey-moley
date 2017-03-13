@@ -4,6 +4,7 @@ import android.content.Context;
 import android.media.Image;
 import android.net.Uri;
 import android.os.Handler;
+import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -26,67 +27,68 @@ import java.util.concurrent.RunnableFuture;
 
 public class MainActivity extends AppCompatActivity {
     ArrayList<ImageView> moles = new ArrayList<>();
+    ArrayList<ImageView> sadmoles= new ArrayList<>();
     public static boolean isComplete = false;
     public final PlayerThread player = new PlayerThread();
-    private ImageView m1, m2, m3, m4, m5, m6, m7, m8, m9;
+    private ImageView m1, m2, m3, m4, m5, m6, m7, m8, m9,bm1,bm2,bm3,bm4,bm5,bm6,bm7,bm8,bm9;//moles
+    private ImageView sm1,sm2,sm3,sm4,sm5,sm6,sm7,sm8,sm9;//sadmoles
+    private ImageView bomb,deadbomb,freeze,deadfreeze,health,deadhealth;
+    private ImageView h1,h2,h3,h4;//hearts
     public TextView score;
+    public boolean[] activeMoles=new boolean[9];
+    public int tempmole=0;
     final Handler handler = new Handler();
-    // Define the code block to be executed
+
     Runnable runnableCode = new Runnable() {
         @Override
         public void run() {
 
-            int moleNum = (int) (Math.random() * 9);
-            moles.get(moleNum).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    player.hitMole();
-                    System.out.println(player.getPoint());
-                }
-            });
+            final int moleNum = (int) (Math.random() * 9);
+            activeMoles[tempmole]=false;
+            activeMoles[moleNum]=true;
             //TODO: Fix runtime setClickale problem
-
             score.setText(Integer.toString(player.getPoint()));
             TranslateAnimation animation = new TranslateAnimation(0, 0, 0, -250);
-            animation.setDuration(3000);
-            if (!animation.hasEnded()){
-                moles.get(moleNum).setClickable(true);
-            }
-            else{
-                moles.get(moleNum).setClickable(false);
-            }
-            moles.get(moleNum).setAnimation(animation);
-
-
+            animation.setDuration(1000);
             TranslateAnimation animation2 = new TranslateAnimation(0, 0, -250, 0);
             animation2.setDuration(1000);
-            if (!animation2.hasEnded()){
-                moles.get(moleNum).setClickable(true);
-            }
-            else{
-                moles.get(moleNum).setClickable(false);
-            }
+//            if (!animation.hasEnded()||!animation2.hasEnded()){
+//                moles.get(moleNum).setClickable(true);
+//            }
+//            else {
+//                moles.get(moleNum).setClickable(false);
+//            }
 
+//            sadmoles.get(moleNum).setAnimation(animation);
+            moles.get(moleNum).setAnimation(animation);
+//            moles.get(moleNum).setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    if(activeMoles[moleNum]){
+//                        moles.get(moleNum).setVisibility(View.INVISIBLE);
+//                        sadmoles.get(moleNum).setVisibility(View.VISIBLE);
+//                        player.hitMole();
+//
+//                    }
+//
+//                }
+//            });
+//            sadmoles.get(moleNum).setAnimation(animation2);
             moles.get(moleNum).setAnimation(animation2);
 
+            if(animation2.hasEnded()){
+                sadmoles.get(moleNum).setVisibility(View.INVISIBLE);
+            }
+            tempmole=moleNum;
+
+//            activeMoles[moleNum]=false;
 //            moles.get(moleNum).setClickable(false);
             Log.d("Handlers", "Called on main thread");
             // Repeat this the same runnable code block again another 2 seconds
-            handler.postDelayed(runnableCode, 500);
+            handler.postDelayed(runnableCode, 800);
         }
     };
-    /**
-     * ATTENTION: This was auto-generated to implement the App Indexing API.
-     * See https://g.co/AppIndexing/AndroidStudio for more information.
-     */
-//    private ImageView m2=(ImageView)findViewById(R.id.mole2);
-//    private ImageView m3=(ImageView)findViewById(R.id.mole3);
-//    private ImageView m4=(ImageView)findViewById(R.id.mole4);
-//    private ImageView m5=(ImageView)findViewById(R.id.mole5);
-//    private ImageView m6=(ImageView)findViewById(R.id.mole6);
-//    private ImageView m7=(ImageView)findViewById(R.id.mole7);
-//    private ImageView m8=(ImageView)findViewById(R.id.mole8);
-//    private ImageView m9=(ImageView)findViewById(R.id.mole9);
+
 
 
     @Override
@@ -115,11 +117,61 @@ public class MainActivity extends AppCompatActivity {
         moles.add(m7);
         moles.add(m8);
         moles.add(m9);
-
+        sm1 = (ImageView) findViewById(R.id.mole10);
+        sm2 = (ImageView) findViewById(R.id.mole11);
+        sm3 = (ImageView) findViewById(R.id.mole12);
+        sm4 = (ImageView) findViewById(R.id.mole13);
+        sm5 = (ImageView) findViewById(R.id.mole14);
+        sm6 = (ImageView) findViewById(R.id.mole15);
+        sm7 = (ImageView) findViewById(R.id.mole16);
+        sm8 = (ImageView) findViewById(R.id.mole17);
+        sm9 = (ImageView) findViewById(R.id.mole18);
+        sadmoles.add(sm1);
+        sadmoles.add(sm2);
+        sadmoles.add(sm3);
+        sadmoles.add(sm4);
+        sadmoles.add(sm5);
+        sadmoles.add(sm6);
+        sadmoles.add(sm7);
+        sadmoles.add(sm8);
+        sadmoles.add(sm9);
+        bomb=(ImageView) findViewById(R.id.bomb);
+        deadbomb=(ImageView) findViewById(R.id.deadbomb);
+        freeze=(ImageView) findViewById(R.id.freeze);
+        deadfreeze=(ImageView) findViewById(R.id.deadfreeze);
+        health=(ImageView) findViewById(R.id.health);
+        deadhealth=(ImageView) findViewById(R.id.deadhealth);
+        h1=(ImageView) findViewById(R.id.heart1);
+        h2=(ImageView) findViewById(R.id.heart2);
+        h3=(ImageView) findViewById(R.id.heart3);
+        h4=(ImageView) findViewById(R.id.heart4);
 
 //        Toast.makeText(this.getApplicationContext(),"hello1",Toast.LENGTH_SHORT).show();
 
         start();
+        bomb.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                bomb.setVisibility(View.GONE);
+                deadbomb.setVisibility(View.VISIBLE);
+
+            }
+        });
+        freeze.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                freeze.setVisibility(View.GONE);
+                deadfreeze.setVisibility(View.VISIBLE);
+            }
+        });
+        health.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                health.setVisibility(View.GONE);
+                h4.setVisibility(View.VISIBLE);//Need to change so that it can check once there is less than 3 lifes
+                deadhealth.setVisibility(View.VISIBLE);
+            }
+        });
         handler.post(runnableCode);
 
 
@@ -137,68 +189,89 @@ public class MainActivity extends AppCompatActivity {
 
     // Start the initial runnable task by posting through the handler
 //TODO:TIMER
-    //TODO:show point
+    //TODO:TOOLS
     void start() {
 
 
         player.start();
-        for (ImageView mole : moles) {
-            mole.setClickable(true);
-//            mole.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    // do something when the corky is clicked
-//                }
-//            });
+        h4.setVisibility(View.INVISIBLE);// the extra heart will only be there if the user click the heart
+        deadbomb.setVisibility(View.INVISIBLE);
+        deadfreeze.setVisibility(View.INVISIBLE);
+        deadhealth.setVisibility(View.INVISIBLE);
+
+        for (int i=0;i<9;i++) {
+            sadmoles.get(i).setVisibility(View.INVISIBLE);
+            final int finalI = i;
+            final int finalI1 = i;
+            moles.get(i).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // do something when the corky is clicked
+                    if(activeMoles[finalI]){
+                        moles.get(finalI1).setVisibility(View.INVISIBLE);
+                    sadmoles.get(finalI1).setVisibility(View.VISIBLE);
+                    player.hitMole();
+
+                    }
+                }
+            });
         }
-    }
-
-    void MolePopOut() {
-        int moleNum = (int) (Math.random() * 9);
-        moles.get(moleNum).setClickable(true);
-        moles.get(moleNum).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                player.hitMole();
-                System.out.println(player.getPoint());
-            }
-        });
-        TranslateAnimation animation = new TranslateAnimation(0, 0, 0, -250);
-        animation.setDuration(8000);
-        animation.setFillAfter(true);
-        //TODO:SOMETIMES NOT CLICKABLE
-
-        moles.get(moleNum).setAnimation(animation);
-
-        TranslateAnimation animation2 = new TranslateAnimation(0, 0, -250, 0);
-        animation2.setDuration(1000);
-        animation2.setFillAfter(true);
-        moles.get(moleNum).setAnimation(animation2);
-        moles.get(moleNum).setClickable(false);
 
 
     }
+    //trying without a listener
+    public void OnClick(View v){
+        int id=v.getId();
+        switch(id){
+            case R.id.mole1:
+                m1.setVisibility(View.INVISIBLE);
+                sm1.setVisibility(View.VISIBLE);
+                break;
+            case R.id.mole2:
+                m2.setVisibility(View.INVISIBLE);
+                sm2.setVisibility(View.VISIBLE);
+                break;
+            default:
+                break;
+        }
+
+
+    }
+//TODO:BEAUTIFY THE SCORE AND HEALTH DISPLAY
+    //TODO:Mole onClick --> sadMole
+//    void MolePopOut() {
+//        int moleNum = (int) (Math.random() * 9);
+//        moles.get(moleNum).setClickable(true);
+//        moles.get(moleNum).setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                player.hitMole();
+//                System.out.println(player.getPoint());
+//            }
+//        });
+//        TranslateAnimation animation = new TranslateAnimation(0, 0, 0, -250);
+//        animation.setDuration(8000);
+//        animation.setFillAfter(true);
+//
+//
+//        moles.get(moleNum).setAnimation(animation);
+//
+//        TranslateAnimation animation2 = new TranslateAnimation(0, 0, -250, 0);
+//        animation2.setDuration(1000);
+//        animation2.setFillAfter(true);
+//        moles.get(moleNum).setAnimation(animation2);
+//        moles.get(moleNum).setClickable(false);
+//
+//
+//    }
 
 
     void gameOver() {
 
     }
 
-    /**
-     * ATTENTION: This was auto-generated to implement the App Indexing API.
-     * See https://g.co/AppIndexing/AndroidStudio for more information.
-     */
-    public Action getIndexApiAction() {
-        Thing object = new Thing.Builder()
-                .setName("Main Page") // TODO: Define a title for the content shown.
-                // TODO: Make sure this auto-generated URL is correct.
-                .setUrl(Uri.parse("http://[ENTER-YOUR-URL-HERE]"))
-                .build();
-        return new Action.Builder(Action.TYPE_VIEW)
-                .setObject(object)
-                .setActionStatus(Action.STATUS_TYPE_COMPLETED)
-                .build();
-    }
+
+
 
 
     ///

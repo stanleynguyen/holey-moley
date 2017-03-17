@@ -37,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
     public TextView score;
     public boolean[] activeMoles=new boolean[9];
     public int tempmole=0;
+
     final Handler handler = new Handler();
 
     Runnable runnableCode = new Runnable() {
@@ -52,6 +53,7 @@ public class MainActivity extends AppCompatActivity {
             animation.setDuration(1000);
             TranslateAnimation animation2 = new TranslateAnimation(0, 0, -250, 0);
             animation2.setDuration(1000);
+
 //            if (!animation.hasEnded()||!animation2.hasEnded()){
 //                moles.get(moleNum).setClickable(true);
 //            }
@@ -76,9 +78,9 @@ public class MainActivity extends AppCompatActivity {
 //            sadmoles.get(moleNum).setAnimation(animation2);
             moles.get(moleNum).setAnimation(animation2);
 
-            if(animation2.hasEnded()){
-                sadmoles.get(moleNum).setVisibility(View.INVISIBLE);
-            }
+//            if(animation2.hasEnded()){
+//                sadmoles.get(moleNum).setVisibility(View.INVISIBLE);
+//            }
             tempmole=moleNum;
 
 //            activeMoles[moleNum]=false;
@@ -117,24 +119,24 @@ public class MainActivity extends AppCompatActivity {
         moles.add(m7);
         moles.add(m8);
         moles.add(m9);
-        sm1 = (ImageView) findViewById(R.id.mole10);
-        sm2 = (ImageView) findViewById(R.id.mole11);
-        sm3 = (ImageView) findViewById(R.id.mole12);
-        sm4 = (ImageView) findViewById(R.id.mole13);
-        sm5 = (ImageView) findViewById(R.id.mole14);
-        sm6 = (ImageView) findViewById(R.id.mole15);
-        sm7 = (ImageView) findViewById(R.id.mole16);
-        sm8 = (ImageView) findViewById(R.id.mole17);
-        sm9 = (ImageView) findViewById(R.id.mole18);
-        sadmoles.add(sm1);
-        sadmoles.add(sm2);
-        sadmoles.add(sm3);
-        sadmoles.add(sm4);
-        sadmoles.add(sm5);
-        sadmoles.add(sm6);
-        sadmoles.add(sm7);
-        sadmoles.add(sm8);
-        sadmoles.add(sm9);
+//        sm1 = (ImageView) findViewById(R.id.mole10);
+//        sm2 = (ImageView) findViewById(R.id.mole11);
+//        sm3 = (ImageView) findViewById(R.id.mole12);
+//        sm4 = (ImageView) findViewById(R.id.mole13);
+//        sm5 = (ImageView) findViewById(R.id.mole14);
+//        sm6 = (ImageView) findViewById(R.id.mole15);
+//        sm7 = (ImageView) findViewById(R.id.mole16);
+//        sm8 = (ImageView) findViewById(R.id.mole17);
+//        sm9 = (ImageView) findViewById(R.id.mole18);
+//        sadmoles.add(sm1);
+//        sadmoles.add(sm2);
+//        sadmoles.add(sm3);
+//        sadmoles.add(sm4);
+//        sadmoles.add(sm5);
+//        sadmoles.add(sm6);
+//        sadmoles.add(sm7);
+//        sadmoles.add(sm8);
+//        sadmoles.add(sm9);
         bomb=(ImageView) findViewById(R.id.bomb);
         deadbomb=(ImageView) findViewById(R.id.deadbomb);
         freeze=(ImageView) findViewById(R.id.freeze);
@@ -152,6 +154,9 @@ public class MainActivity extends AppCompatActivity {
         bomb.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+//                int id = getBaseContext().getResources().getIdentifier("game_deadbomb", "drawable", getPackageName());
+//                bomb.setImageDrawable(getResources().getDrawable(R.drawable.game_deadbomb));
+//                bomb.setImageResource(id);
                 bomb.setVisibility(View.GONE);
                 deadbomb.setVisibility(View.VISIBLE);
 
@@ -200,43 +205,41 @@ public class MainActivity extends AppCompatActivity {
         deadhealth.setVisibility(View.INVISIBLE);
 
         for (int i=0;i<9;i++) {
-            sadmoles.get(i).setVisibility(View.INVISIBLE);
+//            sadmoles.get(i).setVisibility(View.INVISIBLE);
             final int finalI = i;
             final int finalI1 = i;
             moles.get(i).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    // do something when the corky is clicked
-                    if(activeMoles[finalI]){
-                        moles.get(finalI1).setVisibility(View.INVISIBLE);
-                    sadmoles.get(finalI1).setVisibility(View.VISIBLE);
+//                    if(activeMoles[finalI]){
+                        moles.get(finalI1).setImageDrawable(getResources().getDrawable(R.drawable.game_sadmole));
+//                        moles.get(finalI1).setVisibility(View.INVISIBLE);
+//                    sadmoles.get(finalI1).setVisibility(View.VISIBLE);
                     player.hitMole();
-
-                    }
+//                    }
                 }
             });
         }
-
-
     }
+
     //trying without a listener
-    public void OnClick(View v){
-        int id=v.getId();
-        switch(id){
-            case R.id.mole1:
-                m1.setVisibility(View.INVISIBLE);
-                sm1.setVisibility(View.VISIBLE);
-                break;
-            case R.id.mole2:
-                m2.setVisibility(View.INVISIBLE);
-                sm2.setVisibility(View.VISIBLE);
-                break;
-            default:
-                break;
-        }
-
-
-    }
+//    public void OnClick(View v){
+//        int id=v.getId();
+//        switch(id){
+//            case R.id.mole1:
+//                m1.setVisibility(View.INVISIBLE);
+////                sm1.setVisibility(View.VISIBLE);
+//                break;
+//            case R.id.mole2:
+//                m2.setVisibility(View.INVISIBLE);
+////                sm2.setVisibility(View.VISIBLE);
+//                break;
+//            default:
+//                break;
+//        }
+//
+//
+//    }
 //TODO:BEAUTIFY THE SCORE AND HEALTH DISPLAY
     //TODO:Mole onClick --> sadMole
 //    void MolePopOut() {

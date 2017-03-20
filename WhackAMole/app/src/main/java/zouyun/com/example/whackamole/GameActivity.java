@@ -5,7 +5,7 @@ import android.os.Bundle;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class MainActivity extends AppCompatActivity {
+public class GameActivity extends AppCompatActivity {
     private int status; // either -1, 0, 1 (lost, timeout, died)
     private int health = 3;
     private int energy = 0; // range 0 - 100
@@ -14,7 +14,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_game);
         //timer for 1 minute
         Timer timer=new Timer();
         timer.schedule(new TimerTask() {

@@ -1,6 +1,8 @@
 package zouyun.com.example.whackamole;
 
 import android.content.Context;
+import android.content.res.AssetManager;
+import android.graphics.Typeface;
 import android.media.Image;
 import android.net.Uri;
 import android.os.Handler;
@@ -9,10 +11,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewPropertyAnimator;
 import android.view.Window;
 import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.animation.*;
 import android.widget.Toast;
 
 import com.google.android.gms.appindexing.Action;
@@ -40,69 +44,69 @@ public class MainActivity extends AppCompatActivity {
     public TextView score;
     public boolean[] activeMoles=new boolean[9];
     public int tempmole=0;
+    final  Handler handler = new Handler();
 
-    Timer timer = new Timer();
+//    Timer timer = new Timer();
 
 
 
 
-//    final Handler handler = new Handler();
-//
-//    Runnable runnableCode = new Runnable() {
-//        @Override
-//        public void run() {
-//            handler.postDelayed(runnableCode, 1000);
-//
-//
-//            final int moleNum = (int) (Math.random() * 9);
-//            activeMoles[tempmole]=false;
-//            activeMoles[moleNum]=true;
-//            //TODO: Fix runtime setClickale problem
-//            score.setText(Integer.toString(player.getPoint()));
-//            TranslateAnimation animation = new TranslateAnimation(0, 0, 0, -250);
-//            animation.setDuration(1000);// 0.04 s to rise up and go down, 0.5 s stay there
-//            TranslateAnimation animation2 = new TranslateAnimation(0, 0, -250, 0);
-//            animation2.setDuration(1000);
-//
-////            if (!animation.hasEnded()||!animation2.hasEnded()){
-////                moles.get(moleNum).setClickable(true);
-////            }
-////            else {
-////                moles.get(moleNum).setClickable(false);
-////            }
-//
-//
-//            moles.get(moleNum).setAnimation(animation);
-////            moles.get(moleNum).setOnClickListener(new View.OnClickListener() {
-////                @Override
-////                public void onClick(View v) {
-////                    if(activeMoles[moleNum]){
-////                        moles.get(moleNum).setVisibility(View.INVISIBLE);
-////                        sadmoles.get(moleNum).setVisibility(View.VISIBLE);
-////                        player.hitMole();
-////
-////                    }
-////
-////                }
-////            });
-//
-//            moles.get(moleNum).setAnimation(animation2);
-//            if(animation2.hasEnded()){
-//                moles.get(moleNum).setImageDrawable(getResources().getDrawable(R.drawable.game_mole));
-//            }
-//
-//            tempmole=moleNum;
-//
-////            activeMoles[moleNum]=false;
-////            moles.get(moleNum).setClickable(false);
-//            System.out.println("active mole is" +moleNum);
-////            Log.d("Handlers", "Called on main thread");
-//            // Repeat this the same runnable code block again another 2 seconds
-//
-//        }
-//
-//    };
-//
+
+
+
+
+    Runnable runnableCode = new Runnable() {
+        @Override
+        public synchronized void run() {
+            int moleNumtemp = (int) (Math.random() * 9);
+            final int moleNum;
+
+            //no same mole one after another
+
+            if(tempmole!=moleNumtemp){
+             moleNum=moleNumtemp;}
+            else if (moleNumtemp!=8){
+                moleNum=moleNumtemp+1;}
+            else{moleNum=0;}
+
+
+
+
+//                        activeMoles[tempmole]=false;
+//                        moles.get(moleNum).setImageDrawable(getResources().getDrawable(R.drawable.game_mole));
+                        activeMoles[moleNum]=true;
+//                        score.setText(Integer.toString(player.getPoint()));
+                        score.setText("Score: "+Integer.toString(player.getPoint())+" ,Active Mole at"+moleNum);
+//                        ObjectAnimator animation = new ObjectAnimator();
+//                        moles.get(moleNum).animate().translationYBy(-250).setDuration(1000);
+
+                        // 0.04 s to rise up a
+                        // nd go down, 0.5 s stay there
+                        final Runnable endAction2 = new Runnable() {
+                            public void run() {
+                                moles.get(moleNum).setImageDrawable(getResources().getDrawable(R.drawable.game_mole));
+                            }
+                        };
+                        Runnable endAction = new Runnable() {
+                            public void run() {
+                                moles.get(moleNum).animate().translationYBy(250).setDuration(300).withEndAction(endAction2).setStartDelay(500);
+
+                            }
+                        };
+
+
+                        moles.get(moleNum).animate().translationYBy(-250).setDuration(300).withEndAction(endAction);
+
+            tempmole=moleNum;
+
+
+            handler.postDelayed(runnableCode, 1000);
+
+        }
+
+
+    };
+
 
 
 
@@ -111,7 +115,12 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
 
 
+
         super.onCreate(savedInstanceState);
+        AssetManager am = getApplicationContext().getAssets();
+        Typeface typeface = Typeface.createFromAsset(am,
+                String.format("fonts/MoonFlowerBold.ttf"));
+
 
         setContentView(R.layout.activity_main);
         m1 = (ImageView) findViewById(R.id.mole1);
@@ -124,6 +133,7 @@ public class MainActivity extends AppCompatActivity {
         m8 = (ImageView) findViewById(R.id.mole8);
         m9 = (ImageView) findViewById(R.id.mole9);
         score = (TextView) findViewById(R.id.score);
+        score.setTypeface(typeface);
         moles.add(m1);
         moles.add(m2);
         moles.add(m3);
@@ -133,24 +143,7 @@ public class MainActivity extends AppCompatActivity {
         moles.add(m7);
         moles.add(m8);
         moles.add(m9);
-//        sm1 = (ImageView) findViewById(R.id.mole10);
-//        sm2 = (ImageView) findViewById(R.id.mole11);
-//        sm3 = (ImageView) findViewById(R.id.mole12);
-//        sm4 = (ImageView) findViewById(R.id.mole13);
-//        sm5 = (ImageView) findViewById(R.id.mole14);
-//        sm6 = (ImageView) findViewById(R.id.mole15);
-//        sm7 = (ImageView) findViewById(R.id.mole16);
-//        sm8 = (ImageView) findViewById(R.id.mole17);
-//        sm9 = (ImageView) findViewById(R.id.mole18);
-//        sadmoles.add(sm1);
-//        sadmoles.add(sm2);
-//        sadmoles.add(sm3);
-//        sadmoles.add(sm4);
-//        sadmoles.add(sm5);
-//        sadmoles.add(sm6);
-//        sadmoles.add(sm7);
-//        sadmoles.add(sm8);
-//        sadmoles.add(sm9);
+
         bomb=(ImageView) findViewById(R.id.bomb);
         deadbomb=(ImageView) findViewById(R.id.deadbomb);
         freeze=(ImageView) findViewById(R.id.freeze);
@@ -171,9 +164,6 @@ public class MainActivity extends AppCompatActivity {
         bomb.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                int id = getBaseContext().getResources().getIdentifier("game_deadbomb", "drawable", getPackageName());
-//                bomb.setImageDrawable(getResources().getDrawable(R.drawable.game_deadbomb));
-//                bomb.setImageResource(id);
                 bomb.setVisibility(View.GONE);
                 deadbomb.setVisibility(View.VISIBLE);
 
@@ -194,69 +184,51 @@ public class MainActivity extends AppCompatActivity {
                 deadhealth.setVisibility(View.VISIBLE);
             }
         });
-//        handler.post(runnableCode);
+        handler.post(runnableCode);
 
 
-        timer.scheduleAtFixedRate(new TimerTask() {
-
-            @Override
-            public void run() {
-
-            //TODO: Fix runtime setClickale problem
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        final int moleNum = (int) (Math.random() * 9);
-//                        activeMoles[tempmole]=false;
-
-                        activeMoles[moleNum]=true;
-//                        score.setText(Integer.toString(player.getPoint()));
-                        score.setText("active mole is: "+Integer.toString(moleNum)+" score is "+Integer.toString(player.getPoint()));
-                        TranslateAnimation animation = new TranslateAnimation(0, 0, 0, -250);
-                        animation.setDuration(1000);// 0.04 s to rise up and go down, 0.5 s stay there
-                        TranslateAnimation animation2 = new TranslateAnimation(0, 0, -250, 0);
-                        animation2.setDuration(1000);
-
-//            if (!animation.hasEnded()||!animation2.hasEnded()){
-//                moles.get(moleNum).setClickable(true);
-//            }
-//            else {
-//                moles.get(moleNum).setClickable(false);
-//            }
-
-
-                        moles.get(moleNum).setAnimation(animation);
-//            moles.get(moleNum).setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    if(activeMoles[moleNum]){
-//                        moles.get(moleNum).setVisibility(View.INVISIBLE);
-//                        sadmoles.get(moleNum).setVisibility(View.VISIBLE);
-//                        player.hitMole();
+//        timer.scheduleAtFixedRate(new TimerTask() {
+//
+//            @Override
+//            public void run() {
+//
+//            //TODO: Fix runtime setClickale problem
+//                runOnUiThread(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        final int moleNum = (int) (Math.random() * 9);
+////                        activeMoles[tempmole]=false;
+//                        moles.get(moleNum).setImageDrawable(getResources().getDrawable(R.drawable.game_mole));
+//                        activeMoles[moleNum]=true;
+////                        score.setText(Integer.toString(player.getPoint()));
+//                        score.setText("Score: "+Integer.toString(player.getPoint()));
+////                        ObjectAnimator animation = new ObjectAnimator();
+////                        moles.get(moleNum).animate().translationYBy(-250).setDuration(1000);
+//
+//                        // 0.04 s to rise up a
+//                        // nd go down, 0.5 s stay there
+//                        final Runnable endAction2 = new Runnable() {
+//                            public void run() {
+//                                moles.get(moleNum).setImageDrawable(getResources().getDrawable(R.drawable.game_mole));
+//                            }
+//                        };
+//                        Runnable endAction = new Runnable() {
+//                            public void run() {
+//                                moles.get(moleNum).animate().yBy(250).setDuration(500).withEndAction(endAction2);
+//
+//                            }
+//                        };
+//
+//
+//                        moles.get(moleNum).animate().yBy(-250).setDuration(500).withEndAction(endAction);
+//
+//
 //
 //                    }
+//                });
 //
-//                }
-//            });
-                        System.out.println("active mole is" +moleNum);
-                        moles.get(moleNum).setAnimation(animation2);
-                        if(animation2.hasEnded()){
-                            moles.get(moleNum).setImageDrawable(getResources().getDrawable(R.drawable.game_mole));
-                        }
-
-
-
-//            activeMoles[moleNum]=false;
-//            moles.get(moleNum).setClickable(false);
-
-
-
-                    }
-                });
-
-
-            }
-        }, 1000, 1000);
+//            }
+//        },1000,1500);
 
 
 //        //timer for 1 minute
@@ -290,18 +262,15 @@ public class MainActivity extends AppCompatActivity {
             moles.get(i).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    System.out.println("finalI is " + finalI);
+                    System.out.println("activeMoles[finalI] is" + activeMoles[finalI]);
+
                     if(activeMoles[finalI]){
 
-
-//                        moles.get(finalI1).setVisibility(View.INVISIBLE);
-//                    sadmoles.get(finalI1).setVisibility(View.VISIBLE);
                     player.hitMole();
                         moles.get(finalI1).setImageDrawable(getResources().getDrawable(R.drawable.game_sadmole));
                         activeMoles[finalI]=false;
 
-//                        moles.get(finalI1).setImageDrawable(getResources().getDrawable(R.drawable.game_mole));
-
-//                        tempmole=finalI1;
 
                     }
 
@@ -310,51 +279,10 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    //trying without a listener
-//    public void OnClick(View v){
-//        int id=v.getId();
-//        switch(id){
-//            case R.id.mole1:
-//                m1.setVisibility(View.INVISIBLE);
-////                sm1.setVisibility(View.VISIBLE);
-//                break;
-//            case R.id.mole2:
-//                m2.setVisibility(View.INVISIBLE);
-////                sm2.setVisibility(View.VISIBLE);
-//                break;
-//            default:
-//                break;
-//        }
-//
-//
-//    }
+
 //TODO:BEAUTIFY THE SCORE AND HEALTH DISPLAY
     //TODO:Mole onClick --> sadMole
-//    void MolePopOut() {
-//        int moleNum = (int) (Math.random() * 9);
-//        moles.get(moleNum).setClickable(true);
-//        moles.get(moleNum).setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                player.hitMole();
-//                System.out.println(player.getPoint());
-//            }
-//        });
-//        TranslateAnimation animation = new TranslateAnimation(0, 0, 0, -250);
-//        animation.setDuration(8000);
-//        animation.setFillAfter(true);
-//
-//
-//        moles.get(moleNum).setAnimation(animation);
-//
-//        TranslateAnimation animation2 = new TranslateAnimation(0, 0, -250, 0);
-//        animation2.setDuration(1000);
-//        animation2.setFillAfter(true);
-//        moles.get(moleNum).setAnimation(animation2);
-//        moles.get(moleNum).setClickable(false);
-//
-//
-//    }
+
 
 
     void gameOver() {

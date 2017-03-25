@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<head>
+  <title>Holey Moley</title>
+  <link rel="stylesheet" href="/assets/common.css" />
+  <link rel="stylesheet" href="/assets/game/style.css"  />
+</head>
+<body>
+  <div class="drop">
+    <svg class="spinner" width="65px" height="65px" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">
+      <circle class="path" fill="none" stroke-width="6" stroke-linecap="round" cx="33" cy="33" r="30"></circle>
+    </svg>
+    <p class="subtitle">Loading...</p>
+  </div>
+  <div class="container">
+    <h2 class="text-center">Score: <span id="score-board">0</span></h2>
+    <div class="game">
+      <div class="row" id="row-1">
+        <img class="img-fluid background" src="/assets/images/game_hole.svg" />
+        <img class="img-fluid mole" src="/assets/images/game_mole.svg" id="mole-1" />
+        <img class="img-fluid mole" src="/assets/images/game_mole.svg" id="mole-2" />
+        <img class="img-fluid mole" src="/assets/images/game_mole.svg" id="mole-3" />
+        <img class="img-fluid foreground" src="/assets/images/game_foreground.svg" />
+      </div>
+      <div class="row" id="row-2">
+        <img class="img-fluid background" src="/assets/images/game_hole.svg" />
+        <img class="img-fluid mole" src="/assets/images/game_mole.svg" id="mole-4" />
+        <img class="img-fluid mole" src="/assets/images/game_mole.svg" id="mole-5" />
+        <img class="img-fluid mole" src="/assets/images/game_mole.svg" id="mole-6" />
+        <img class="img-fluid foreground" src="/assets/images/game_foreground.svg" />
+      </div>
+      <div class="row" id="row-3">
+        <img class="img-fluid background" src="/assets/images/game_hole.svg" />
+        <img class="img-fluid mole" src="/assets/images/game_mole.svg" id="mole-7" />
+        <img class="img-fluid mole" src="/assets/images/game_mole.svg" id="mole-8" />
+        <img class="img-fluid mole" src="/assets/images/game_mole.svg" id="mole-9" />
+        <img class="img-fluid foreground" src="/assets/images/game_foreground.svg" />
+      </div>
+      <div class="footer">
+        <div class="heart-bar">
+          <img class="img-fluid heart" src="/assets/images/game_heart.svg" />
+          <img class="img-fluid heart" src="/assets/images/game_heart.svg" />
+          <img class="img-fluid heart" src="/assets/images/game_heart.svg" />
+        </div>
+        <div class="items-box">
+          <img class="img-fluid item off" src="/assets/images/game_health.svg" data-cost="100" data-id="health" />
+          <img class="img-fluid item off" src="/assets/images/game_freeze.svg" data-cost="50" data-id="freeze" />
+          <img class="img-fluid item off" src="/assets/images/game_bomb.svg" data-cost="80" data-id="bomb" />
+        </div>
+        <div class="mana-bar">
+          <div class="mana"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="/assets/game/script.js"></script>
+</body>

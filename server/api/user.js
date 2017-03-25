@@ -9,7 +9,11 @@ module.exports = {
     User.findOne({ username }, (err, u) => {
       if (err) return res.status(500).json(err);
       if (u) return res.status(400).json({ message: 'Username Taken' });
-      const newUser = new User({ username });
+      const newUser = new User({ 
+        username,
+        level: 1,
+        exp_needed: 1 * 200
+      });
       newUser.password = newUser.encryptPassword(password);
       newUser.save((err) => {
         if (err) return res.status(500).json(err);

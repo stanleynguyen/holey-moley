@@ -11,6 +11,7 @@ const socket = io();
 let loadingSubInterval;
 // vars for kena items
 let frozen, bomb;
+const frozenOverlay = document.querySelector('.freeze-overlay');
 
 (function() {
   loadingSubInterval = setInterval(generateSubs(), 3000);
@@ -20,6 +21,8 @@ let frozen, bomb;
   socket.on('mole', peep);
   socket.on('item', kena);
   socket.on('score', updateOppScore);
+  socket.on('win', handleWin);
+  socket.on('lose', handleLose);
   
   moles.forEach(function(m) { m.addEventListener('click', hit.bind(m, socket)); });
   items.forEach(function(i) { i.addEventListener('click', useItem); });
@@ -47,7 +50,6 @@ function turnOffDrop() {
 function peep(moleIdx) {
   if (frozen) return;
   const mole = moles[moleIdx];
-  mole.src = '/assets/images/game_mole.svg';
   mole.classList.add('up');
   setTimeout(function() {
     mole.classList.remove('up');
@@ -73,6 +75,7 @@ function hit(socket, e) {
   checkItems();
   this.src = '/assets/images/game_sadMole.svg';
   this.classList.remove('up');
+  setTimeout(() => this.src = '/assets/images/game_mole.svg', 500);
   myScore.textContent = score;
   socket.emit('score');
 }
@@ -88,7 +91,11 @@ function kena(item) {
   switch (item) {
     case 'freeze':
       frozen = true;
-      setTimeout(() => frozen = false, 3000);
+      frozenOverlay.style.display = 'block';
+      setTimeout(() => {
+        frozen = false;
+        frozenOverlay.style.display = 'none';
+      }, 3000);
       break;
     default:
       return;
@@ -96,3 +103,15 @@ function kena(item) {
 }
 
 function updateOppScore(score) { opponentScore.textContent = score; }
+
+function handleWin() { 
+  socket.emit('end', localStorage.getItem('token')); 
+  alert('You won');
+  window.location = '/home';
+}
+
+function handleLose() {
+  socket.emit('end', localStorage.getItem('token'));
+  alert('You Lost');
+  window.location = '/home';
+}

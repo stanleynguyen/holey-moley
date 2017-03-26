@@ -2,9 +2,17 @@ body {
   background-color: #b8b44e;
   padding-bottom: 70px;
 }
+body * {
+  font-family: "BigNoodle";
+}
 
 .tab-content {
   padding: 20px;
+}
+.tab-content h1 {
+  font-size: 50px;
+  margin-top: 0;
+  margin-bottom: 20px;
 }
 
 .nav {
@@ -12,6 +20,7 @@ body {
   position: fixed;
   bottom: 0;
   width: 100%;
+  height: 90px;
   max-width: 480px;
   margin: 0;
   padding-left: 0;
@@ -34,9 +43,67 @@ body {
 }
 
 .nav li .img-fluid {
-  max-width: 50%;
+  max-height: 50%;
 }
 
 .nav li p {
+  margin: 0;
+}
+
+.tab-pane {
+  display: none;
+}
+
+.tab-pane.active {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.tab-item {
+  display: flex;
+  align-items: center;
+  flex-grow: 0;
+  flex-shrink: 0;
+  background-color: #aaa23c;
+  border-radius: 5px;
+  margin: 5px 0;
+  padding: 20px;
+  max-height: 80px;
+  cursor: pointer;
+}
+
+.tab-item p {
+  font-size: 40px;
+}
+
+#game .tab-item {
+  flex-basis: 90%;
+  justify-content: space-between;
+}
+
+#game .tab-item .img-fluid {
+  max-height: 100%;
+}
+
+#inventory.tab-pane, #shop.tab-pane {
+  justify-content: space-around;
+}
+
+#inventory .text-center, #shop .text-center {
+  flex-basis: 100%;
+}
+
+#inventory .tab-item, #shop .tab-item {
+  flex-basis: 38%;
+  flex-direction: column;
+  max-height: none;
+}
+
+#inventory .tab-item .img-fluid, #shop .tab-item .img-fluid {
+  margin: 5px;
+}
+
+#inventory .tab-item p, #shop .tab-item p {
   margin: 0;
 }

@@ -28,8 +28,18 @@ import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.RunnableFuture;
-//TODO: get number from server
+//TODO:get player status (tools the play bought) from server at the start and show the icon accordingly
+//TODO: get mole number for popping out from server at runtime, get opponent data at run time
 //TODO: send mena data to the server
+//TODO:implement bomb mole and set OnclickListener that relates to the heart displayed
+//TODO:implement timer to time the game
+//TODO:display game over when time is up and show score
+
+
+
+//TODO:bugs to fix:pressing on static mole still will change mole(esp when the time interval for changing mole is fast)
+//TODO: optimise and enable faster mole popping and response(currently 0.04s for moving up.down mess things up)
+
 
 
 public class MainActivity extends AppCompatActivity {
@@ -46,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
     public int tempmole=0;
     final  Handler handler = new Handler();
 
-//    Timer timer = new Timer();
+    Timer timer = new Timer();
 
 
 
@@ -61,8 +71,7 @@ public class MainActivity extends AppCompatActivity {
             int moleNumtemp = (int) (Math.random() * 9);
             final int moleNum;
 
-            //no same mole one after another
-
+            //no same mole consecutively
             if(tempmole!=moleNumtemp){
              moleNum=moleNumtemp;}
             else if (moleNumtemp!=8){
@@ -76,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
 //                        moles.get(moleNum).setImageDrawable(getResources().getDrawable(R.drawable.game_mole));
                         activeMoles[moleNum]=true;
 //                        score.setText(Integer.toString(player.getPoint()));
-                        score.setText("Score: "+Integer.toString(player.getPoint())+" ,Active Mole at"+moleNum);
+
 //                        ObjectAnimator animation = new ObjectAnimator();
 //                        moles.get(moleNum).animate().translationYBy(-250).setDuration(1000);
 
@@ -96,11 +105,12 @@ public class MainActivity extends AppCompatActivity {
 
 
                         moles.get(moleNum).animate().translationYBy(-250).setDuration(300).withEndAction(endAction);
+            score.setText("Score: "+Integer.toString(player.getPoint())+" ,Active Mole at"+moleNum);
 
             tempmole=moleNum;
 
 
-            handler.postDelayed(runnableCode, 1000);
+            handler.postDelayed(runnableCode, 1100);
 
         }
 
@@ -184,7 +194,17 @@ public class MainActivity extends AppCompatActivity {
                 deadhealth.setVisibility(View.VISIBLE);
             }
         });
+        //        //timer for 1 minute
         handler.post(runnableCode);
+
+
+//        timer.schedule(new TimerTask() {
+//            @Override
+//            public void run() {
+//
+//            }
+//        }, 60*1000);
+
 
 
 //        timer.scheduleAtFixedRate(new TimerTask() {
@@ -192,7 +212,7 @@ public class MainActivity extends AppCompatActivity {
 //            @Override
 //            public void run() {
 //
-//            //TODO: Fix runtime setClickale problem
+
 //                runOnUiThread(new Runnable() {
 //                    @Override
 //                    public void run() {
@@ -231,21 +251,13 @@ public class MainActivity extends AppCompatActivity {
 //        },1000,1500);
 
 
-//        //timer for 1 minute
-//        Timer timer=new Timer();
-//        timer.schedule(new TimerTask() {
-//            @Override
-//            public void run() {
-//
-//            }
-//        }, 5000);
+
 
 
     }
 
     // Start the initial runnable task by posting through the handler
-//TODO:TIMER
-    //TODO:TOOLS
+
     synchronized void start() {
 
 
@@ -280,8 +292,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-//TODO:BEAUTIFY THE SCORE AND HEALTH DISPLAY
-    //TODO:Mole onClick --> sadMole
+
 
 
 
@@ -291,80 +302,6 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-
-
-    ///
-
-//    class OpponentThread extends Thread{
-//        private int point;
-//        private int energy;
-//        private int health;
-//        private int status;
-//        public OpponentThread(){
-//            this.point=0;
-//            this.energy=0;
-//            this.health=3;
-//        }
-//
-//
-//
-//        @Override
-//        public void run() {
-//
-////            for(ImageView mole: moles){
-////                mole.setOnClickListener();
-////            }
-//
-//            if(this.health==0){
-//                this.status=-1;
-//                System.out.println("You died");
-//            }
-//
-//        }
-//        int getHealth() {
-//            return health;
-//        }
-//        int getEnergy() {
-//            return energy;
-//        }
-//        int getPoint() {
-//            return points;
-//        }
-//
-//
-//
-//        void hitMole() {
-//            gainPoint(1);
-//            gainEnergy(20);
-//        }
-//
-//        void kenaBomb() {
-//            deductHealth(1);
-//        }
-//
-//
-//        ///////////////////////
-//        /// utility functions
-//        /////////////////////
-//
-//        void deductHealth(int amount) {
-//            this.health -= amount;
-//        }
-//
-//        void gainEnergy(int amount) {
-//            if (this.energy + amount > 100) { this.energy = 100; }
-//            else { this.energy += amount; }
-//        }
-//
-//        void gainPoint(int amount) {
-//            points += amount;
-//        }
-//
-//        void deductPoint(int amount) {
-//            points -= amount;
-//        }
-//    }
-//    ///
 
 }
 
@@ -438,4 +375,77 @@ class PlayerThread extends Thread{
         point -= amount;
     }
 }
+
+///
+
+//    class OpponentThread extends Thread{
+//        private int point;
+//        private int energy;
+//        private int health;
+//        private int status;
+//        public OpponentThread(){
+//            this.point=0;
+//            this.energy=0;
+//            this.health=3;
+//        }
+//
+//
+//
+//        @Override
+//        public void run() {
+//
+////            for(ImageView mole: moles){
+////                mole.setOnClickListener();
+////            }
+//
+//            if(this.health==0){
+//                this.status=-1;
+//                System.out.println("You died");
+//            }
+//
+//        }
+//        int getHealth() {
+//            return health;
+//        }
+//        int getEnergy() {
+//            return energy;
+//        }
+//        int getPoint() {
+//            return points;
+//        }
+//
+//
+//
+//        void hitMole() {
+//            gainPoint(1);
+//            gainEnergy(20);
+//        }
+//
+//        void kenaBomb() {
+//            deductHealth(1);
+//        }
+//
+//
+//        ///////////////////////
+//        /// utility functions
+//        /////////////////////
+//
+//        void deductHealth(int amount) {
+//            this.health -= amount;
+//        }
+//
+//        void gainEnergy(int amount) {
+//            if (this.energy + amount > 100) { this.energy = 100; }
+//            else { this.energy += amount; }
+//        }
+//
+//        void gainPoint(int amount) {
+//            points += amount;
+//        }
+//
+//        void deductPoint(int amount) {
+//            points -= amount;
+//        }
+//    }
+//    ///
 

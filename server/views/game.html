@@ -12,7 +12,14 @@
     <p class="subtitle">Loading...</p>
   </div>
   <div class="container">
-    <h2 class="text-center">Score: <span id="score-board">0</span></h2>
+    <div class="score">
+      <div class="me">
+        <p class="text-center">Me: <span id="my-score">0</span></p>
+      </div>
+      <div class="opponent">
+        <p class="text-center">Opponent: <span id="opp-score">0</span></p>
+      </div>
+    </div>
     <div class="game">
       <div class="row" id="row-1">
         <img class="img-fluid background" src="/assets/images/game_hole.svg" />
@@ -35,20 +42,20 @@
         <img class="img-fluid mole" src="/assets/images/game_mole.svg" id="mole-9" />
         <img class="img-fluid foreground" src="/assets/images/game_foreground.svg" />
       </div>
-      <div class="footer">
-        <div class="heart-bar">
-          <img class="img-fluid heart" src="/assets/images/game_heart.svg" />
-          <img class="img-fluid heart" src="/assets/images/game_heart.svg" />
-          <img class="img-fluid heart" src="/assets/images/game_heart.svg" />
-        </div>
-        <div class="items-box">
-          <img class="img-fluid item off" src="/assets/images/game_health.svg" data-cost="100" data-id="health" />
-          <img class="img-fluid item off" src="/assets/images/game_freeze.svg" data-cost="50" data-id="freeze" />
-          <img class="img-fluid item off" src="/assets/images/game_bomb.svg" data-cost="80" data-id="bomb" />
-        </div>
-        <div class="mana-bar">
-          <div class="mana"></div>
-        </div>
+    </div>
+    <div class="footer">
+      <div class="heart-bar">
+        <img class="img-fluid heart" src="/assets/images/game_heart.svg" />
+        <img class="img-fluid heart" src="/assets/images/game_heart.svg" />
+        <img class="img-fluid heart" src="/assets/images/game_heart.svg" />
+      </div>
+      <div class="items-box">
+        <img class="img-fluid item off" src="/assets/images/game_health.svg" data-cost="100" data-id="health" />
+        <img class="img-fluid item off" src="/assets/images/game_freeze.svg" data-cost="50" data-id="freeze" />
+        <img class="img-fluid item off" src="/assets/images/game_bomb.svg" data-cost="80" data-id="bomb" />
+      </div>
+      <div class="mana-bar">
+        <div class="mana"></div>
       </div>
     </div>
   </div>

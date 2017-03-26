@@ -2,7 +2,8 @@
 const subsDisplay = document.querySelector('.drop .subtitle');
 const moles = document.querySelectorAll('.mole');
 const items = document.querySelectorAll('.item');
-const scoreBoard = document.querySelector('#score-board');
+const myScore = document.querySelector('#my-score');
+const opponentScore = document.querySelector('#opp-score');
 const manaBar = document.querySelector('.mana');
 let score = 0;
 let mana = 0;
@@ -18,8 +19,9 @@ let frozen, bomb;
   socket.on('start', turnOffDrop);
   socket.on('mole', peep);
   socket.on('item', kena);
+  socket.on('score', updateOppScore);
   
-  moles.forEach(function(m) { m.addEventListener('click', hit); });
+  moles.forEach(function(m) { m.addEventListener('click', hit.bind(m, socket)); });
   items.forEach(function(i) { i.addEventListener('click', useItem); });
 })();
 
@@ -45,6 +47,7 @@ function turnOffDrop() {
 function peep(moleIdx) {
   if (frozen) return;
   const mole = moles[moleIdx];
+  mole.src = '/assets/images/game_mole.svg';
   mole.classList.add('up');
   setTimeout(function() {
     mole.classList.remove('up');
@@ -62,14 +65,16 @@ function checkItems() {
   });
 }
 
-function hit(e) {
+function hit(socket, e) {
   if (!e.isTrusted) return;
   score++;
   if (mana < 100) mana += 10;
   updateManaStatus();
   checkItems();
+  this.src = '/assets/images/game_sadMole.svg';
   this.classList.remove('up');
-  scoreBoard.textContent = score;
+  myScore.textContent = score;
+  socket.emit('score');
 }
 
 function useItem() {
@@ -89,3 +94,5 @@ function kena(item) {
       return;
   }
 }
+
+function updateOppScore(score) { opponentScore.textContent = score; }

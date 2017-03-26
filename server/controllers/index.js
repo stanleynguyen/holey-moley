@@ -7,5 +7,9 @@ module.exports = {
   
   renderGame(req, res) {
     res.sendFile(path.resolve('views/game.html'));
+  },
+  
+  renderHome(req, res) {
+    res.sendFile(path.resolve('views/home.html'));
   }
 };

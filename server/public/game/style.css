@@ -3,6 +3,10 @@ body {
   background-image: url('/assets/images/game_background.svg');
 }
 
+.container {
+  min-height: 100vh;
+}
+
 .game {
   margin-top: 120px;
 }
@@ -24,16 +28,16 @@ body {
   position: absolute;
   margin: auto 3.5% auto 2%;
   top: 30px;
-  transition: all .4s;
+  transition: all .5s;
 }
 
 .mole.up {
-  top: -100px;
+  top: -50%;
 }
 
 .foreground {
   position: relative;
-  margin-top: -26px;
+  margin-top: -6%;
 }
 
 #row-1 .mole {

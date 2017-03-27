@@ -30,6 +30,13 @@ module.exports = (server) => {
       socket.broadcast.to(room).emit('score', playerBook[socketId].getScore());
     });
     
+    socket.on('dead', () => {
+      const deadPlayer = playerBook[socket.id];
+      const winner = playerBook[deadPlayer.getOpponent()];
+      io.to(winner.getId()).emit('win');
+      io.to(deadPlayer.getId()).emit('lose');
+    });
+    
     socket.on('end', (token) => {
       const player = playerBook[socket.id];
       let expGain = player.getScore();
@@ -66,8 +73,8 @@ function checkQ(io, waitingQueue, playerBook) {
   const room = player1.id + '#' + player2.id;
   player1.join(room);
   player2.join(room);
-  playerBook[player1.id] = new Player(player1, room);
-  playerBook[player2.id] = new Player(player2, room);
+  playerBook[player1.id] = new Player(player1, player2, room);
+  playerBook[player2.id] = new Player(player2, player1, room);
   io.to(room).emit('start');
   const moleEmitter = emitMole(io, room);
   countDown(io, room, moleEmitter, playerBook);
@@ -104,12 +111,14 @@ function countDown(io, roomName, emitter, playerBook) {
 const randMole = () => Math.floor(Math.random() * 9);
 
 // class to save player info
-function Player(socket, socketRoom) {
+function Player(socket, opponentSoc, socketRoom) {
   const id = socket.id;
+  const opponent = opponentSoc;
   const room = socketRoom;
   let score = 0;
   let win = false;
   this.getId = () => id;
+  this.getOpponent = () => opponent.id;
   this.getRoom = () => room;
   this.getScore = () => score;
   this.incScore = () => score++;

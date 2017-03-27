@@ -82,7 +82,6 @@ function hit(socket, e) {
     explosionOverlay.style.display = 'block';
     setTimeout(() => explosionOverlay.style.display = 'none', 200);
     updateHealth(health);
-    if (health === 0) socket.emit('dead');
   }
   score++;
   if (mana < 100) mana += 10;
@@ -127,6 +126,7 @@ function kena(item) {
 function updateOppScore(score) { opponentScore.textContent = score; }
 
 function updateHealth(health) {
+  if (health === 0) socket.emit('dead');
   heartIcons.forEach((i) => i.classList.remove('off'));
   for (let i=0; i<3-health; i++) {
     heartIcons[i].classList.add('off');

@@ -79,7 +79,7 @@ body * {
 
 #game .tab-item {
   flex-basis: 90%;
-  justify-content: space-between;
+  justify-content: space-around;
 }
 
 #game .tab-item .img-fluid {

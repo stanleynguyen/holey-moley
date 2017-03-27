@@ -6,12 +6,15 @@ const myScore = document.querySelector('#my-score');
 const opponentScore = document.querySelector('#opp-score');
 const manaBar = document.querySelector('.mana');
 let score = 0;
+let health = 3;
 let mana = 0;
 const socket = io();
 let loadingSubInterval;
 // vars for kena items
 let frozen, bomb;
 const frozenOverlay = document.querySelector('.freeze-overlay');
+const heartIcons = document.querySelectorAll('.heart');
+const explosionOverlay = document.querySelector('.explosion-overlay');
 
 (function() {
   loadingSubInterval = setInterval(generateSubs(), 3000);
@@ -50,9 +53,14 @@ function turnOffDrop() {
 function peep(moleIdx) {
   if (frozen) return;
   const mole = moles[moleIdx];
+  if (bomb) mole.src = '/assets/images/game_bombMole.svg';
   mole.classList.add('up');
   setTimeout(function() {
     mole.classList.remove('up');
+    setTimeout(() => {
+      mole.src = '/assets/images/game_mole.svg';
+      bomb = false;
+    }, 500);
   }, 500);
 }
 
@@ -69,6 +77,13 @@ function checkItems() {
 
 function hit(socket, e) {
   if (!e.isTrusted) return;
+  if (bomb) {
+    health--;
+    explosionOverlay.style.display = 'block';
+    setTimeout(() => explosionOverlay.style.display = 'none', 200);
+    updateHealth(health);
+    if (health === 0) socket.emit('dead');
+  }
   score++;
   if (mana < 100) mana += 10;
   updateManaStatus();
@@ -84,6 +99,10 @@ function useItem() {
   mana -= this.dataset.cost;
   updateManaStatus();
   checkItems();
+  if (this.dataset.id === 'health') {
+    health < 3 && health++;
+    updateHealth(health);
+  }
   socket.emit('item', this.dataset.id);
 }
 
@@ -97,12 +116,22 @@ function kena(item) {
         frozenOverlay.style.display = 'none';
       }, 3000);
       break;
+    case 'bomb':
+      bomb = true;
+      break;
     default:
       return;
   }
 }
 
 function updateOppScore(score) { opponentScore.textContent = score; }
+
+function updateHealth(health) {
+  heartIcons.forEach((i) => i.classList.remove('off'));
+  for (let i=0; i<3-health; i++) {
+    heartIcons[i].classList.add('off');
+  }
+}
 
 function handleWin() { 
   socket.emit('end', localStorage.getItem('token')); 

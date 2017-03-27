@@ -107,7 +107,7 @@ body {
   max-width: 30%;
 }
 
-.item.off {
+.off {
   filter: grayscale(90%);
 }
 
@@ -152,15 +152,22 @@ body {
   font-size: 1.5em;
 }
 
-.freeze-overlay {
+.overlay {
   display: none;
   position: fixed;
   top: 0;
   left: 0;
   height: 100vh;
   width: 100vw;
-  background-color: rgba(0,0,255, 0.3);
   z-index: 100000;
+}
+
+.freeze-overlay {
+  background-color: rgba(0,0,255, 0.3);
+}
+
+.explosion-overlay {
+  background-color: rgba(255,0,0, 0.3);
 }
 
 .spinner {

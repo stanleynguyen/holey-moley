@@ -89,8 +89,8 @@
         android:src="@drawable/game_mole"
         android:layout_below="@+id/holes1"
         android:id="@+id/mole1"
-        android:layout_marginLeft="6dp"
-        android:layout_marginTop="-50dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="-40dp"
         />
     <!--<ImageView-->
     <!--android:layout_width="90dp"-->
@@ -107,8 +107,8 @@
         android:src="@drawable/game_mole"
         android:layout_below="@+id/holes1"
         android:id="@+id/mole2"
-        android:layout_marginLeft="146dp"
-        android:layout_marginTop="-50dp"
+        android:layout_marginLeft="150dp"
+        android:layout_marginTop="-40dp"
         />
     <!--<ImageView-->
     <!--android:layout_width="90dp"-->
@@ -125,9 +125,8 @@
         android:src="@drawable/game_mole"
         android:layout_below="@+id/holes1"
         android:id="@+id/mole3"
-        android:onClick="OnClick"
-        android:layout_marginLeft="286dp"
-        android:layout_marginTop="-50dp"
+        android:layout_marginLeft="295dp"
+        android:layout_marginTop="-40dp"
         />
 
     <ImageView
@@ -151,8 +150,8 @@
         android:src="@drawable/game_mole"
         android:layout_below="@+id/holes2"
         android:id="@+id/mole4"
-        android:layout_marginLeft="6dp"
-        android:layout_marginTop="-50dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="-40dp"
         />
     <!--<ImageView-->
     <!--android:layout_width="90dp"-->
@@ -169,8 +168,8 @@
         android:src="@drawable/game_mole"
         android:layout_below="@+id/holes2"
         android:id="@+id/mole5"
-        android:layout_marginLeft="146dp"
-        android:layout_marginTop="-50dp"
+        android:layout_marginLeft="150dp"
+        android:layout_marginTop="-40dp"
         />
     <!--<ImageView-->
     <!--android:layout_width="90dp"-->
@@ -187,19 +186,9 @@
         android:src="@drawable/game_mole"
         android:layout_below="@+id/holes2"
         android:id="@+id/mole6"
-        android:layout_marginLeft="286dp"
-        android:layout_marginTop="-50dp"
+        android:layout_marginLeft="295dp"
+        android:layout_marginTop="-40dp"
         />
-    <!--<ImageView-->
-    <!--android:layout_width="90dp"-->
-    <!--android:layout_height="110dp"-->
-    <!--android:src="@drawable/game_sadmole"-->
-    <!--android:layout_below="@+id/holes2"-->
-    <!--android:id="@+id/mole15"-->
-    <!--android:layout_marginLeft="286dp"-->
-    <!--android:layout_marginTop="-50dp"-->
-    <!--/>-->
-
 
     <ImageView
         android:layout_width="wrap_content"
@@ -222,18 +211,10 @@
         android:src="@drawable/game_mole"
         android:layout_below="@+id/holes3"
         android:id="@+id/mole7"
-        android:layout_marginLeft="6dp"
-        android:layout_marginTop="-50dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="-40dp"
         />
-    <!--<ImageView-->
-    <!--android:layout_width="90dp"-->
-    <!--android:layout_height="110dp"-->
-    <!--android:src="@drawable/game_sadmole"-->
-    <!--android:layout_below="@+id/holes3"-->
-    <!--android:id="@+id/mole16"-->
-    <!--android:layout_marginLeft="6dp"-->
-    <!--android:layout_marginTop="-50dp"-->
-    <!--/>-->
+
 
     <ImageView
         android:layout_width="90dp"
@@ -241,35 +222,20 @@
         android:src="@drawable/game_mole"
         android:layout_below="@+id/holes3"
         android:id="@+id/mole8"
-        android:layout_marginLeft="146dp"
-        android:layout_marginTop="-50dp"
+        android:layout_marginLeft="150dp"
+        android:layout_marginTop="-40dp"
         />
-    <!--<ImageView-->
-    <!--android:layout_width="90dp"-->
-    <!--android:layout_height="110dp"-->
-    <!--android:src="@drawable/game_sadmole"-->
-    <!--android:layout_below="@+id/holes3"-->
-    <!--android:id="@+id/mole17"-->
-    <!--android:layout_marginLeft="146dp"-->
-    <!--android:layout_marginTop="-50dp"-->
-    <!--/>-->
+
     <ImageView
         android:layout_width="90dp"
         android:layout_height="110dp"
         android:src="@drawable/game_mole"
         android:layout_below="@+id/holes3"
         android:id="@+id/mole9"
-        android:layout_marginLeft="286dp"
-        android:layout_marginTop="-50dp"
+        android:layout_marginLeft="295dp"
+        android:layout_marginTop="-40dp"
         />
-    <!--<ImageView-->
-    <!--android:layout_width="90dp"-->
-    <!--android:layout_height="110dp"-->
-    <!--android:src="@drawable/game_sadmole"-->
-    <!--android:layout_below="@+id/holes3"-->
-    <!--android:id="@+id/mole18"-->
-    <!--android:layout_marginLeft="286dp"-->
-    <!--android:layout_marginTop="-50dp"-->
+
     <!--/>-->
     <ImageView
         android:layout_width="wrap_content"
@@ -278,6 +244,7 @@
 
         android:layout_marginTop="-190dp"
         android:layout_below="@id/holes3" />
+
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

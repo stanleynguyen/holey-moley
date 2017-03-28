@@ -1,3 +1,15 @@
 <resources>
-    <string name="app_name">WhackAMole</string>
+    <string name="app_name">HoleyMoley</string>
+    <string name="action_settings">Settings</string>
+    <string name="section_format">Hello World from section: %1$d</string>
+    <string name="network_issue">Network Issue. Please try again later.</string>
+    <string name="battle">Battle</string>
+    <string name="match_found">Match Found</string>
+    <string name="find_match">Find Match</string>
+
+    <string name="title_activity_welcome">WelcomeActivity</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="finding">Finding</string>
+    <string name="title_activity_tabs">TabsActivity</string>
 </resources>

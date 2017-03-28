@@ -90,7 +90,7 @@ public class GameActivity extends AppCompatActivity {
 //                        activeMoles[tempmole]=false;
 //                        moles.get(moleNum).setImageDrawable(getResources().getDrawable(R.drawable.game_mole));
             /////
-            activeMoles[moleNum]=true;
+//            activeMoles[moleNum]=true;
             /////
 //                        score.setText(Integer.toString(player.getPoint()));
 
@@ -99,7 +99,7 @@ public class GameActivity extends AppCompatActivity {
 
             // 0.04 s to rise up a
             // nd go down, 0.5 s stay there
-//            moles.get(moleNum).setClickable(true);
+            moles.get(moleNum).setClickable(true);
             final Runnable endAction2 = new Runnable() {
                 public void run() {
                     moles.get(moleNum).setImageDrawable(getResources().getDrawable(R.drawable.game_mole));
@@ -120,7 +120,7 @@ public class GameActivity extends AppCompatActivity {
 
             tempmole=moleNum;
 
-            handler.postDelayed(runnableCode, 1100);
+            handler.postDelayed(runnableCode, 900);
 
         }
 
@@ -310,14 +310,15 @@ public class GameActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
 
-                    if(activeMoles[finalI]){
-                        activeMoles[finalI]=false;
+//                    if(activeMoles[finalI]){
+//                        activeMoles[finalI]=false;
                         player.hitMole();
                         moles.get(finalI1).setImageDrawable(getResources().getDrawable(R.drawable.game_sadmole));
+                    moles.get(finalI).setClickable(false);
 
 
 
-                    }
+//                    }
 
                 }
             });

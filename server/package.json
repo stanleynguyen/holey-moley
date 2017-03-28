@@ -1,0 +1,38 @@
+{
+  "name": "holey-moley",
+  "version": "1.0.0",
+  "description": "multiplayer whack a mole",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "sudo NODE_ENV=dev nodemon index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/stanleynguyen/holey-moley.git"
+  },
+  "keywords": [
+    "whackamole"
+  ],
+  "author": "stanleynguyen",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/stanleynguyen/holey-moley/issues"
+  },
+  "homepage": "https://github.com/stanleynguyen/holey-moley#readme",
+  "dependencies": {
+    "bcrypt": "^1.0.2",
+    "body-parser": "^1.16.1",
+    "express": "^4.14.1",
+    "jsonwebtoken": "^7.3.0",
+    "mongoose": "^4.8.5",
+    "socket.io": "^1.7.3"
+  },
+  "devDependencies": {
+    "dotenv": "^4.0.0",
+    "eslint": "^3.16.1",
+    "eslint-plugin-react": "^6.10.0",
+    "nodemon": "^1.11.0"
+  }
+}

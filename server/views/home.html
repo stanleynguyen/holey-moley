@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<head>
+  <title>Holey Moley | Home</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="/assets/common.css" />
+  <link rel="stylesheet" href="/assets/home/style.css" />
+</head>
+<body>
+  <div class="container home">
+    <ul class="nav">
+      <li class="active" data-toggle="game">
+        <img class="img-fluid" src="/assets/images/home_play.svg" />
+        <p>Game</p>
+      </li>
+      <li data-toggle="inventory">
+        <img class="img-fluid" src="/assets/images/home_inventory.svg" />
+        <p>Inventory</p>
+      </li>
+      <li data-toggle="shop">
+        <img class="img-fluid" src="/assets/images/home_shop.svg" />
+        <p>Shop</p>
+      </li>
+      <li data-toggle="settings">
+        <img class="img-fluid" src="/assets/images/home_settings.svg" />
+        <p>Settings</p>
+      </li>
+    </ul>
+    <div class="tab-content">
+      <div id="game" class="tab-pane active">
+        <h1 class="text-center">Game Mode</h1>
+        <div class="tab-item" data-goto="/game">
+          <img class="img-fluid" src="/assets/images/menu_random.svg" />
+          <p>Random Match</p>
+        </div>
+        <div class="tab-item">
+          <img class="img-fluid" src="/assets/images/menu_single.svg" />
+          <p>Single Player</p>
+        </div>
+        <div class="tab-item">
+          <img class="img-fluid" src="/assets/images/menu_local.svg" />
+          <p>Local Match</p>
+        </div>
+      </div>
+      <div id="inventory" class="tab-pane">
+        <h1 class="text-center">Inventory</h1>
+        <div class="tab-item">
+          <img class="img-fluid" src="/assets/images/game_freeze.svg" />
+          <p>x 2</p>
+        </div>
+        <div class="tab-item">
+          <img class="img-fluid" src="/assets/images/game_bomb.svg" />
+          <p>x 4</p>
+        </div>
+      </div>
+      <div id="shop" class="tab-pane">
+        <h1 class="text-center">Shop</h1>
+        <div class="tab-item">
+          <img class="img-fluid" src="/assets/images/game_freeze.svg" />
+          <p>Level 2</p>
+          <p>300 Coins</p>
+        </div>
+        <div class="tab-item">
+          <img class="img-fluid" src="/assets/images/game_bomb.svg" />
+          <p>Level 1</p>
+          <p>500 Coins</p>
+        </div>
+      </div>
+      <div id="settings" class="tab-pane">
+        <h1 class="text-center">Settings</h1>
+      </div>
+    </div>
+  </div>
+  <script src="/assets/home/script.js"></script>
+</body>

@@ -58,23 +58,24 @@ public class Game extends Fragment {
         random.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                single.setClickable(false);
-                local.setClickable(false);
-                random.setVisibility(View.INVISIBLE);
-                randomtxt.setVisibility(View.INVISIBLE);
-                randomPB.setVisibility(View.VISIBLE);
-                new Handler().postDelayed(new Runnable() {
-
-                    @Override
-                    public void run() {
-                        randomPB.setVisibility(View.INVISIBLE);
-                        random.setVisibility(View.VISIBLE);
-                        randomtxt.setVisibility(View.VISIBLE);
-                        single.setClickable(!false);
-                        local.setClickable(!false);
-                    }
-
-                },5000);
+                startActivity(new Intent(getActivity(), GameActivity.class));
+//                single.setClickable(false);
+//                local.setClickable(false);
+//                random.setVisibility(View.INVISIBLE);
+//                randomtxt.setVisibility(View.INVISIBLE);
+//                randomPB.setVisibility(View.VISIBLE);
+//                new Handler().postDelayed(new Runnable() {
+//
+//                    @Override
+//                    public void run() {
+//                        randomPB.setVisibility(View.INVISIBLE);
+//                        random.setVisibility(View.VISIBLE);
+//                        randomtxt.setVisibility(View.VISIBLE);
+//                        single.setClickable(!false);
+//                        local.setClickable(!false);
+//                    }
+//
+//                },5000);
             }
         });
 
@@ -110,7 +111,8 @@ public class Game extends Fragment {
                 single.setClickable(false);
                 local.setVisibility(View.INVISIBLE);
                 localtxt.setVisibility(View.INVISIBLE);
-                localPB.setVisibility(View.VISIBLE);
+              localPB.setVisibility(View.VISIBLE);
+
 
                 new Handler().postDelayed(new Runnable() {
                     @Override

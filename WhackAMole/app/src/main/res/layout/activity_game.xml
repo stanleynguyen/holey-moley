@@ -1,12 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/activity_main"
+    android:id="@+id/activity_game"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/game_background"
     android:fitsSystemWindows="true"
     tools:context="zouyun.com.example.whackamole.GameActivity">
+
+
+    <!---->
+    <!--<ProgressBar-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent" />-->
+    <ProgressBar
+        style="@android:style/Widget.ProgressBar.Horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:progressBackgroundTint="#9bb53e"
+
+        android:progressTint="#6699cc"
+        android:layout_marginLeft="100dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
+        android:id="@+id/myprogress"
+        />
+    <ProgressBar
+        style="@android:style/Widget.ProgressBar.Horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:progressBackgroundTint="#9bb53e"
+
+        android:progressTint="@color/colorAccent"
+        android:layout_marginLeft="100dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="35dp"
+        android:id="@+id/opponentprogress"
+        />
+
+
 
     <TextView
         android:layout_width="wrap_content"
@@ -14,7 +46,7 @@
         android:text=""
         android:textSize="20dp"
         android:layout_marginLeft="10dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="10dp"
         android:id="@+id/score"
         />
     <TextView
@@ -26,6 +58,7 @@
         android:layout_marginTop="60dp"
         android:id="@+id/time"
         />
+
     <ImageView
         android:layout_width="25dp"
         android:layout_height="25dp"
@@ -33,7 +66,7 @@
         android:layout_alignParentEnd="true"
         android:id="@+id/heart1"
         android:layout_marginRight="10dp"
-        android:layout_marginTop="20dp"/>
+        android:layout_marginTop="60dp"/>
     <ImageView
         android:layout_width="25dp"
         android:layout_height="25dp"
@@ -43,7 +76,7 @@
         android:layout_alignParentEnd="true"
         android:layout_marginRight="40dp"
         android:id="@+id/heart2"
-        android:layout_marginTop="20dp"/>
+        android:layout_marginTop="60dp"/>
     <ImageView
         android:layout_width="25dp"
         android:layout_height="25dp"
@@ -53,7 +86,7 @@
         android:layout_alignParentEnd="true"
         android:layout_marginRight="70dp"
         android:id="@+id/heart3"
-        android:layout_marginTop="20dp"/>
+        android:layout_marginTop="60dp"/>
     <ImageView
         android:layout_width="25dp"
         android:layout_height="25dp"
@@ -63,7 +96,7 @@
         android:layout_alignParentEnd="true"
         android:layout_marginRight="100dp"
         android:id="@+id/heart4"
-        android:layout_marginTop="20dp"/>
+        android:layout_marginTop="60dp"/>
 
 
 
@@ -89,8 +122,8 @@
         android:src="@drawable/game_mole"
         android:layout_below="@+id/holes1"
         android:id="@+id/mole1"
-        android:layout_marginLeft="6dp"
-        android:layout_marginTop="-50dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="-40dp"
         />
     <!--<ImageView-->
     <!--android:layout_width="90dp"-->
@@ -107,8 +140,8 @@
         android:src="@drawable/game_mole"
         android:layout_below="@+id/holes1"
         android:id="@+id/mole2"
-        android:layout_marginLeft="146dp"
-        android:layout_marginTop="-50dp"
+        android:layout_marginLeft="150dp"
+        android:layout_marginTop="-40dp"
         />
     <!--<ImageView-->
     <!--android:layout_width="90dp"-->
@@ -125,9 +158,8 @@
         android:src="@drawable/game_mole"
         android:layout_below="@+id/holes1"
         android:id="@+id/mole3"
-        android:onClick="OnClick"
-        android:layout_marginLeft="286dp"
-        android:layout_marginTop="-50dp"
+        android:layout_marginLeft="295dp"
+        android:layout_marginTop="-40dp"
         />
 
     <ImageView
@@ -151,8 +183,8 @@
         android:src="@drawable/game_mole"
         android:layout_below="@+id/holes2"
         android:id="@+id/mole4"
-        android:layout_marginLeft="6dp"
-        android:layout_marginTop="-50dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="-40dp"
         />
     <!--<ImageView-->
     <!--android:layout_width="90dp"-->
@@ -169,8 +201,8 @@
         android:src="@drawable/game_mole"
         android:layout_below="@+id/holes2"
         android:id="@+id/mole5"
-        android:layout_marginLeft="146dp"
-        android:layout_marginTop="-50dp"
+        android:layout_marginLeft="150dp"
+        android:layout_marginTop="-40dp"
         />
     <!--<ImageView-->
     <!--android:layout_width="90dp"-->
@@ -187,19 +219,9 @@
         android:src="@drawable/game_mole"
         android:layout_below="@+id/holes2"
         android:id="@+id/mole6"
-        android:layout_marginLeft="286dp"
-        android:layout_marginTop="-50dp"
+        android:layout_marginLeft="295dp"
+        android:layout_marginTop="-40dp"
         />
-    <!--<ImageView-->
-    <!--android:layout_width="90dp"-->
-    <!--android:layout_height="110dp"-->
-    <!--android:src="@drawable/game_sadmole"-->
-    <!--android:layout_below="@+id/holes2"-->
-    <!--android:id="@+id/mole15"-->
-    <!--android:layout_marginLeft="286dp"-->
-    <!--android:layout_marginTop="-50dp"-->
-    <!--/>-->
-
 
     <ImageView
         android:layout_width="wrap_content"
@@ -222,18 +244,10 @@
         android:src="@drawable/game_mole"
         android:layout_below="@+id/holes3"
         android:id="@+id/mole7"
-        android:layout_marginLeft="6dp"
-        android:layout_marginTop="-50dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="-40dp"
         />
-    <!--<ImageView-->
-    <!--android:layout_width="90dp"-->
-    <!--android:layout_height="110dp"-->
-    <!--android:src="@drawable/game_sadmole"-->
-    <!--android:layout_below="@+id/holes3"-->
-    <!--android:id="@+id/mole16"-->
-    <!--android:layout_marginLeft="6dp"-->
-    <!--android:layout_marginTop="-50dp"-->
-    <!--/>-->
+
 
     <ImageView
         android:layout_width="90dp"
@@ -241,35 +255,20 @@
         android:src="@drawable/game_mole"
         android:layout_below="@+id/holes3"
         android:id="@+id/mole8"
-        android:layout_marginLeft="146dp"
-        android:layout_marginTop="-50dp"
+        android:layout_marginLeft="150dp"
+        android:layout_marginTop="-40dp"
         />
-    <!--<ImageView-->
-    <!--android:layout_width="90dp"-->
-    <!--android:layout_height="110dp"-->
-    <!--android:src="@drawable/game_sadmole"-->
-    <!--android:layout_below="@+id/holes3"-->
-    <!--android:id="@+id/mole17"-->
-    <!--android:layout_marginLeft="146dp"-->
-    <!--android:layout_marginTop="-50dp"-->
-    <!--/>-->
+
     <ImageView
         android:layout_width="90dp"
         android:layout_height="110dp"
         android:src="@drawable/game_mole"
         android:layout_below="@+id/holes3"
         android:id="@+id/mole9"
-        android:layout_marginLeft="286dp"
-        android:layout_marginTop="-50dp"
+        android:layout_marginLeft="295dp"
+        android:layout_marginTop="-40dp"
         />
-    <!--<ImageView-->
-    <!--android:layout_width="90dp"-->
-    <!--android:layout_height="110dp"-->
-    <!--android:src="@drawable/game_sadmole"-->
-    <!--android:layout_below="@+id/holes3"-->
-    <!--android:id="@+id/mole18"-->
-    <!--android:layout_marginLeft="286dp"-->
-    <!--android:layout_marginTop="-50dp"-->
+
     <!--/>-->
     <ImageView
         android:layout_width="wrap_content"
@@ -278,6 +277,7 @@
 
         android:layout_marginTop="-190dp"
         android:layout_below="@id/holes3" />
+
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -294,6 +294,7 @@
         android:adjustViewBounds="true"
         android:maxWidth="90dp"
         android:maxHeight="90dp"
+
         android:scaleType="fitCenter"
         android:layout_marginStart="33dp"
         android:layout_alignParentBottom="true"
@@ -307,6 +308,7 @@
         android:adjustViewBounds="true"
         android:maxWidth="90dp"
         android:maxHeight="90dp"
+        android:clickable="false"
         android:scaleType="fitCenter"
         android:layout_marginStart="33dp"
         android:layout_alignParentBottom="true"
@@ -333,6 +335,7 @@
         android:adjustViewBounds="true"
         android:maxWidth="90dp"
         android:maxHeight="90dp"
+        android:clickable="false"
         android:scaleType="fitCenter"
         android:layout_marginStart="5dp"
         android:layout_alignParentBottom="true"
@@ -359,11 +362,51 @@
         android:adjustViewBounds="true"
         android:maxWidth="90dp"
         android:maxHeight="90dp"
+        android:clickable="false"
         android:scaleType="fitCenter"
         android:layout_marginStart="115dp"
         android:layout_alignParentBottom="true"
         android:layout_alignStart="@+id/mole8"
         android:layout_marginBottom="29dp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+
+        android:id="@+id/freezing"
+        android:textSize="40dp"
+        android:textColor="@color/colorPrimary"
+        android:layout_centerInParent="true"/>
+
+    <ProgressBar
+        style="@android:style/Widget.ProgressBar.Horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:progressBackgroundTint="#b8b44e"
+
+        android:progressTint="#dfa248"
+        android:layout_marginTop="450dp"
+        android:layout_marginLeft="70dp"
+        android:layout_marginRight="10dp"
+        android:minHeight="30dp"
+        android:id="@+id/manaprogress"
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Mana"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="450dp"
+        android:id="@+id/mana"
+        />
+    <ProgressBar
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:progressBackgroundTint="#9bb53e"
+        android:progressTint="#6699cc"
+        android:id="@+id/spinningwheel"
+        android:background="#dfa248"
+        />
 
 
 </RelativeLayout>

@@ -107,3 +107,30 @@ body * {
 #inventory .tab-item p, #shop .tab-item p {
   margin: 0;
 }
+
+#profile .tab-item {
+  max-height: none;
+  flex: 1 0 90%;
+  flex-direction: column;
+}
+
+#profile .tab-item .img-fluid {
+  max-width: 50%;
+}
+
+ #profile .tab-item p {
+   margin: 10px 0;
+ }
+
+#profile .tab-item .exp-container {
+  width: 100%;
+  background-color: rgba(0,0,0,0.07);
+  border-radius: 3px;
+}
+
+#profile .tab-item .exp-container .exp-bar {
+  width: 50%;
+  height: 20px;
+  background-color: #dfa248;
+  border-radius: inherit;
+}

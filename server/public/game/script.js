@@ -1,4 +1,8 @@
 'use strict';
+// check login
+const token = localStorage.getItem('token');
+if (!token) window.location = '/';
+// main
 const subsDisplay = document.querySelector('.drop .subtitle');
 const moles = document.querySelectorAll('.mole');
 const items = document.querySelectorAll('.item');
@@ -27,8 +31,10 @@ const explosionOverlay = document.querySelector('.explosion-overlay');
   socket.on('win', handleWin);
   socket.on('lose', handleLose);
   
-  moles.forEach(function(m) { m.addEventListener('click', hit.bind(m, socket)); });
-  items.forEach(function(i) { i.addEventListener('click', useItem); });
+  // moles.forEach(function(m) { m.addEventListener('click', hit.bind(m, socket)); });
+  // items.forEach(function(i) { i.addEventListener('click', useItem); });
+  moles.forEach(function(m) { m.addEventListener('touchstart', hit.bind(m, socket)); });
+  items.forEach(function(i) { i.addEventListener('touchstart', useItem); });
 })();
 
 function generateSubs() {
@@ -77,7 +83,7 @@ function checkItems() {
 
 function hit(socket, e) {
   if (!e.isTrusted) return;
-  if (bomb) {
+  if (this.src.includes('/assets/images/game_bombMole.svg')) {
     health--;
     explosionOverlay.style.display = 'block';
     setTimeout(() => explosionOverlay.style.display = 'none', 200);

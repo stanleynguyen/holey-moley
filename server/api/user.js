@@ -32,5 +32,10 @@ module.exports = {
       const token = jwt.sign(u._doc, process.env.SECRET, { expiresIn: '720h' });
       res.status(200).json({ token });
     });
+  },
+  
+  // GET /api/user/info
+  getUserInfo(req, res) {
+    res.status(200).json(req.user);
   }
 };

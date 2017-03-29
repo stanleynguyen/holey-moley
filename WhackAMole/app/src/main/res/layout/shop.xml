@@ -12,11 +12,12 @@
 
     <TextView
         android:text="SHOP"
+        android:fontFamily=""
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="26dp"
         android:id="@+id/inventorytxt"
-        android:textSize="60dp"
+        android:textSize="60sp"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:layout_centerHorizontal="true"

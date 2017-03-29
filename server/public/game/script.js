@@ -101,6 +101,7 @@ function hit(socket, e) {
 }
 
 function useItem() {
+  if (mana - this.dataset.cost < 0) return;
   mana -= this.dataset.cost;
   updateManaStatus();
   checkItems();

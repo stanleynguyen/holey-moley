@@ -1,0 +1,18 @@
+Start 
+Background: #ea9232
+Tap to start button red: #e54e35
+Tap to start button orange: #e87d34
+
+
+HomePage
+Background: #dfa248
+button: #db9231
+
+
+Inventory/Game mode/Shop
+background: #b8b44e
+button: #aaa23c
+
+Game play
+background: #9bb53e
+mana color: #6699cc

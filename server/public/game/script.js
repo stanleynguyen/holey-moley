@@ -19,6 +19,25 @@ let frozen, bomb;
 const frozenOverlay = document.querySelector('.freeze-overlay');
 const heartIcons = document.querySelectorAll('.heart');
 const explosionOverlay = document.querySelector('.explosion-overlay');
+const isEventSupported = (function(){
+  const TAGNAMES = {
+    'select':'input','change':'input',
+    'submit':'form','reset':'form',
+    'error':'img','load':'img','abort':'img'
+  };
+  function isEventSupported(eventName) {
+    var el = document.createElement(TAGNAMES[eventName] || 'div');
+    eventName = 'on' + eventName;
+    var isSupported = (eventName in el);
+    if (!isSupported) {
+      el.setAttribute(eventName, 'return;');
+      isSupported = typeof el[eventName] == 'function';
+    }
+    el = null;
+    return isSupported;
+  }
+  return isEventSupported;
+})();
 
 (function() {
   loadingSubInterval = setInterval(generateSubs(), 3000);
@@ -31,10 +50,12 @@ const explosionOverlay = document.querySelector('.explosion-overlay');
   socket.on('win', handleWin);
   socket.on('lose', handleLose);
   
-  // moles.forEach(function(m) { m.addEventListener('click', hit.bind(m, socket)); });
-  // items.forEach(function(i) { i.addEventListener('click', useItem); });
   moles.forEach(function(m) { m.addEventListener('touchstart', hit.bind(m, socket)); });
   items.forEach(function(i) { i.addEventListener('touchstart', useItem); });
+  if (!isEventSupported('touchstart')) {
+    moles.forEach(function(m) { m.addEventListener('click', hit.bind(m, socket)); });
+    items.forEach(function(i) { i.addEventListener('click', useItem); });
+  }
 })();
 
 function generateSubs() {
@@ -59,14 +80,13 @@ function turnOffDrop() {
 function peep(moleIdx) {
   if (frozen) return;
   const mole = moles[moleIdx];
-  if (bomb) mole.src = '/assets/images/game_bombMole.svg';
+  if (bomb) mole.classList.add('mole-bomb');
   mole.classList.add('up');
+  const _bomb = bomb;
   setTimeout(function() {
     mole.classList.remove('up');
-    setTimeout(() => {
-      mole.src = '/assets/images/game_mole.svg';
-      bomb = false;
-    }, 500);
+    if (_bomb) bomb = false;
+    if (_bomb) setTimeout(() => { mole.classList.remove('mole-bomb'); }, 500);
   }, 500);
 }
 
@@ -83,7 +103,7 @@ function checkItems() {
 
 function hit(socket, e) {
   if (!e.isTrusted) return;
-  if (this.src.includes('/assets/images/game_bombMole.svg')) {
+  if (this.classList.contains('mole-bomb')) {
     health--;
     explosionOverlay.style.display = 'block';
     setTimeout(() => explosionOverlay.style.display = 'none', 200);
@@ -93,14 +113,15 @@ function hit(socket, e) {
   if (mana < 100) mana += 10;
   updateManaStatus();
   checkItems();
-  this.src = '/assets/images/game_sadMole.svg';
+  this.classList.add('mole-hitted');
   this.classList.remove('up');
-  setTimeout(() => this.src = '/assets/images/game_mole.svg', 500);
+  setTimeout(() => this.classList.remove('mole-hitted'), 500);
   myScore.textContent = score;
   socket.emit('score');
 }
 
 function useItem() {
+  if (mana - this.dataset.cost < 0) return;
   mana -= this.dataset.cost;
   updateManaStatus();
   checkItems();
@@ -112,6 +133,7 @@ function useItem() {
 }
 
 function kena(item) {
+  console.log(item)
   switch (item) {
     case 'freeze':
       frozen = true;

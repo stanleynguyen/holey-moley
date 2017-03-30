@@ -2,8 +2,8 @@
 const navItems = document.querySelectorAll('.nav li');
 const tabItems = document.querySelectorAll('.tab-item');
 const name = document.querySelector('#profile #name');
-const level = document.querySelector('#profile #level');
-const exp = document.querySelector('#profile #exp');
+const _level = document.querySelector('#profile #level');
+const _exp = document.querySelector('#profile #exp');
 const expBar = document.querySelector('#profile .exp-bar');
 const token = localStorage.getItem('token');
 if (!token) window.location = '/';
@@ -28,14 +28,13 @@ function getUserInfo() {
   const request = new XMLHttpRequest();
   request.open('GET', `/api/user/info?token=${token}`, true);
   request.onload = function() {
-    console.log(token, request.status);
     if (request.status === 200) {
       const data = JSON.parse(request.responseText);
       name.textContent = data.username;
-      level.textContent = data.level;
+      _level.textContent = data.level;
       const expLevel = data.level * 200;
       const expGained = expLevel - data.exp_needed;
-      exp.textContent = `${expGained}/${expLevel}`;
+      _exp.textContent = `${expGained}/${expLevel}`;
       expBar.style.width = `${Math.floor(expGained/expLevel * 100)}%`;
     } else if (request.status > 400) {
       alert('Error! Redirecting back to login');

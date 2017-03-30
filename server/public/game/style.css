@@ -25,14 +25,38 @@ body {
 
 .mole {
   max-width: 25%;
+  height: auto;
   position: absolute;
-  margin: auto 3.5% auto 2%;
+  margin: auto 2% auto 2%;
   top: 30px;
   transition: all .5s;
 }
 
+.mole-img {
+  width: 100%;
+  height: auto;
+}
+
+.mole-bomb-img, .mole-hitted-img {
+  display: none;
+  width: 100%;
+  height: auto;
+}
+
+.mole.mole-hitted .mole-img, .mole.mole-bomb .mole-img {
+  display: none;
+}
+
+.mole.mole-hitted .mole-hitted-img {
+  display: block;
+}
+
+.mole.mole-bomb .mole-bomb-img {
+  display: block;
+}
+
 .mole.up {
-  top: -50%;
+  top: -45%;
 }
 
 .foreground {

@@ -21,6 +21,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import org.json.JSONObject;
 import android.os.AsyncTask;
+import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -47,6 +48,10 @@ public class WelcomeActivity extends Activity {
     private LinearLayout popupview;
     private ImageView startImage;
 
+    public String theToken = "";
+
+    private boolean pass = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,26 +70,25 @@ public class WelcomeActivity extends Activity {
         key = (EditText) findViewById(R.id.password);
         login = (Button) findViewById(R.id.loginbtn);
         cancel = (Button) findViewById(R.id.cancelbtn);
-        token = (TextView) findViewById(R.id.token);
         startImage = (ImageView) findViewById(R.id.startImage);
         popupview = (LinearLayout) findViewById(R.id.popup_form);
-
-        id.setTypeface(custom_font);
-        key.setTypeface(custom_font);
 
         startButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                System.out.println("start button");
-                popupview.setVisibility(View.VISIBLE);
-                startImage.animate().scaleY(0.6f).scaleX(0.6f);
-                popupview.animate().translationY(0).alpha(1.0f);
-//                startActivity(new Intent(WelcomeActivity.this, Login.class));
+                if (theToken.length() > 0) {
+                    startActivity(new Intent(WelcomeActivity.this, TabsActivity.class));
 //                this.finish();
+                } else {
+                    popupview.setVisibility(View.VISIBLE);
+                    startImage.animate().scaleY(0.6f).scaleX(0.6f);
+                    popupview.animate().translationY(0).alpha(1.0f);
+                }
+//
             }
 
-            private void finish() {
-            }
+//            private void finish() {
+//            }
         });
 
         login.setOnClickListener(new View.OnClickListener() {
@@ -94,27 +98,23 @@ public class WelcomeActivity extends Activity {
                 String password = key.getText().toString();
 
                 new WelcomeActivity.AsyncLogin().execute(username, password);
-                startActivity(new Intent(WelcomeActivity.this, TabsActivity.class));
-                this.finish();
+
             }
-            private void finish() {
-            }
+
         });
 
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                System.out.println("cancel");
                 startImage.animate().scaleY(1.0f).scaleX(1.0f);
                 popupview.animate().translationY(popupview.getHeight()).alpha(0.0f).setListener(
                     new AnimatorListenerAdapter() {
                         @Override
                         public void onAnimationEnd(Animator animation) {
-                            super.onAnimationEnd(animation);
-                            System.out.println("set invisible");
-                            popupview.setVisibility(View.INVISIBLE);
-                            popupview.animate().setListener(null);
-                        }});
+                    super.onAnimationEnd(animation);
+                    popupview.setVisibility(View.INVISIBLE);
+                    popupview.animate().setListener(null);
+                }});
 
             }
 
@@ -225,9 +225,9 @@ public class WelcomeActivity extends Activity {
             }
 
             try {
-
+                pass = false;
                 int response_code = conn.getResponseCode();
-//                System.out.println(response_code);
+                System.out.println(response_code);
                 // Check if successful connection made
                 if (response_code == HttpURLConnection.HTTP_OK) {
 
@@ -236,17 +236,21 @@ public class WelcomeActivity extends Activity {
                     BufferedReader reader = new BufferedReader(new InputStreamReader(input));
                     StringBuilder result = new StringBuilder();
                     String line;
+                    pass = true;
 
                     while ((line = reader.readLine()) != null) {
                         result.append(line);
                     }
 
                     // Pass data to onPostExecute method
-                    return(result.toString());
+                    return (result.toString());
 
-                }else{
+                } else if (response_code == 401) {
+                    return ("Invalid username or password");
 
-                    return("unsuccessful");
+                }else {
+                    return ("Service is currently unavailable");
+
                 }
 
             } catch (IOException e) {
@@ -268,14 +272,21 @@ public class WelcomeActivity extends Activity {
 
 //            token.setText(result);
 
-            try {
-                JSONObject obj = new JSONObject(result);
-                token.setText(obj.getString("token"));
+            if (!pass) {
+                Toast.makeText(getApplicationContext(), result, Toast.LENGTH_SHORT).show();
+            } else {
 
-            } catch (Exception e) {
-                e.printStackTrace();
+                try {
+                    JSONObject obj = new JSONObject(result);
+                    startActivity(new Intent(WelcomeActivity.this, TabsActivity.class));
+//                this.finish();
+                    theToken = obj.getString("token");
+                    token.setText(obj.getString("token"));
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
-
 
 
 
@@ -285,9 +296,9 @@ public class WelcomeActivity extends Activity {
 //                use sharedPreferences of Android. and logout button to clear sharedPreferences.
 //                 */
 //
-//                Intent intent = new Intent(Login.this,TabsActivity.class);
+//                Intent intent = new Intent(WelcomeActivity.this,TabsActivity.class);
 //                startActivity(intent);
-//                Login.this.finish();
+//                WelcomeActivity.this.finish();
 //
 //            }else if (result.equalsIgnoreCase("false")){
 //

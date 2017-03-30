@@ -44,6 +44,7 @@ public class Inventory extends Fragment {
             @Override
             public void onClick(View view) {
                 Toast.makeText(getActivity(), "Equipped Freeze", Toast.LENGTH_SHORT).show();
+                // // TODO: 30/3/17 send signal to server 
             }
         });
 

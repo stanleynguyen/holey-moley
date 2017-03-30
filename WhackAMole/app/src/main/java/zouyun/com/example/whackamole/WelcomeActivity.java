@@ -43,7 +43,7 @@ public class WelcomeActivity extends Activity {
     private EditText id;
     private EditText key;
     private Button login;
-    private Button cancel;
+    private Button register;
     private TextView token;
     private LinearLayout popupview;
     private ImageView startImage;
@@ -69,7 +69,7 @@ public class WelcomeActivity extends Activity {
         id = (EditText) findViewById(R.id.username);
         key = (EditText) findViewById(R.id.password);
         login = (Button) findViewById(R.id.loginbtn);
-        cancel = (Button) findViewById(R.id.cancelbtn);
+        register = (Button) findViewById(R.id.registerbtn);
         startImage = (ImageView) findViewById(R.id.startImage);
         popupview = (LinearLayout) findViewById(R.id.popup_form);
 
@@ -78,17 +78,12 @@ public class WelcomeActivity extends Activity {
             public void onClick(View view) {
                 if (theToken.length() > 0) {
                     startActivity(new Intent(WelcomeActivity.this, TabsActivity.class));
-//                this.finish();
                 } else {
                     popupview.setVisibility(View.VISIBLE);
                     startImage.animate().scaleY(0.6f).scaleX(0.6f);
                     popupview.animate().translationY(0).alpha(1.0f);
                 }
-//
             }
-
-//            private void finish() {
-//            }
         });
 
         login.setOnClickListener(new View.OnClickListener() {
@@ -103,7 +98,7 @@ public class WelcomeActivity extends Activity {
 
         });
 
-        cancel.setOnClickListener(new View.OnClickListener() {
+        register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 startImage.animate().scaleY(1.0f).scaleX(1.0f);
@@ -119,29 +114,6 @@ public class WelcomeActivity extends Activity {
             }
 
         });
-
-
-//        Animation animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.welcome_anim);
-//        imageView.setAnimation(animation);
-
-//        animation.setAnimationListener(new Animation.AnimationListener() {
-//            @Override
-//            public void onAnimationStart(Animation animation) {
-//
-//            }
-//
-//            @Override
-//            public void onAnimationEnd(Animation animation) {
-//                finish();
-//                startActivity(new Intent(getApplicationContext(), MainActivity.class));
-//
-//            }
-//
-//            @Override
-//            public void onAnimationRepeat(Animation animation) {
-//
-//            }
-//        });
 
         new Handler().postDelayed(new Runnable() {
             @Override

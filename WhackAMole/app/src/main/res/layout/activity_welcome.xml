@@ -89,8 +89,8 @@
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="cancel"
-            android:id="@+id/cancelbtn"
+            android:text="register"
+            android:id="@+id/registerbtn"
             android:background="#ea9232"/>
     </LinearLayout>
 

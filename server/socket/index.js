@@ -89,7 +89,7 @@ function emitMole(io, roomName) {
   return setInterval(() => {
     mole = randMole();
     io.to(roomName).emit('mole', mole);
-  }, 500);
+  }, 1500);
 }
 
 function countDown(io, roomName, emitter, playerBook) {

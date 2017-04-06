@@ -25,6 +25,7 @@ body * {
   margin: 0;
   padding-left: 0;
   list-style: none;
+  z-index: 1;
 }
 
 .nav li {
@@ -71,6 +72,10 @@ body * {
   padding: 20px;
   max-height: 80px;
   cursor: pointer;
+}
+
+.tab-item.locked {
+  opacity: 0.5;
 }
 
 .tab-item p {

@@ -39,6 +39,11 @@ module.exports = {
   
   // GET /api/user/info
   getUserInfo(req, res) {
-    res.status(200).json(req.user);
+    User.findOne({ _id: req.user._id })
+      .populate('inventory equipped')
+      .exec((err, u) => {
+        if (err) return res.status(500).json(err);
+        res.status(200).json(u);
+      });
   }
 };

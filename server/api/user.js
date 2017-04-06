@@ -12,7 +12,10 @@ module.exports = {
       const newUser = new User({ 
         username,
         level: 1,
-        exp_needed: 1 * 200
+        exp_needed: 1 * 200,
+        gold: 0,
+        inventory: [],
+        equipped: []
       });
       newUser.password = newUser.encryptPassword(password);
       newUser.save((err) => {

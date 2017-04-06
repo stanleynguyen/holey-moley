@@ -9,6 +9,7 @@ const UserSchema = new mongoose.Schema({
   password: { type: String, required: true },
   level: { type: Number, required: true },
   exp_needed: { type: Number, required: true },
+  gold: { type: Number, required: true, min: 0 },
   inventory: [
     {
       type: mongoose.Schema.Types.ObjectId,
@@ -17,7 +18,7 @@ const UserSchema = new mongoose.Schema({
   ],
   equipped: {
     type: [{
-      type: mongoose.Schema.Type.ObjectId,
+      type: mongoose.Schema.Types.ObjectId,
       ref: 'Item'
     }],
     validate: [equipmentLimit, '{PATH} exceeds the limit of 3']

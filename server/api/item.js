@@ -12,8 +12,8 @@ module.exports = {
   
   // POST /api/item
   createNewItem(req, res) {
-    const { id, img, required_level, price } = req.body;
-    const newItem = new Item({ id, img, required_level, price });
+    const { id, img, required_level, price, mana_cost } = req.body;
+    const newItem = new Item({ id, img, required_level, price, mana_cost });
     newItem.save((err) => {
       if (err) return res.status(500).json(err);
       res.status(200).json(newItem);
@@ -22,13 +22,14 @@ module.exports = {
   
   // PUT /api/item
   editItem(req, res) {
-    const { id, img, required_level, price } = req.body;
+    const { id, img, required_level, price, mana_cost } = req.body;
     Item.findOne({ id }, (err, i) => {
       if (err) return res.status(500).json(err);
       if (!i) return res.status(404).json({ responseText: 'Not Found' });
       i.img = img;
       i.required_level = required_level;
       i.price = price;
+      i.mana_cost = mana_cost;
       i.save((err) => {
         if (err) return res.status(500).json(err);
         res.status(200).json(i);

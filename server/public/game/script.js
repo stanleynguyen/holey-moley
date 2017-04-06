@@ -109,6 +109,7 @@ function hit(socket, e) {
     setTimeout(() => explosionOverlay.style.display = 'none', 200);
     updateHealth(health);
   }
+  if (this.clasList.contains('mole-hitted')) return;
   score++;
   if (mana < 100) mana += 10;
   updateManaStatus();
@@ -133,7 +134,6 @@ function useItem() {
 }
 
 function kena(item) {
-  console.log(item)
   switch (item) {
     case 'freeze':
       frozen = true;

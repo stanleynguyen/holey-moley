@@ -120,6 +120,7 @@ function buyItem() {
           _inventory.innerHTML += InventoryList(JSON.parse(request.responseText));
           alert('Successfully bought item');
           _this.classList.add('locked');
+          bindInventoryEvents();
         } else if (request.status === 401) {
           localStorage.removeItem('token');
           alert('Please login first!');
@@ -173,6 +174,7 @@ function equipItem() {
 }
 
 function handleError() {
+  localStorage.removeItem('token');
   alert('Error! Redirecting back to login');
   window.location = '/';
 }

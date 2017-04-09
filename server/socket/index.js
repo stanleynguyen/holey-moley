@@ -40,7 +40,11 @@ module.exports = (server) => {
       const player = playerBook[socket.id];
       if (!player) return;
       let expGain = player.getScore();
-      if (player.getWin()) expGain += 30;
+      let goldGain = player.getScore();
+      if (player.getWin()) {
+        expGain += 30;
+        goldGain += 20;
+      }
       jwt.verify(token, process.env.SECRET, (err, decoded) => {
         if (err) return;
         User.findOne({ _id: decoded._id })
@@ -51,6 +55,7 @@ module.exports = (server) => {
             } else {
               u.exp_needed -= expGain;
             }
+            u.gold = goldGain;
             u.save();
           });
       });

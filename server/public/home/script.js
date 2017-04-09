@@ -16,6 +16,7 @@ if (!token) window.location = '/';
     .then(getShopItems)
     .then(displayShop)
     .then(bindShopEvents)
+    .then(bindInventoryEvents)
     .catch(handleError);
   navItems.forEach((i) => i.addEventListener('click', toggle.bind(i)));
   tabItems.forEach((i) => i.addEventListener('click', handleClick.bind(i)));
@@ -61,7 +62,7 @@ function displayUserInfo(data) {
     _exp.textContent = `${expGained}/${expLevel}`;
     expBar.style.width = `${Math.floor(expGained/expLevel * 100)}%`;
     _gold.textContent = data.gold;
-    _inventory.innerHTML += InventoryList(data.inventory);
+    _inventory.innerHTML += InventoryList(data.inventory, data.equipped);
     resolve(data);
   });
 }
@@ -135,26 +136,64 @@ function buyItem() {
   });
 }
 
+function bindInventoryEvents() {
+  const invItems = document.querySelectorAll('#inventory .tab-item');
+  invItems.forEach((i) => i.addEventListener('click', equipItem.bind(i)));
+}
+
+function equipItem() {
+  const itemId = this.dataset.id;
+  const _this = this;
+  return new Promise(function(resolve, reject) {
+    const request = new XMLHttpRequest();
+    request.open('POST', '/api/user/equip', true);
+    request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
+    const data = `item=${itemId}&token=${token}`;
+    request.onload = function() {
+      if (request.readyState === 4) {
+        if (request.status === 200) {
+          const equipped = JSON.parse(request.responseText).equipped;
+          (equipped)
+            ? _this.classList.add('equipped')
+            : _this.classList.remove('equipped');
+        } else if (request.status === 401) {
+          localStorage.removeItem('token');
+          alert('Please login first!');
+          window.location = '/';
+          reject();
+        } else {
+          const response = JSON.parse(request.responseText);
+          alert(response.responseText);
+        }
+      }
+    };
+    request.onerror = reject;
+    request.send(data);
+  });
+}
+
 function handleError() {
   alert('Error! Redirecting back to login');
   window.location = '/';
 }
 
 // functions to render views 
-const InventoryList = function(invList) {
+const InventoryList = function(invList, equipmentList) {
   return invList.map(function(i) {
-    return '<div class="tab-item">\
-              <img class="img-fluid" src="' + i.img + '" />\
-            </div>';
+    let equipped = false;
+    if (equipmentList) equipped = equipmentList.some((e) => e._id === i._id);
+    return `<div class="tab-item ${(equipped && 'equipped')}" data-id="${i._id}">
+              <img class="img-fluid" src="${i.img}" />
+            </div>`;
   }).join('');
 };
 
 const ShopList = function(itmList) {
   return itmList.map(function(i) {
-    return '<div class="tab-item ' + (i.canBuy ? '' : 'locked') + '" data-id="' + i._id + '">\
-              <img class="img-fluid" src="' + i.img + '" />\
-              <p>Level ' + i.required_level + '</p>\
-              <p>' + i.price + ' Gold</p>\
-            </div>';
+    return `<div class="tab-item ${(i.canBuy ? '' : 'locked')}" data-id="${i._id}">
+              <img class="img-fluid" src="${i.img}" />
+              <p>Level ${i.required_level}</p>
+              <p>${i.price} Gold</p>
+            </div>`;
   }).join('');
 };

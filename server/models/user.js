@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 const bcrypt = require('bcrypt');
 
-const equipmentLimit = (v) => v <= 3;
+const equipmentLimit = (v) => v.length <= 3;
 
 const UserSchema = new mongoose.Schema({
   username: { type: String, required: true, unique: true },
@@ -21,7 +21,10 @@ const UserSchema = new mongoose.Schema({
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Item'
     }],
-    validate: [equipmentLimit, '{PATH} exceeds the limit of 3']
+    validate: {
+      validator: equipmentLimit, 
+      message: '{PATH} exceeds the limit of 3'
+    }
   }
 });
 

@@ -76,11 +76,25 @@ module.exports = {
     User.findOne({ _id: req.user._id }, (err, u) => {
       if (err) return res.status(500).json(err);
       if (u.inventory.indexOf(item) === -1) return res.status(404).json({ responseText: 'Item Not In Inventory' });
-      if (u.equipped.length > 3) return res.status(403).json({ responseText: 'Cant hold more than 3. Unequip something first!' });
-      u.equipped = [...u.equipped, item];
+      // check if item alr equipped, if so unequip it
+      const idx = u.equipped.indexOf(item);
+      let equipped;
+      if (idx === -1) {
+        // handle equip
+        if (u.equipped.length >= 3) return res.status(403).json({ responseText: 'Cant hold more than 3. Unequip something first!' });
+        u.equipped = [...u.equipped, item];
+        equipped = true;
+      } else {
+        // handle unequip
+        u.equipped = [
+          ...u.equipped.slice(0, idx),
+          ...u.equipped.slice(idx+1)
+        ];
+        equipped = false;
+      }
       u.save((err) => {
         if (err) return res.status(500).json(err);
-        res.status(200).json({});
+        res.status(200).json({ equipped });
       });
     });
   }

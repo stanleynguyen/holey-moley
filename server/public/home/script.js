@@ -41,7 +41,7 @@ function getUserInfo() {
       if (request.status === 200) {
         const data = JSON.parse(request.responseText);
         resolve(data);
-      } else if (request.status > 500) {
+      } else if (request.status >= 500) {
         reject();
       } else if (request.status === 401) {
         localStorage.removeItem('token');
@@ -82,7 +82,7 @@ function getShopItems(userData) {
           return d;
         });
         resolve(rtv);
-      } else if (request.status > 500) {
+      } else if (request.status >= 500) {
         reject();
       } else if (request.status === 401) {
         localStorage.removeItem('token');

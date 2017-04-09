@@ -5,10 +5,10 @@ if (!token) window.location = '/';
 // main
 const subsDisplay = document.querySelector('.drop .subtitle');
 const moles = document.querySelectorAll('.mole');
-const items = document.querySelectorAll('.item');
 const myScore = document.querySelector('#my-score');
 const opponentScore = document.querySelector('#opp-score');
 const manaBar = document.querySelector('.mana');
+const itemsBox = document.querySelector('.footer .items-box');
 let score = 0;
 let health = 3;
 let mana = 0;
@@ -42,7 +42,11 @@ const isEventSupported = (function(){
 (function() {
   loadingSubInterval = setInterval(generateSubs(), 3000);
     
-  socket.emit('join');
+  loadEquipments()
+    .then(putOnEquipment)
+    .then(bindItemsEvent)
+    .then(socket.emit.bind(socket, 'join'))
+    .catch(handleError);
   socket.on('start', turnOffDrop);
   socket.on('mole', peep);
   socket.on('item', kena);
@@ -51,12 +55,51 @@ const isEventSupported = (function(){
   socket.on('lose', handleLose);
   
   moles.forEach(function(m) { m.addEventListener('touchstart', hit.bind(m, socket)); });
-  items.forEach(function(i) { i.addEventListener('touchstart', useItem); });
   if (!isEventSupported('touchstart')) {
     moles.forEach(function(m) { m.addEventListener('click', hit.bind(m, socket)); });
-    items.forEach(function(i) { i.addEventListener('click', useItem); });
   }
 })();
+
+function loadEquipments() {
+  return new Promise(function(resolve, reject) {
+    const request = new XMLHttpRequest();
+    request.open('GET', `/api/user/equipment?token=${token}`, true);
+    request.onload = function() {
+      if (request.status === 200) {
+        const data = JSON.parse(request.responseText);
+        resolve(data);
+      } else if (request.status === 401) {
+        localStorage.removeItem('token');
+        reject('Login first!');
+      } else {
+        reject('Server Error');
+      }
+    };
+    request.onerror = reject;
+    request.send();
+  });
+}
+
+function putOnEquipment(equipments) {
+  return new Promise(function(resolve) {
+    itemsBox.innerHTML = EquipmentList(equipments);
+    resolve();
+  });
+}
+
+function bindItemsEvent() {
+  return new Promise(function(resolve) {
+    const items = document.querySelectorAll('.item');
+    items.forEach((i) => i.addEventListener('touchstart', useItem.bind(i)));
+    if (!isEventSupported('touchstart')) items.forEach((i) => i.addEventListener('click', useItem.bind(i)));
+    resolve();
+  });
+}
+
+function handleError(msg) {
+  alert(msg);
+  window.location = '/home';
+}
 
 function generateSubs() {
   let idx = -1;
@@ -95,6 +138,7 @@ function updateManaStatus() {
 }
 
 function checkItems() {
+  const items = document.querySelectorAll('.item');
   items.forEach(function(i) {
     if (mana >= i.dataset.cost) i.classList.remove('off');
     else i.classList.add('off');
@@ -109,7 +153,7 @@ function hit(socket, e) {
     setTimeout(() => explosionOverlay.style.display = 'none', 200);
     updateHealth(health);
   }
-  if (this.clasList.contains('mole-hitted')) return;
+  if (this.classList.contains('mole-hitted')) return;
   score++;
   if (mana < 100) mana += 10;
   updateManaStatus();
@@ -172,3 +216,10 @@ function handleLose() {
   alert('You Lost');
   window.location = '/home';
 }
+
+// functions to render views
+const EquipmentList = function(eqList) {
+  return eqList.map((e) => `
+    <img class="img-fluid item off" src="${e.img}" data-cost="${e.mana_cost}" data-id="${e.id}" />
+  `).join('');
+};

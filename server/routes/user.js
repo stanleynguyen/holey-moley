@@ -7,5 +7,6 @@ router.post('/login', userApi.logInUser);
 router.get('/info', userAuth, userApi.getUserInfo);
 router.post('/buy', userAuth, userApi.buyNewItem);
 router.post('/equip', userAuth, userApi.equipItem);
+router.get('/equipment', userAuth, userApi.getEquipments);
 
 module.exports = router;

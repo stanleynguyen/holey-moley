@@ -97,5 +97,15 @@ module.exports = {
         res.status(200).json({ equipped });
       });
     });
+  },
+  
+  // GET /api/user/equipment
+  getEquipments(req, res) {
+    User.findOne({ _id: req.user._id })
+      .populate('equipped')
+      .exec((err, u) => {
+        if (err) return res.status(500).json(err);
+        res.status(200).json(u.equipped);
+      });
   }
 };

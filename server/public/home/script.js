@@ -5,6 +5,7 @@ const name = document.querySelector('#profile #name');
 const _level = document.querySelector('#profile #level');
 const _exp = document.querySelector('#profile #exp');
 const expBar = document.querySelector('#profile .exp-bar');
+const _gold = document.querySelector('#profile #gold');
 const _inventory = document.querySelector('#inventory');
 const _shop = document.querySelector('#shop');
 const token = localStorage.getItem('token');
@@ -14,6 +15,7 @@ if (!token) window.location = '/';
     .then(displayUserInfo)
     .then(getShopItems)
     .then(displayShop)
+    .then(bindShopEvents)
     .catch(handleError);
   navItems.forEach((i) => i.addEventListener('click', toggle.bind(i)));
   tabItems.forEach((i) => i.addEventListener('click', handleClick.bind(i)));
@@ -40,7 +42,7 @@ function getUserInfo() {
         resolve(data);
       } else if (request.status > 500) {
         reject();
-      } else if (request.status > 400) {
+      } else if (request.status === 401) {
         localStorage.removeItem('token');
         reject();
       }
@@ -58,6 +60,7 @@ function displayUserInfo(data) {
     const expGained = expLevel - data.exp_needed;
     _exp.textContent = `${expGained}/${expLevel}`;
     expBar.style.width = `${Math.floor(expGained/expLevel * 100)}%`;
+    _gold.textContent = data.gold;
     _inventory.innerHTML += InventoryList(data.inventory);
     resolve(data);
   });
@@ -72,13 +75,15 @@ function getShopItems(userData) {
         const data = JSON.parse(request.responseText);
         const rtv = data.map(function(d) {
           d.canBuy = false;
-          if (d.price <= userData.gold && d.required_level <= userData.level) d.canBuy = true;
+          if (d.price <= userData.gold 
+            && d.required_level <= userData.level
+            && !userData.inventory.some((i) => i._id === d._id)) d.canBuy = true;
           return d;
         });
         resolve(rtv);
       } else if (request.status > 500) {
         reject();
-      } else if (request.status > 400) {
+      } else if (request.status === 401) {
         localStorage.removeItem('token');
         reject();
       }
@@ -92,6 +97,41 @@ function displayShop(shopList) {
   return new Promise(function(resolve) {
     _shop.innerHTML += ShopList(shopList);
     resolve();
+  });
+}
+
+function bindShopEvents() {
+  const itemsCanBuy = document.querySelectorAll('#shop .tab-item:not(.locked)');
+  itemsCanBuy.forEach((i) => i.addEventListener('click', buyItem.bind(i)));
+}
+
+function buyItem() {
+  const itemId = this.dataset.id;
+  const _this = this;
+  return new Promise(function(resolve, reject) {
+    const request = new XMLHttpRequest();
+    request.open('POST', '/api/user/buy', true);
+    request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
+    const data = `item=${itemId}&token=${token}`;
+    request.onload = function() {
+      if (request.readyState === 4) {
+        if (request.status === 200) {
+          _inventory.innerHTML += InventoryList(JSON.parse(request.responseText));
+          alert('Successfully bought item');
+          _this.classList.add('locked');
+        } else if (request.status === 401) {
+          localStorage.removeItem('token');
+          alert('Please login first!');
+          window.location = '/';
+          reject();
+        } else {
+          const response = JSON.parse(request.responseText);
+          alert(response.responseText);
+        }
+      }
+    };
+    request.onerror = reject;
+    request.send(data);
   });
 }
 
@@ -111,10 +151,10 @@ const InventoryList = function(invList) {
 
 const ShopList = function(itmList) {
   return itmList.map(function(i) {
-    return '<div class="tab-item ' + (i.canBuy ? '' : 'locked') + '">\
+    return '<div class="tab-item ' + (i.canBuy ? '' : 'locked') + '" data-id="' + i._id + '">\
               <img class="img-fluid" src="' + i.img + '" />\
               <p>Level ' + i.required_level + '</p>\
-              <p>' + i.price + '</p>\
+              <p>' + i.price + ' Gold</p>\
             </div>';
-  });
+  }).join('');
 };

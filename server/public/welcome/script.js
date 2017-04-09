@@ -1,4 +1,6 @@
 'use strict';
+const token = localStorage.getItem('token');
+if (token) window.location = '/home';
 (function() {
   const loginModal = document.querySelector('#modal__login');
   const loginBtn = document.querySelector('#btn__login');

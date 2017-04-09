@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
+<!--xmlns:app="http://schemas.android.com/apk/res-auto"-->
+<!--xmlns:tools="http://schemas.android.com/tools"-->
+<!--android:id="@+id/main_content"-->
+<!--android:layout_width="match_parent"-->
+<!--android:layout_height="match_parent"-->
+<!--android:fitsSystemWindows="true"-->
+<!--tools:context="com.example.kailue.holeymoley.MainActivity">-->
+
+<!--<android.support.design.widget.AppBarLayout-->
+<!--android:id="@+id/appbar"-->
+<!--android:layout_width="match_parent"-->
+<!--android:layout_height="wrap_content"-->
+<!--android:paddingTop="@dimen/appbar_padding_top"-->
+<!--android:theme="@style/AppTheme.AppBarOverlay">-->
+
+<!--&lt;!&ndash;<android.support.v7.widget.Toolbar&ndash;&gt;-->
+<!--&lt;!&ndash;android:id="@+id/toolbar"&ndash;&gt;-->
+<!--&lt;!&ndash;android:layout_width="match_parent"&ndash;&gt;-->
+<!--&lt;!&ndash;android:layout_height="?attr/actionBarSize"&ndash;&gt;-->
+<!--&lt;!&ndash;android:background="?attr/colorPrimary"&ndash;&gt;-->
+<!--&lt;!&ndash;app:layout_scrollFlags="scroll|enterAlways"&ndash;&gt;-->
+<!--&lt;!&ndash;app:popupTheme="@style/AppTheme.PopupOverlay">&ndash;&gt;-->
+
+<!--&lt;!&ndash;</android.support.v7.widget.Toolbar>&ndash;&gt;-->
+
+<!--<android.support.design.widget.TabLayout-->
+<!--android:id="@+id/tabs"-->
+<!--android:layout_width="match_parent"-->
+<!--android:layout_height="wrap_content" />-->
+
+<!--</android.support.design.widget.AppBarLayout>-->
+
+<!--<android.support.v4.view.ViewPager-->
+<!--android:id="@+id/container"-->
+<!--android:layout_width="match_parent"-->
+<!--android:layout_height="match_parent"-->
+<!--app:layout_behavior="@string/appbar_scrolling_view_behavior" />-->
+
+
+
+<!--</android.support.design.widget.CoordinatorLayout>-->
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_content"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:context="zouyun.com.example.whackamole.TabsActivity">
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:overScrollMode="never"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/appbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay"
+        android:layout_alignParentBottom="true" >
+
+        <!--<android.support.v7.widget.Toolbar-->
+        <!--android:id="@+id/toolbar"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="?attr/actionBarSize"-->
+        <!--android:background="?attr/colorPrimary"-->
+        <!--app:layout_scrollFlags="scroll|enterAlways"-->
+        <!--app:popupTheme="@style/AppTheme.PopupOverlay">-->
+
+        <!--</android.support.v7.widget.Toolbar>-->
+
+        <android.support.design.widget.TabLayout
+            android:id="@+id/tabs"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            app:tabIndicatorColor="#e54e35"
+            app:tabIndicatorHeight="5dp"
+            app:tabSelectedTextColor="#000000"
+            />
+
+    </android.support.design.widget.AppBarLayout>
+
+
+</RelativeLayout>

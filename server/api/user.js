@@ -9,7 +9,7 @@ module.exports = {
     const { username, password } = req.body;
     User.findOne({ username }, (err, u) => {
       if (err) return res.status(500).json(err);
-      if (u) return res.status(400).json({ message: 'Username Taken' });
+      if (u) return res.status(400).json({ responseText: 'Username Taken' });
       const newUser = new User({ 
         username,
         level: 1,
@@ -31,7 +31,7 @@ module.exports = {
     const { username, password } = req.body;
     User.findOne({ username }, (err, u) => {
       if (err) return res.status(500).json(err);
-      if (!u) return res.status(400).json({ message: 'User Not Found' });
+      if (!u) return res.status(400).json({ responseText: 'User Not Found' });
       if (!u.checkPassword(password, u.password)) return res.status(401).json({ message: 'Invalid credentials' });
       const token = jwt.sign(u._doc, process.env.SECRET, { expiresIn: '720h' });
       res.status(200).json({ token });

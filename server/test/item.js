@@ -1,5 +1,5 @@
-let User = require('../models/user');
-let Item = require('../models/item');
+const User = require('../models/user');
+const Item = require('../models/item');
 
 const chai = require('chai');
 const chaiHttp = require('chai-http');

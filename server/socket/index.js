@@ -55,7 +55,7 @@ module.exports = (server) => {
             } else {
               u.exp_needed -= expGain;
             }
-            u.gold = goldGain;
+            u.gold += goldGain;
             u.save();
           });
       });

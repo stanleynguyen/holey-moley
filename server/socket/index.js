@@ -39,6 +39,7 @@ module.exports = (server) => {
     socket.on('end', (token) => {
       const player = playerBook[socket.id];
       if (!player) return;
+      playerBook[socket.id] = null;
       let expGain = player.getScore();
       let goldGain = player.getScore();
       if (player.getWin()) {
@@ -48,7 +49,9 @@ module.exports = (server) => {
       jwt.verify(token, process.env.SECRET, (err, decoded) => {
         if (err) return;
         User.findOne({ _id: decoded._id })
-          .then((u) => {
+          .exec((err, u) => {
+            if (err) return;
+            if (!u) return;
             if (expGain > u.exp_needed) {
               u.level++;
               u.exp_needed = u.level * 200;
@@ -66,8 +69,12 @@ module.exports = (server) => {
       if (qIdx !== -1) waitingQueue.splice(qIdx, 1);
       const disconnectedPlayer = playerBook[socket.id];
       if (!disconnectedPlayer) return;
+      playerBook[socket.id] = null;
       const opponent = playerBook[disconnectedPlayer.getOpponent()];
-      if (opponent) io.to(opponent.getId()).emit('win');
+      if (opponent) {
+        io.to(opponent.getId()).emit('win');
+        playerBook[disconnectedPlayer.getOpponent()] = null;
+      }
     });
   });
   
@@ -78,6 +85,14 @@ function checkQ(io, waitingQueue, playerBook) {
   if (waitingQueue.length < 2) return;
   const player1 = waitingQueue[0];
   const player2 = waitingQueue[1];
+  if (playerBook[player1.id]) {
+    waitingQueue = waitingQueue.slice(1);
+    return;
+  }
+  if (playerBook[player2.id]) {
+    waitingQueue = waitingQueue.slice(0,1);
+    return;
+  }
   waitingQueue = waitingQueue.slice(2);
   const room = player1.id + '#' + player2.id;
   player1.join(room);
@@ -103,6 +118,7 @@ function countDown(io, roomName, emitter, playerBook) {
     const playerIds = roomName.split('#');
     const player1 = playerBook[playerIds[0]], player2 = playerBook[playerIds[1]];
     let winner, loser;
+    if (!player1 || !player2) return;
     if (player1.getScore() > player2.getScore()) {
       winner = player1;
       player1.setWin();

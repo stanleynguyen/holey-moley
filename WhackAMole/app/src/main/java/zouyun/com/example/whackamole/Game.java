@@ -111,19 +111,20 @@ public class Game extends Fragment {
                 local.setVisibility(View.INVISIBLE);
                 localtxt.setVisibility(View.INVISIBLE);
                 localPB.setVisibility(View.VISIBLE);
+                startActivity(new Intent(getActivity(), GameActivity.class));
 
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        localPB.setVisibility(View.INVISIBLE);
-                        local.setVisibility(View.VISIBLE);
-                        localtxt.setVisibility(View.VISIBLE);
-                        random.setClickable(true);
-                        single.setClickable(true);
-                        startActivity(new Intent(getActivity(), GameActivity.class));
-                    }
-
-                },5000);
+//                new Handler().postDelayed(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        localPB.setVisibility(View.INVISIBLE);
+//                        local.setVisibility(View.VISIBLE);
+//                        localtxt.setVisibility(View.VISIBLE);
+//                        random.setClickable(true);
+//                        single.setClickable(true);
+//                        startActivity(new Intent(getActivity(), GameActivity.class));
+//                    }
+//
+//                },5000);
 
             }
         });

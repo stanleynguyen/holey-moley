@@ -1,7 +1,10 @@
 package zouyun.com.example.whackamole;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.AssetManager;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.graphics.Typeface;
 import android.media.Image;
 import android.net.Uri;
@@ -17,6 +20,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.animation.*;
 import android.widget.Toast;
@@ -43,11 +47,10 @@ import io.socket.parser.Packet;
 import io.socket.parser.Parser;
 import io.socket.thread.EventThread;
 //TODO:get player status (tools the play bought) from server at the start and show the icon accordingly
-//TODO: get mole number for popping out from server at runtime, get opponent data at run time
 //TODO: send mena data to the server
 //TODO:implement bomb mole and set OnclickListener that relates to the heart displayed
-//TODO:implement timer to time the game
 //TODO:display game over when time is up and show score
+//implement progress bar
 
 
 
@@ -61,21 +64,21 @@ import io.socket.thread.EventThread;
 
 
 public class GameActivity extends AppCompatActivity {
-    public static ArrayList<ImageView> moles = new ArrayList<>();
-    ArrayList<ImageView> sadmoles= new ArrayList<>();
-    public static boolean isComplete = false;
-    public final PlayerThread player = new PlayerThread(this.getBaseContext());
+    private static ArrayList<ImageView> moles = new ArrayList<>();
+    private static ArrayList<ImageView> hearts=new ArrayList<>();
+    private final PlayerThread player = new PlayerThread(this.getBaseContext());
     private ImageView m1, m2, m3, m4, m5, m6, m7, m8, m9,bm1,bm2,bm3,bm4,bm5,bm6,bm7,bm8,bm9;//moles
     private ImageView sm1,sm2,sm3,sm4,sm5,sm6,sm7,sm8,sm9;//sadmoles
     private ImageView bomb,deadbomb,freeze,deadfreeze,health,deadhealth;
     private ImageView h1,h2,h3,h4;//hearts
-    public TextView score,timeLeft;
-    public static boolean[] activeMoles=new boolean[9];
-    public int tempmole=0;
-    public int moleNumtemp;
-    public io.socket.client.Socket socket = null;
-    public String item=null;
-    public int oppoentScore=0;
+    private TextView score,timeLeft,freezing;
+
+    private static boolean[] activeMoles=new boolean[9];
+    private int tempmole=0;
+    private int moleNumtemp;
+    private io.socket.client.Socket socket = null;
+    private String item="none";
+    private int oppoentScore=0;
 //    final  Handler handler = new Handler();
 
     Timer timer = new Timer();
@@ -165,19 +168,19 @@ public class GameActivity extends AppCompatActivity {
 
 
         setContentView(R.layout.activity_game);
-
+///set up socket
         try {
             socket = IO.socket("http://holeymoley.herokuapp.com");
         } catch (URISyntaxException e) {
             e.printStackTrace();
         }
 
-
         socket.emit("join");
         final GameActivity _this = this;
         socket.on("start", new Emitter.Listener() {
             @Override
             public void call(Object... args) {
+
 //
                 System.out.println("connecting");
 //                        Toast.makeText(_this.getApplicationContext(),"hello1",Toast.LENGTH_SHORT).show();
@@ -186,7 +189,12 @@ public class GameActivity extends AppCompatActivity {
         socket.on("mole", new Emitter.Listener() {
             @Override
             public void call(Object... args) {
-                moleNumtemp=Integer.parseInt(args[0].toString());
+                int molenumber=Integer.parseInt(args[0].toString());
+                if(item.equals("bomb")){
+                    bombMolePopping(molenumber);
+                    item="none";
+                }
+                else{molePopping(molenumber);}
                 System.out.println(args[0].toString());
             }
         });//
@@ -194,6 +202,11 @@ public class GameActivity extends AppCompatActivity {
             @Override
             public void call(Object... args) {
                 item=args[0].toString();
+
+                if(item.equals("freeze")){
+                    freezeEffect();
+                }
+
                 System.out.println(args[0].toString());
             }
         });
@@ -219,7 +232,11 @@ public class GameActivity extends AppCompatActivity {
         m9 = (ImageView) findViewById(R.id.mole9);
         score = (TextView) findViewById(R.id.score);
         timeLeft=(TextView) findViewById(R.id.time);
+        freezing=(TextView) findViewById(R.id.freezing);
         score.setTypeface(typeface2);
+        freezing.setTypeface(typeface2);
+        freezing.setVisibility(View.INVISIBLE);
+
         timeLeft.setTypeface(typeface1);
         moles.add(m1);
         moles.add(m2);
@@ -241,6 +258,12 @@ public class GameActivity extends AppCompatActivity {
         h2=(ImageView) findViewById(R.id.heart2);
         h3=(ImageView) findViewById(R.id.heart3);
         h4=(ImageView) findViewById(R.id.heart4);
+        hearts.add(h1);
+        hearts.add(h2);
+        hearts.add(h3);
+        hearts.add(h4);
+
+
 
 //        Toast.makeText(this.getApplicationContext(),"hello1",Toast.LENGTH_SHORT).show();
 
@@ -251,97 +274,147 @@ public class GameActivity extends AppCompatActivity {
         bomb.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                bomb.setVisibility(View.GONE);
-                deadbomb.setVisibility(View.VISIBLE);
+                socket.emit("item","bomb");
+//                bomb.setVisibility(View.GONE);
+//                deadbomb.setVisibility(View.VISIBLE);
 
             }
         });
         freeze.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                freeze.setVisibility(View.GONE);
-                deadfreeze.setVisibility(View.VISIBLE);
+                socket.emit("item","freeze");
+//                freeze.setVisibility(View.GONE);
+//                deadfreeze.setVisibility(View.VISIBLE);
             }
         });
         health.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 health.setVisibility(View.GONE);
-                h4.setVisibility(View.VISIBLE);//Need to change so that it can check once there is less than 3 lifes
+                hearts.get(player.getHealth()).setVisibility(View.VISIBLE);
+                player.gainHealth();
                 deadhealth.setVisibility(View.VISIBLE);
             }
         });
         //        //timer for 1 minute
 //        handler.post(runnableCode);
+        score.setText("Score: "+Integer.toString(player.getPoint())+"\nOppoent Score:"+oppoentScore);
 
 
 
 ////this part is for moles popping
-        timer.scheduleAtFixedRate(new TimerTask() {
-
-            @Override
-            public void run() {
-
-
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-//                        int moleNumtemp = (int) (Math.random() * 9);
-            final int moleNum;
-
-            //no same mole consecutively
-            if(tempmole!=moleNumtemp){
-                moleNum=moleNumtemp;}
-            else if (moleNumtemp!=8){
-                moleNum=moleNumtemp+1;}
-            else{moleNum=0;}
-
-
-
-
-//                        activeMoles[tempmole]=false;
-//                        moles.get(moleNum).setImageDrawable(getResources().getDrawable(R.drawable.game_mole));
-            /////
-            activeMoles[moleNum]=true;
-            /////
-//                        score.setText(Integer.toString(player.getPoint()));
-
-//                        ObjectAnimator animation = new ObjectAnimator();
-//                        moles.get(moleNum).animate().translationYBy(-250).setDuration(1000);
-
-            // 0.04 s to rise up a
-            // nd go down, 0.5 s stay there
-
-            final Runnable endAction2 = new Runnable() {
-                public void run() {
-                    moles.get(moleNum).setImageDrawable(getResources().getDrawable(R.drawable.game_mole));
-
-                }
-            };
-            Runnable endAction = new Runnable() {
-                public void run() {
-                    moles.get(moleNum).animate().translationYBy(250).setDuration(500).withEndAction(endAction2).setStartDelay(500);
+//        timer.scheduleAtFixedRate(new TimerTask() {
+//
+//            @Override
+//            public void run() {
+//                runOnUiThread(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        final int moleNum=moleNumtemp;
+//
+//                        //no same mole consecutively
+//
+////                        if(tempmole!=moleNumtemp){
+////                            moleNum=moleNumtemp;}
+////                        else if (moleNumtemp!=8){
+////                            moleNum=moleNumtemp+1;}
+////                        else{moleNum=0;}
+//
+//
+//                            if (item.equals("freeze")){
+//                                freezing.setVisibility(View.VISIBLE);
+//
+//                                try {
+//                                    System.out.println("freeeeeeezzzzzzinggg");
+//                                    Thread.sleep(1500);
+//                                } catch (InterruptedException e) {
+//                                    e.printStackTrace();
+//                                }
+////                                freezing.setVisibility(View.INVISIBLE);
+//                                item="none";
+//                            }
+//                            else if(item.equals("bomb")){
+//                                moles.get(moleNum).setImageDrawable(getResources().getDrawable(R.drawable.game_bombmole));
+//                                activeMoles[moleNum]=true;
+//                                final Runnable endAction2 = new Runnable() {
+//                                    public void run() {
+//                                        moles.get(moleNum).setImageDrawable(getResources().getDrawable(R.drawable.game_mole));
+//
+//                                    }
+//                                };
+//                                Runnable endAction = new Runnable() {
+//                                    public void run() {
+//                                        moles.get(moleNum).animate().translationYBy(250).setDuration(500).withEndAction(endAction2).setStartDelay(500);
+////                    moles.get(moleNum).animate().translationYBy(250).setDuration(500).withEndAction(endAction2).setStartDelay(500);
+//
+//                                    }
+//                                };
+//
+//
+//                                moles.get(moleNum).animate().translationYBy(-250).setDuration(500).withEndAction(endAction);
+////            moles.get(moleNum).setClickable(false);
+//                                score.setText("Score: "+Integer.toString(player.getPoint())+"\nOppoent Score:"+oppoentScore);
+//                                moles.get(moleNum).setImageDrawable(getResources().getDrawable(R.drawable.game_mole));
+//
+//
+//                                tempmole=moleNum;
+//
+//
+//                                item="none";
+//                            }else{
+//
+////                        int moleNumtemp = (int) (Math.random() * 9);
+//
+//
+//
+//
+//
+////                        activeMoles[tempmole]=false;
+////                        moles.get(moleNum).setImageDrawable(getResources().getDrawable(R.drawable.game_mole));
+//            /////
+//            activeMoles[moleNum]=true;
+//            /////
+////                        score.setText(Integer.toString(player.getPoint()));
+//
+////                        ObjectAnimator animation = new ObjectAnimator();
+////                        moles.get(moleNum).animate().translationYBy(-250).setDuration(1000);
+//
+//            // 0.04 s to rise up a
+//            // nd go down, 0.5 s stay there
+//
+//            final Runnable endAction2 = new Runnable() {
+//                public void run() {
+//                    moles.get(moleNum).setImageDrawable(getResources().getDrawable(R.drawable.game_mole));
+//
+//                }
+//            };
+//            Runnable endAction = new Runnable() {
+//                public void run() {
 //                    moles.get(moleNum).animate().translationYBy(250).setDuration(500).withEndAction(endAction2).setStartDelay(500);
-
-                }
-            };
-
-
-            moles.get(moleNum).animate().translationYBy(-250).setDuration(500).withEndAction(endAction);
-//            moles.get(moleNum).setClickable(false);
-                        score.setText("Score: "+Integer.toString(player.getPoint())+"\nOppoent Score:"+oppoentScore);
-            moles.get(moleNum).setImageDrawable(getResources().getDrawable(R.drawable.game_mole));
-
-
-            tempmole=moleNum;
-
-
-
-                    }
-                });
-
-            }
-        },0,1500);
+////                    moles.get(moleNum).animate().translationYBy(250).setDuration(500).withEndAction(endAction2).setStartDelay(500);
+//
+//                }
+//            };
+//
+//
+//            moles.get(moleNum).animate().translationYBy(-250).setDuration(500).withEndAction(endAction);
+////            moles.get(moleNum).setClickable(false);
+//                        score.setText("Score: "+Integer.toString(player.getPoint())+"\nOppoent Score:"+oppoentScore);
+//            moles.get(moleNum).setImageDrawable(getResources().getDrawable(R.drawable.game_mole));
+//                                moles.get(moleNum).clearColorFilter();
+//
+//
+//            tempmole=moleNum;
+//                            }
+//
+//
+//
+//                    }
+//                });
+//
+//            }
+//        },0,1500);
 
 
 
@@ -366,9 +439,18 @@ public class GameActivity extends AppCompatActivity {
             }
 
             public void onFinish() {
-                timeLeft.setText("Time is up!");
-                timer.cancel();
                 socket.disconnect();
+                timer.cancel();
+                timeLeft.setText("Time is up!");
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        startActivity(new Intent(getApplicationContext(), TabsActivity.class));//testing
+                    }
+
+                },2000);
+
 //                handler.removeCallbacks(runnableCode);
 //
 //                try {
@@ -390,10 +472,17 @@ public class GameActivity extends AppCompatActivity {
                 public void onClick(View v) {
 
                     if(activeMoles[finalI]){
+                        if(item.equals("bomb")){
+                            player.kenaBomb();
+                            moles.get(finalI).getDrawable().setColorFilter(Color.RED, PorterDuff.Mode.ADD );;
+                        }
+                        else if(item.equals("none")){
+                            player.hitMole();
+                            moles.get(finalI1).setImageDrawable(getResources().getDrawable(R.drawable.game_sadmole));
+                            socket.emit("score");
+                        }
 //                        activeMoles[finalI]=false;
-                        player.hitMole();
-                        moles.get(finalI1).setImageDrawable(getResources().getDrawable(R.drawable.game_sadmole));
-                        socket.emit("score");
+
 //                    moles.get(finalI).setClickable(false);
 
 
@@ -403,6 +492,93 @@ public class GameActivity extends AppCompatActivity {
                 }
             });
         }
+    }
+
+    void molePopping(final int moleNum){
+        final Runnable endAction2 = new Runnable() {
+            public void run() {
+                moles.get(moleNum).setImageDrawable(getResources().getDrawable(R.drawable.game_mole));
+
+            }
+        };
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                /////
+                activeMoles[moleNum]=true;
+                /////
+
+                // 0.5 s to rise up and go down, 0.5 s stay there
+
+
+                Runnable endAction = new Runnable() {
+                    public void run() {
+                        moles.get(moleNum).animate().translationYBy(250).setDuration(500).withEndAction(endAction2).setStartDelay(500);
+//                    moles.get(moleNum).animate().translationYBy(250).setDuration(500).withEndAction(endAction2).setStartDelay(500);
+
+                    }
+                };
+
+
+                moles.get(moleNum).animate().translationYBy(-250).setDuration(500).withEndAction(endAction);
+
+            }
+        });
+
+//            moles.get(moleNum).setClickable(false);
+
+
+    }
+    void bombMolePopping(final int moleNum){
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                moles.get(moleNum).setImageDrawable(getResources().getDrawable(R.drawable.game_bombmole));
+                activeMoles[moleNum]=true;
+
+                // 0.5 s to rise up and go down, 0.5 s stay there
+
+                final Runnable endAction2 = new Runnable() {
+                    public void run() {
+                        moles.get(moleNum).setImageDrawable(getResources().getDrawable(R.drawable.game_mole));
+
+                    }
+                };
+                Runnable endAction = new Runnable() {
+                    public void run() {
+                        moles.get(moleNum).animate().translationYBy(250).setDuration(500).withEndAction(endAction2).setStartDelay(500);
+//                    moles.get(moleNum).animate().translationYBy(250).setDuration(500).withEndAction(endAction2).setStartDelay(500);
+
+                    }
+                };
+
+
+                moles.get(moleNum).animate().translationYBy(-250).setDuration(500).withEndAction(endAction);
+//            moles.get(moleNum).setClickable(false);
+
+            }
+        });
+
+
+
+
+
+    }
+    void freezeEffect(){
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                freezing.setVisibility(View.VISIBLE);
+                try {
+                    Thread.sleep(3000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+
+
     }
 
 
@@ -483,7 +659,8 @@ class PlayerThread extends Thread{
     public PlayerThread(final Context context){
         this.point=0;
         this.energy=0;
-        this.health=3;}
+        this.health=3;
+    }
 //        this.context=context;
 //        this.runnableCode= new Runnable() {
 //
@@ -573,7 +750,10 @@ class PlayerThread extends Thread{
     }
 
     void kenaBomb() {
-        deductHealth(1);
+        deductHealth();
+    }
+    void gainHealth(){
+        this.health++;
     }
 
 
@@ -581,8 +761,8 @@ class PlayerThread extends Thread{
     /// utility functions
     /////////////////////
 
-    void deductHealth(int amount) {
-        this.health -= amount;
+    void deductHealth() {
+        this.health --;
     }
 
     void gainEnergy(int amount) {

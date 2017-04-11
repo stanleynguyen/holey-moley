@@ -1,13 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/activity_main"
+    android:id="@+id/activity_game"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/game_background"
     android:fitsSystemWindows="true"
     tools:context="zouyun.com.example.whackamole.GameActivity">
 
+
+    <!---->
+    <!--<ProgressBar-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent" />-->
 
 
     <TextView
@@ -28,6 +33,7 @@
         android:layout_marginTop="60dp"
         android:id="@+id/time"
         />
+
     <ImageView
         android:layout_width="25dp"
         android:layout_height="25dp"
@@ -333,6 +339,15 @@
         android:layout_alignParentBottom="true"
         android:layout_alignStart="@+id/mole8"
         android:layout_marginBottom="29dp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+
+        android:id="@+id/freezing"
+        android:textSize="40dp"
+        android:textColor="@color/colorPrimary"
+        android:layout_centerInParent="true"/>
 
 
 </RelativeLayout>

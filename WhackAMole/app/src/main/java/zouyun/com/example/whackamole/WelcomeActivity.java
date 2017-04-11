@@ -40,6 +40,7 @@ public class WelcomeActivity extends Activity {
     private ImageView startButton;
     private TextView tapToStart;
 
+    // For login
     private EditText id;
     private EditText key;
     private Button login;
@@ -47,6 +48,15 @@ public class WelcomeActivity extends Activity {
     private TextView token;
     private LinearLayout popupview;
     private ImageView startImage;
+
+    // For registration
+    private EditText Rid;
+    private EditText Rkey;
+    private EditText Rkey2;
+    private Button Rlogin;
+    private Button Rregister;
+    private TextView Rtoken;
+    private LinearLayout Rpopupview;
 
     public String theToken = "";
 
@@ -59,19 +69,34 @@ public class WelcomeActivity extends Activity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_welcome);
 
+        Typeface custom_font = Typeface.createFromAsset(getAssets(),  "fonts/bignoodletitling.ttf");
+        Typeface field_font = Typeface.createFromAsset(getAssets(),  "fonts/Roboto-Light.ttf");
+
         startProgressBar = (ProgressBar) findViewById(R.id.startProgressBar);
         startButton = (ImageView) findViewById(R.id.startButton);
         tapToStart = (TextView) findViewById(R.id.tapToStart);
-        Typeface custom_font = Typeface.createFromAsset(getAssets(),  "fonts/bignoodletitling.ttf");
         tapToStart.setTypeface(custom_font);
 
-
+        // For login
         id = (EditText) findViewById(R.id.username);
         key = (EditText) findViewById(R.id.password);
         login = (Button) findViewById(R.id.loginbtn);
         register = (Button) findViewById(R.id.registerbtn);
         startImage = (ImageView) findViewById(R.id.startImage);
         popupview = (LinearLayout) findViewById(R.id.popup_form);
+        id.setTypeface(field_font);
+        key.setTypeface(field_font);
+
+        // For registration
+        Rid = (EditText) findViewById(R.id.Rusername);
+        Rkey = (EditText) findViewById(R.id.Rpassword);
+        Rkey2 = (EditText) findViewById(R.id.Rconfirmpassword);
+        Rregister = (Button) findViewById(R.id.Rregisterbtn);
+        Rlogin = (Button) findViewById(R.id.Rloginbtn);
+        Rpopupview = (LinearLayout) findViewById(R.id.Rpopup_form);
+        Rid.setTypeface(field_font);
+        Rkey.setTypeface(field_font);
+        Rkey2.setTypeface(field_font);
 
         startButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -82,6 +107,7 @@ public class WelcomeActivity extends Activity {
                     popupview.setVisibility(View.VISIBLE);
                     startImage.animate().scaleY(0.6f).scaleX(0.6f);
                     popupview.animate().translationY(0).alpha(1.0f);
+                    startButton.setVisibility(View.INVISIBLE);
                 }
             }
         });
@@ -101,18 +127,49 @@ public class WelcomeActivity extends Activity {
         register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startImage.animate().scaleY(1.0f).scaleX(1.0f);
+//                startImage.animate().scaleY(1.0f).scaleX(1.0f);
                 popupview.animate().translationY(popupview.getHeight()).alpha(0.0f).setListener(
                     new AnimatorListenerAdapter() {
                         @Override
                         public void onAnimationEnd(Animator animation) {
-                    super.onAnimationEnd(animation);
-                    popupview.setVisibility(View.INVISIBLE);
-                    popupview.animate().setListener(null);
+                            super.onAnimationEnd(animation);
+                            popupview.setVisibility(View.INVISIBLE);
+                            popupview.animate().setListener(null);
+                            Rpopupview.setVisibility(View.VISIBLE);
+                            startImage.animate().scaleY(0.6f).scaleX(0.6f);
+                            Rpopupview.animate().translationY(0).alpha(1.0f);
                 }});
-
             }
 
+        });
+
+        Rregister.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String Rusername = Rid.getText().toString();
+                String Rpassword = Rkey.getText().toString();
+                String Rpassword2 = Rkey2.getText().toString();
+
+                new WelcomeActivity.AsyncRegister().execute(Rusername, Rpassword, Rpassword2);
+            }
+        });
+
+        Rlogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+//                startImage.animate().scaleY(1.0f).scaleX(1.0f);
+                Rpopupview.animate().translationY(popupview.getHeight()).alpha(0.0f).setListener(
+                        new AnimatorListenerAdapter() {
+                            @Override
+                            public void onAnimationEnd(Animator animation) {
+                                super.onAnimationEnd(animation);
+                                Rpopupview.setVisibility(View.INVISIBLE);
+                                Rpopupview.animate().setListener(null);
+                                popupview.setVisibility(View.VISIBLE);
+                                startImage.animate().scaleY(0.6f).scaleX(0.6f);
+                                popupview.animate().translationY(0).alpha(1.0f);
+                            }});
+            }
         });
 
         new Handler().postDelayed(new Runnable() {
@@ -125,6 +182,8 @@ public class WelcomeActivity extends Activity {
                 tapToStart.setVisibility(View.VISIBLE);
                 popupview.setAlpha(0.0f);
                 popupview.setTranslationY(popupview.getHeight());
+                Rpopupview.setAlpha(0.0f);
+                Rpopupview.setTranslationY(Rpopupview.getHeight());
             }
 
 
@@ -139,17 +198,6 @@ public class WelcomeActivity extends Activity {
         ProgressDialog pdLoading = new ProgressDialog(zouyun.com.example.whackamole.WelcomeActivity.this);
         HttpURLConnection conn;
         URL url = null;
-
-//        @Override
-//        protected void onPreExecute() {
-//            super.onPreExecute();
-//
-//            //this method will be running on UI t+hread
-//            pdLoading.setMessage("\tLoading...");
-//            pdLoading.setCancelable(false);
-//            pdLoading.show();
-//
-//        }
 
         @Override
         protected String doInBackground(String... params) {
@@ -271,6 +319,153 @@ public class WelcomeActivity extends Activity {
 //                Intent intent = new Intent(WelcomeActivity.this,TabsActivity.class);
 //                startActivity(intent);
 //                WelcomeActivity.this.finish();
+//
+//            }else if (result.equalsIgnoreCase("false")){
+//
+//                // If username and password does not match display a error message
+//                Toast.makeText(getApplicationContext(), "Invalid email or password", Toast.LENGTH_LONG).show();
+//
+//            } else if (result.equalsIgnoreCase("exception") || result.equalsIgnoreCase("unsuccessful")) {
+//
+//                Toast.makeText(getApplicationContext(), "OOPs! Something went wrong. Connection Problem.", Toast.LENGTH_LONG).show();
+//
+//            }
+        }
+
+    }
+
+    private class AsyncRegister extends AsyncTask<String, String, String> {
+        public static final int CONNECTION_TIMEOUT=10000;
+        public static final int READ_TIMEOUT=15000;
+
+        ProgressDialog pdLoading = new ProgressDialog(WelcomeActivity.this);
+        HttpURLConnection conn;
+        URL url = null;
+
+//        @Override
+//        protected void onPreExecute() {
+//            super.onPreExecute();
+//
+//            //this method will be running on UI thread
+//            pdLoading.setMessage("\tLoading...");
+//            pdLoading.setCancelable(false);
+//            pdLoading.show();
+//
+//        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            try {
+
+                // Enter URL address where your php file resides
+                url = new URL("http://holeymoley.herokuapp.com/api/user/register");
+
+            } catch (MalformedURLException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+                return "exception";
+            }
+            try {
+                // Setup HttpURLConnection class to send and receive data from php and mysql
+                conn = (HttpURLConnection)url.openConnection();
+                conn.setReadTimeout(READ_TIMEOUT);
+                conn.setConnectTimeout(CONNECTION_TIMEOUT);
+                conn.setRequestMethod("POST");
+
+                // setDoInput and setDoOutput method depict handling of both send and receive
+                conn.setDoInput(true);
+                conn.setDoOutput(true);
+
+                // Append parameters to URL
+                Uri.Builder builder = new Uri.Builder()
+                        .appendQueryParameter("username", params[0])
+                        .appendQueryParameter("password", params[1])
+                        .appendQueryParameter("password2", params[2]);
+                String query = builder.build().getEncodedQuery();
+
+                // Open connection for sending data
+                OutputStream os = conn.getOutputStream();
+                BufferedWriter writer = new BufferedWriter(
+                        new OutputStreamWriter(os, "UTF-8"));
+                writer.write(query);
+                writer.flush();
+                writer.close();
+                os.close();
+                conn.connect();
+
+            } catch (IOException e1) {
+                // TODO Auto-generated catch block
+                e1.printStackTrace();
+                return "exception";
+            }
+
+            try {
+
+                int response_code = conn.getResponseCode();
+                System.out.println(response_code);
+                // Check if successful connection made
+                if (response_code == HttpURLConnection.HTTP_OK) {
+
+                    // Read data sent from server
+                    InputStream input = conn.getInputStream();
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(input));
+                    StringBuilder result = new StringBuilder();
+                    String line;
+
+                    while ((line = reader.readLine()) != null) {
+                        result.append(line);
+                    }
+
+                    // Pass data to onPostExecute method
+                    return (result.toString());
+
+                } else if (response_code == 400) {
+                    return ("The username is already taken.");
+
+                } else if (response_code == 503) {
+                    return ("Service is currently unavailable. Please try again later.");
+
+                }else{
+
+                    return("unsuccessful");
+                }
+
+            } catch (IOException e) {
+                e.printStackTrace();
+                return "exception";
+            } finally {
+                conn.disconnect();
+            }
+
+
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+
+            //this method will be running on UI thread
+
+            pdLoading.dismiss();
+//            try {
+//                JSONObject obj = new JSONObject(result);
+//                token.setText(obj.getString("token"));
+//
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+
+
+
+
+//            if(result.equalsIgnoreCase("true"))
+//            {
+//                /* Here launching another activity when login successful. If you persist login state
+//                use sharedPreferences of Android. and logout button to clear sharedPreferences.
+//                 */
+//
+//                Intent intent = new Intent(Login.this,TabsActivity.class);
+//                startActivity(intent);
+//                Login.this.finish();
 //
 //            }else if (result.equalsIgnoreCase("false")){
 //

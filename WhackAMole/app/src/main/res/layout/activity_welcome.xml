@@ -64,6 +64,7 @@
             android:background="#e87d34"
             android:hint="Username"
             android:id="@+id/username"
+            android:inputType="text"
             android:padding="15dp"
             android:textSize="24sp"
             android:layout_marginBottom="10dp"/>
@@ -94,5 +95,62 @@
             android:background="#ea9232"/>
     </LinearLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="20dp"
+        android:background="#ea9232"
+        android:visibility="invisible"
+        android:layout_alignParentBottom="true"
+        android:id="@+id/Rpopup_form"
+        android:orientation="vertical">
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#e87d34"
+            android:hint="Username"
+            android:id="@+id/Rusername"
+            android:inputType="text"
+            android:padding="15dp"
+            android:textSize="24sp"
+            android:layout_marginBottom="10dp"/>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#e87d34"
+            android:hint="Password"
+            android:id="@+id/Rpassword"
+            android:padding="15sp"
+            android:textSize="24sp"
+            android:layout_marginBottom="10dp"
+            android:inputType="textPassword"/>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#e87d34"
+            android:hint="Confirm Password"
+            android:id="@+id/Rconfirmpassword"
+            android:padding="15sp"
+            android:textSize="24sp"
+            android:layout_marginBottom="10dp"
+            android:inputType="textPassword"/>
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="login"
+            android:id="@+id/Rloginbtn"
+            android:background="#e54e35"/>
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="register"
+            android:id="@+id/Rregisterbtn"
+            android:background="#ea9232"/>
+    </LinearLayout>
 
 </RelativeLayout>

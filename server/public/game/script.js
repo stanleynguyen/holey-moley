@@ -15,7 +15,7 @@ let mana = 0;
 const socket = io();
 let loadingSubInterval;
 // vars for kena items
-let frozen, bomb;
+let frozen, bomb, immunity;
 const frozenOverlay = document.querySelector('.freeze-overlay');
 const heartIcons = document.querySelectorAll('.heart');
 const explosionOverlay = document.querySelector('.explosion-overlay');
@@ -149,7 +149,7 @@ function hit(socket, e) {
   if (!e.isTrusted) return;
   if (this.classList.contains('mole-bomb')) {
     health--;
-    explosionOverlay.style.display = 'block';
+    explosionOverlay.style.display = 'flex';
     setTimeout(() => explosionOverlay.style.display = 'none', 200);
     updateHealth(health);
   }
@@ -173,15 +173,19 @@ function useItem() {
   if (this.dataset.id === 'health') {
     health < 3 && health++;
     updateHealth(health);
+  } else if (this.dataset.id === 'immunity') {
+    immunity = true;
+    setTimeout(() => immunity = false, 5000);
   }
   socket.emit('item', this.dataset.id);
 }
 
 function kena(item) {
+  if (immunity) return;
   switch (item) {
     case 'freeze':
       frozen = true;
-      frozenOverlay.style.display = 'block';
+      frozenOverlay.style.display = 'flex';
       setTimeout(() => {
         frozen = false;
         frozenOverlay.style.display = 'none';

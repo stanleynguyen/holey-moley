@@ -13,34 +13,38 @@ module.exports = (server) => {
       checkQ(io, waitingQueue, playerBook);
     });
     
-    socket.on('message', () => {
-      const room = playerBook[socket.id].getRoom();
-      socket.broadcast.to(room).emit('message', `message from ${socket.id}`);
-    });
-    
     socket.on('item', (id) => {
-      const room = playerBook[socket.id].getRoom();
+      const player = playerBook[socket.id];
+      if (!player) return;
+      const room = player.getRoom();
       socket.broadcast.to(room).emit('item', id);
     });
     
     socket.on('score', () => {
-      const socketId = socket.id;
-      const room = playerBook[socketId].getRoom();
-      playerBook[socketId].incScore();
-      socket.broadcast.to(room).emit('score', playerBook[socketId].getScore());
+      const player = playerBook[socket.id];
+      if (!player) return;
+      const room = player.getRoom();
+      player.incScore();
+      socket.broadcast.to(room).emit('score', player.getScore());
     });
     
     socket.on('dead', () => {
       const deadPlayer = playerBook[socket.id];
+      if (!deadPlayer) return;
       const winner = playerBook[deadPlayer.getOpponent()];
-      io.to(winner.getId()).emit('win');
+      if (winner) io.to(winner.getId()).emit('win');
       io.to(deadPlayer.getId()).emit('lose');
     });
     
     socket.on('end', (token) => {
       const player = playerBook[socket.id];
+      if (!player) return;
       let expGain = player.getScore();
-      if (player.getWin()) expGain += 30;
+      let goldGain = player.getScore();
+      if (player.getWin()) {
+        expGain += 30;
+        goldGain += 20;
+      }
       jwt.verify(token, process.env.SECRET, (err, decoded) => {
         if (err) return;
         User.findOne({ _id: decoded._id })
@@ -51,6 +55,7 @@ module.exports = (server) => {
             } else {
               u.exp_needed -= expGain;
             }
+            u.gold = goldGain;
             u.save();
           });
       });
@@ -59,6 +64,10 @@ module.exports = (server) => {
     socket.on('disconnect', () => {
       const qIdx = waitingQueue.indexOf(socket);
       if (qIdx !== -1) waitingQueue.splice(qIdx, 1);
+      const disconnectedPlayer = playerBook[socket.id];
+      if (!disconnectedPlayer) return;
+      const opponent = playerBook[disconnectedPlayer.getOpponent()];
+      if (opponent) io.to(opponent.getId()).emit('win');
     });
   });
   
@@ -85,24 +94,24 @@ function emitMole(io, roomName) {
   return setInterval(() => {
     mole = randMole();
     io.to(roomName).emit('mole', mole);
-  }, 500);
+  }, 1500);
 }
 
 function countDown(io, roomName, emitter, playerBook) {
-  const playerIds = roomName.split('#');
-  const player1 = playerBook[playerIds[0]], player2 = playerBook[playerIds[1]];
-  let winner, loser;
-  if (player1.getScore() > player2.getScore()) {
-    winner = player1;
-    player1.setWin();
-    loser = player2;
-  } else {
-    winner = player2;
-    player2.setWin();
-    loser = player1;
-  }
   setTimeout(() => {
     clearInterval(emitter);
+    const playerIds = roomName.split('#');
+    const player1 = playerBook[playerIds[0]], player2 = playerBook[playerIds[1]];
+    let winner, loser;
+    if (player1.getScore() > player2.getScore()) {
+      winner = player1;
+      player1.setWin();
+      loser = player2;
+    } else {
+      winner = player2;
+      player2.setWin();
+      loser = player1;
+    }
     io.to(winner.getId()).emit('win');
     io.to(loser.getId()).emit('lose');
   }, 60000);

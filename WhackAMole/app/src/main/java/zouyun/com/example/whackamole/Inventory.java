@@ -2,11 +2,13 @@ package zouyun.com.example.whackamole;
 
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -23,6 +25,8 @@ public class Inventory extends Fragment {
     private ImageButton freeze;
     private ImageButton bomb;
 
+    private GridView inventoryGrid;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -31,9 +35,10 @@ public class Inventory extends Fragment {
         inventorytxt = (TextView) rootView.findViewById(R.id.inventorytxt);
         bombtxt = (TextView) rootView.findViewById(R.id.bombtxt);
         freezetxt = (TextView) rootView.findViewById(R.id.freezetxt);
-
         freeze = (ImageButton) rootView.findViewById(R.id.itemLeft);
         bomb = (ImageButton) rootView.findViewById(R.id.itemRight);
+
+        inventoryGrid = (GridView) rootView.findViewById(R.id.inventoryGrid);
 
         Typeface custom_font = Typeface.createFromAsset(getActivity().getAssets(),  "fonts/bignoodletitling.ttf");
         inventorytxt.setTypeface(custom_font);
@@ -57,5 +62,12 @@ public class Inventory extends Fragment {
         });
 
         return rootView;
+    }
+
+    private class AsyncInventory extends AsyncTask {
+        @Override
+        protected Object doInBackground(Object[] objects) {
+            return null;
+        }
     }
 }

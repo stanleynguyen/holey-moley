@@ -5,10 +5,10 @@ if (!token) window.location = '/';
 // main
 const subsDisplay = document.querySelector('.drop .subtitle');
 const moles = document.querySelectorAll('.mole');
-const items = document.querySelectorAll('.item');
 const myScore = document.querySelector('#my-score');
 const opponentScore = document.querySelector('#opp-score');
 const manaBar = document.querySelector('.mana');
+const itemsBox = document.querySelector('.footer .items-box');
 let score = 0;
 let health = 3;
 let mana = 0;
@@ -19,11 +19,34 @@ let frozen, bomb;
 const frozenOverlay = document.querySelector('.freeze-overlay');
 const heartIcons = document.querySelectorAll('.heart');
 const explosionOverlay = document.querySelector('.explosion-overlay');
+const isEventSupported = (function(){
+  const TAGNAMES = {
+    'select':'input','change':'input',
+    'submit':'form','reset':'form',
+    'error':'img','load':'img','abort':'img'
+  };
+  function isEventSupported(eventName) {
+    var el = document.createElement(TAGNAMES[eventName] || 'div');
+    eventName = 'on' + eventName;
+    var isSupported = (eventName in el);
+    if (!isSupported) {
+      el.setAttribute(eventName, 'return;');
+      isSupported = typeof el[eventName] == 'function';
+    }
+    el = null;
+    return isSupported;
+  }
+  return isEventSupported;
+})();
 
 (function() {
   loadingSubInterval = setInterval(generateSubs(), 3000);
     
-  socket.emit('join');
+  loadEquipments()
+    .then(putOnEquipment)
+    .then(bindItemsEvent)
+    .then(socket.emit.bind(socket, 'join'))
+    .catch(handleError);
   socket.on('start', turnOffDrop);
   socket.on('mole', peep);
   socket.on('item', kena);
@@ -31,11 +54,52 @@ const explosionOverlay = document.querySelector('.explosion-overlay');
   socket.on('win', handleWin);
   socket.on('lose', handleLose);
   
-  // moles.forEach(function(m) { m.addEventListener('click', hit.bind(m, socket)); });
-  // items.forEach(function(i) { i.addEventListener('click', useItem); });
   moles.forEach(function(m) { m.addEventListener('touchstart', hit.bind(m, socket)); });
-  items.forEach(function(i) { i.addEventListener('touchstart', useItem); });
+  if (!isEventSupported('touchstart')) {
+    moles.forEach(function(m) { m.addEventListener('click', hit.bind(m, socket)); });
+  }
 })();
+
+function loadEquipments() {
+  return new Promise(function(resolve, reject) {
+    const request = new XMLHttpRequest();
+    request.open('GET', `/api/user/equipment?token=${token}`, true);
+    request.onload = function() {
+      if (request.status === 200) {
+        const data = JSON.parse(request.responseText);
+        resolve(data);
+      } else if (request.status === 401) {
+        localStorage.removeItem('token');
+        reject('Login first!');
+      } else {
+        reject('Server Error');
+      }
+    };
+    request.onerror = reject;
+    request.send();
+  });
+}
+
+function putOnEquipment(equipments) {
+  return new Promise(function(resolve) {
+    itemsBox.innerHTML = EquipmentList(equipments);
+    resolve();
+  });
+}
+
+function bindItemsEvent() {
+  return new Promise(function(resolve) {
+    const items = document.querySelectorAll('.item');
+    items.forEach((i) => i.addEventListener('touchstart', useItem.bind(i)));
+    if (!isEventSupported('touchstart')) items.forEach((i) => i.addEventListener('click', useItem.bind(i)));
+    resolve();
+  });
+}
+
+function handleError(msg) {
+  alert(msg);
+  window.location = '/home';
+}
 
 function generateSubs() {
   let idx = -1;
@@ -59,14 +123,13 @@ function turnOffDrop() {
 function peep(moleIdx) {
   if (frozen) return;
   const mole = moles[moleIdx];
-  if (bomb) mole.src = '/assets/images/game_bombMole.svg';
+  if (bomb) mole.classList.add('mole-bomb');
   mole.classList.add('up');
+  const _bomb = bomb;
   setTimeout(function() {
     mole.classList.remove('up');
-    setTimeout(() => {
-      mole.src = '/assets/images/game_mole.svg';
-      bomb = false;
-    }, 500);
+    if (_bomb) bomb = false;
+    if (_bomb) setTimeout(() => { mole.classList.remove('mole-bomb'); }, 500);
   }, 500);
 }
 
@@ -75,6 +138,7 @@ function updateManaStatus() {
 }
 
 function checkItems() {
+  const items = document.querySelectorAll('.item');
   items.forEach(function(i) {
     if (mana >= i.dataset.cost) i.classList.remove('off');
     else i.classList.add('off');
@@ -83,24 +147,26 @@ function checkItems() {
 
 function hit(socket, e) {
   if (!e.isTrusted) return;
-  if (this.src.includes('/assets/images/game_bombMole.svg')) {
+  if (this.classList.contains('mole-bomb')) {
     health--;
     explosionOverlay.style.display = 'block';
     setTimeout(() => explosionOverlay.style.display = 'none', 200);
     updateHealth(health);
   }
+  if (this.classList.contains('mole-hitted')) return;
   score++;
   if (mana < 100) mana += 10;
   updateManaStatus();
   checkItems();
-  this.src = '/assets/images/game_sadMole.svg';
+  this.classList.add('mole-hitted');
   this.classList.remove('up');
-  setTimeout(() => this.src = '/assets/images/game_mole.svg', 500);
+  setTimeout(() => this.classList.remove('mole-hitted'), 500);
   myScore.textContent = score;
   socket.emit('score');
 }
 
 function useItem() {
+  if (mana - this.dataset.cost < 0) return;
   mana -= this.dataset.cost;
   updateManaStatus();
   checkItems();
@@ -150,3 +216,10 @@ function handleLose() {
   alert('You Lost');
   window.location = '/home';
 }
+
+// functions to render views
+const EquipmentList = function(eqList) {
+  return eqList.map((e) => `
+    <img class="img-fluid item off" src="${e.img}" data-cost="${e.mana_cost}" data-id="${e.id}" />
+  `).join('');
+};

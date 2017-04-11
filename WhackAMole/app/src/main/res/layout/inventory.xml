@@ -8,7 +8,7 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:background="#b8b44e"
-    tools:context="zouyun.com.example.whackamole.TabsActivity$PlaceHolderFragment">
+    tools:context="zouyun.com.example.whackamole.TabsActivity">
 
     <TextView
         android:text="INVENTORY"
@@ -21,6 +21,23 @@
         android:layout_alignParentEnd="true"
         android:layout_centerHorizontal="true"
         android:textAlignment="center"/>
+
+    <ProgressBar
+        android:id="@+id/startProgressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="82dp"
+        android:layout_below="@+id/inventorytxt"
+        android:layout_centerHorizontal="true" />
+
+    <GridView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/inventorytxt"
+        android:id="@+id/inventoryGrid"
+        android:numColumns="2"
+        android:stretchMode="columnWidth"
+        android:verticalSpacing="10dp"/>
 
     <LinearLayout
         android:orientation="horizontal"

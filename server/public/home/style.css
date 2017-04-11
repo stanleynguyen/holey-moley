@@ -25,6 +25,7 @@ body * {
   margin: 0;
   padding-left: 0;
   list-style: none;
+  z-index: 1;
 }
 
 .nav li {
@@ -67,10 +68,14 @@ body * {
   flex-shrink: 0;
   background-color: #aaa23c;
   border-radius: 5px;
-  margin: 5px 0;
+  margin: 5px;
   padding: 20px;
   max-height: 80px;
   cursor: pointer;
+}
+
+.tab-item.locked {
+  opacity: 0.5;
 }
 
 .tab-item p {
@@ -87,7 +92,7 @@ body * {
 }
 
 #inventory.tab-pane, #shop.tab-pane {
-  justify-content: space-around;
+  justify-content: flex-start;
 }
 
 #inventory .text-center, #shop .text-center {
@@ -106,6 +111,11 @@ body * {
 
 #inventory .tab-item p, #shop .tab-item p {
   margin: 0;
+}
+
+#inventory .tab-item.equipped:after {
+  content: 'equipped';
+  font-size: 30px;
 }
 
 #profile .tab-item {
@@ -133,4 +143,10 @@ body * {
   height: 20px;
   background-color: #dfa248;
   border-radius: inherit;
+}
+
+@media screen and (max-width: 480px) {
+  .tab-item {
+    flex-grow: 1;
+  }
 }

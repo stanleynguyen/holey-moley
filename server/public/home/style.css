@@ -145,6 +145,10 @@ body * {
   border-radius: inherit;
 }
 
+#profile .tab-item:last-child .text-center {
+  margin: 0;
+}
+
 @media screen and (max-width: 480px) {
   .tab-item {
     flex-grow: 1;

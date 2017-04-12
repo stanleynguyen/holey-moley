@@ -7,6 +7,32 @@ body {
   min-height: 100vh;
 }
 
+.score .score-container {
+  margin: 2px 10px;
+  width: 90%;
+  height: 18px;
+  display: flex;
+  align-items: center;
+}
+
+.score .score-container * {
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+
+.score .score-container .score-bar {
+  height: 80%;
+  border-radius: 2px;
+}
+
+.score .score-container#my-score .score-bar {
+  background-color: #5d92ff;
+}
+
+.score .score-container#opp-score .score-bar {
+  background-color: #e55c4a;
+}
+
 .game {
   margin-top: 120px;
 }

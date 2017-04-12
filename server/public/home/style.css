@@ -149,7 +149,7 @@ body * {
   margin: 0;
 }
 
-@media screen and (max-width: 480px) {
+@media screen and (max-width: 460px) {
   .tab-item {
     flex-grow: 1;
   }

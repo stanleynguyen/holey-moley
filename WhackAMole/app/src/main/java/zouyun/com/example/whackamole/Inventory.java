@@ -13,6 +13,12 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.Arrays;
+
 /**
  * Created by KaiLue on 02-Mar-17.
  */
@@ -31,6 +37,10 @@ public class Inventory extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.inventory, container, false);
+
+        String inventoryBundle = getArguments().getString("inventoryInfo");
+
+        System.out.println("From inventory: " + inventoryBundle);
 
         inventorytxt = (TextView) rootView.findViewById(R.id.inventorytxt);
         bombtxt = (TextView) rootView.findViewById(R.id.bombtxt);
@@ -64,10 +74,5 @@ public class Inventory extends Fragment {
         return rootView;
     }
 
-    private class AsyncInventory extends AsyncTask {
-        @Override
-        protected Object doInBackground(Object[] objects) {
-            return null;
-        }
-    }
+
 }

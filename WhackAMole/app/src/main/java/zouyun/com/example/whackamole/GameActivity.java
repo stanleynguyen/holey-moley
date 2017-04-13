@@ -20,6 +20,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.animation.*;
@@ -47,19 +48,20 @@ import io.socket.parser.Packet;
 import io.socket.parser.Parser;
 import io.socket.thread.EventThread;
 //TODO:get player status (tools the play bought) from server at the start and show the icon accordingly
-//TODO: send mena data to the server
+
 //TODO:implement bomb mole and set OnclickListener that relates to the heart displayed
 //TODO:display game over when time is up and show score
-//implement progress bar
+//TODO: fix the issue when there are too many moles popping out after using the special power
+
+//TODO:implement immunity
 
 
 
-//TODO:bugs to fix:pressing on static mole still will change mole(esp when the time interval for changing mole is fast)
 //TODO: optimise and enable faster mole popping and response(currently 0.04s for moving up.down mess things up)
 
-//TODO:adjust the size of the sadmole
+
 //TODO:add sound when pressing
-//TODO: progress bar or something
+
 
 
 
@@ -71,17 +73,20 @@ public class GameActivity extends AppCompatActivity {
     private ImageView sm1,sm2,sm3,sm4,sm5,sm6,sm7,sm8,sm9;//sadmoles
     private ImageView bomb,deadbomb,freeze,deadfreeze,health,deadhealth;
     private ImageView h1,h2,h3,h4;//hearts
-    private TextView score,timeLeft,freezing;
+    private TextView score,timeLeft,freezing,mana;
+    private ProgressBar manaprogress,spinningwheel,playerprogress,oppprogress;
 
     private static boolean[] activeMoles=new boolean[9];
     private int tempmole=0;
     private int moleNumtemp;
     private io.socket.client.Socket socket = null;
     private String item="none";
-    private int oppoentScore=0;
+    private int opponentScore=0;
+    private boolean isOver=false;
+    private Object lock=new Object();
 //    final  Handler handler = new Handler();
 
-    Timer timer = new Timer();
+//    Timer timer = new Timer();
 
 
 
@@ -154,9 +159,6 @@ public class GameActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
-
-
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -168,6 +170,8 @@ public class GameActivity extends AppCompatActivity {
 
 
         setContentView(R.layout.activity_game);
+        spinningwheel=(ProgressBar)findViewById(R.id.spinningwheel);
+
 ///set up socket
         try {
             socket = IO.socket("http://holeymoley.herokuapp.com");
@@ -180,12 +184,17 @@ public class GameActivity extends AppCompatActivity {
         socket.on("start", new Emitter.Listener() {
             @Override
             public void call(Object... args) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
 
-//
-                System.out.println("connecting");
+                        spinningwheel.setVisibility(View.GONE);}});
+
+                        System.out.println("game start");
 //                        Toast.makeText(_this.getApplicationContext(),"hello1",Toast.LENGTH_SHORT).show();
-            }
-        });
+                    }
+                });
+
         socket.on("mole", new Emitter.Listener() {
             @Override
             public void call(Object... args) {
@@ -213,7 +222,7 @@ public class GameActivity extends AppCompatActivity {
         socket.on("score", new Emitter.Listener() {
             @Override
             public void call(Object... args) {
-                oppoentScore++;
+                opponentScore++;
                 System.out.println(args[0].toString());
             }
         });
@@ -233,9 +242,12 @@ public class GameActivity extends AppCompatActivity {
         score = (TextView) findViewById(R.id.score);
         timeLeft=(TextView) findViewById(R.id.time);
         freezing=(TextView) findViewById(R.id.freezing);
+        mana=(TextView) findViewById(R.id.mana);
         score.setTypeface(typeface2);
         freezing.setTypeface(typeface2);
         freezing.setVisibility(View.INVISIBLE);
+        mana.setTypeface(typeface2);
+
 
         timeLeft.setTypeface(typeface1);
         moles.add(m1);
@@ -263,6 +275,9 @@ public class GameActivity extends AppCompatActivity {
         hearts.add(h3);
         hearts.add(h4);
 
+        manaprogress=(ProgressBar)findViewById(R.id.manaprogress);
+        playerprogress=(ProgressBar)findViewById(R.id.myprogress);
+        oppprogress=(ProgressBar)findViewById(R.id.opponentprogress);
 
 
 //        Toast.makeText(this.getApplicationContext(),"hello1",Toast.LENGTH_SHORT).show();
@@ -271,35 +286,180 @@ public class GameActivity extends AppCompatActivity {
 
 
         start();
-        bomb.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                socket.emit("item","bomb");
-//                bomb.setVisibility(View.GONE);
-//                deadbomb.setVisibility(View.VISIBLE);
 
-            }
-        });
-        freeze.setOnClickListener(new View.OnClickListener() {
+
+        new Thread(new Runnable() {
             @Override
-            public void onClick(View v) {
-                socket.emit("item","freeze");
-//                freeze.setVisibility(View.GONE);
-//                deadfreeze.setVisibility(View.VISIBLE);
-            }
-        });
-        health.setOnClickListener(new View.OnClickListener() {
+            public void run() {
+
+                //sychronise?
+                while(!isOver){
+                    synchronized (this){
+                        synchronized (lock){
+                while (player.getMana()<80) {
+                    try {
+                        System.out.println(player.getMana());
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                System.out.println("here");
+
+
+                                freeze.setVisibility(View.INVISIBLE);
+                                deadfreeze.setVisibility(View.VISIBLE);}});
+                        lock.wait();
+
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }}
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    System.out.println("here");
+
+
+                                    freeze.setVisibility(View.VISIBLE);
+                                    deadfreeze.setVisibility(View.INVISIBLE);}});
+                            try {
+                                Thread.sleep(100);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                        freeze.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                socket.emit("item","freeze");
+                                player.loseMana(80);
+
+                            }
+                        });}}
+
+                }
+        }
+
+
+        }).start();
+        new Thread(new Runnable() {
             @Override
-            public void onClick(View v) {
-                health.setVisibility(View.GONE);
-                hearts.get(player.getHealth()).setVisibility(View.VISIBLE);
-                player.gainHealth();
-                deadhealth.setVisibility(View.VISIBLE);
+            public void run() {
+                while(!isOver){
+                    synchronized (this){
+                    synchronized (lock){
+                    while (player.getMana()<100) {
+                        try {
+//                            System.out.println(player.getMana());
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    System.out.println("here");
+
+
+                                    health.setVisibility(View.INVISIBLE);
+                                    deadhealth.setVisibility(View.VISIBLE);}});
+                            lock.wait();
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }}
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                System.out.println("here");
+
+
+                                health.setVisibility(View.VISIBLE);
+                                deadhealth.setVisibility(View.INVISIBLE);}});
+                        try {
+                            Thread.sleep(100);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+
+                    health.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            player.gainHealth();
+                            player.loseMana(100);
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                            hearts.get(player.getHealth()).setVisibility(View.VISIBLE);}});
+
+                        }
+                    });
+
+                }}
+                }
             }
-        });
+        }).start();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+
+
+
+while(!isOver){
+                    synchronized (this){
+                    synchronized (lock){
+                    while (player.getMana()<50) {
+                        try {
+//                            System.out.println(player.getMana());
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    System.out.println("here");
+
+
+                                    bomb.setVisibility(View.INVISIBLE);
+                                    deadbomb.setVisibility(View.VISIBLE);}});
+                            lock.wait();
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }}
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                System.out.println("here");
+
+
+                    bomb.setVisibility(View.VISIBLE);
+                    deadbomb.setVisibility(View.INVISIBLE);}});
+                        try {
+                            Thread.sleep(100);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+
+
+                        bomb.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            socket.emit("item","bomb");
+                            player.loseMana(50);
+
+                        }
+                    });}
+
+
+                }
+            }}
+        }).start();
+
+
+
+
+//        health.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                health.setVisibility(View.GONE);
+//                hearts.get(player.getHealth()).setVisibility(View.VISIBLE);
+//                player.gainHealth();
+//                deadhealth.setVisibility(View.VISIBLE);
+//            }
+//        });
         //        //timer for 1 minute
 //        handler.post(runnableCode);
-        score.setText("Score: "+Integer.toString(player.getPoint())+"\nOppoent Score:"+oppoentScore);
+        score.setText("Score: "+Integer.toString(player.getPoint())+"\nopponent Score:"+opponentScore);
+
 
 
 
@@ -354,7 +514,7 @@ public class GameActivity extends AppCompatActivity {
 //
 //                                moles.get(moleNum).animate().translationYBy(-250).setDuration(500).withEndAction(endAction);
 ////            moles.get(moleNum).setClickable(false);
-//                                score.setText("Score: "+Integer.toString(player.getPoint())+"\nOppoent Score:"+oppoentScore);
+//                                score.setText("Score: "+Integer.toString(player.getPoint())+"\nopponent Score:"+opponentScore);
 //                                moles.get(moleNum).setImageDrawable(getResources().getDrawable(R.drawable.game_mole));
 //
 //
@@ -400,7 +560,7 @@ public class GameActivity extends AppCompatActivity {
 //
 //            moles.get(moleNum).animate().translationYBy(-250).setDuration(500).withEndAction(endAction);
 ////            moles.get(moleNum).setClickable(false);
-//                        score.setText("Score: "+Integer.toString(player.getPoint())+"\nOppoent Score:"+oppoentScore);
+//                        score.setText("Score: "+Integer.toString(player.getPoint())+"\nopponent Score:"+opponentScore);
 //            moles.get(moleNum).setImageDrawable(getResources().getDrawable(R.drawable.game_mole));
 //                                moles.get(moleNum).clearColorFilter();
 //
@@ -424,15 +584,16 @@ public class GameActivity extends AppCompatActivity {
 
     // Start the initial runnable task by posting through the handler
 
-    synchronized void start() {
+    void start() {
 
 
         player.start();
         h4.setVisibility(View.INVISIBLE);// the extra heart will only be there if the user click the heart
-        deadbomb.setVisibility(View.INVISIBLE);
-        deadfreeze.setVisibility(View.INVISIBLE);
-        deadhealth.setVisibility(View.INVISIBLE);
-        new CountDownTimer(60000, 1000) {
+
+        bomb.setVisibility(View.INVISIBLE);
+        freeze.setVisibility(View.INVISIBLE);
+        health.setVisibility(View.INVISIBLE);
+        new CountDownTimer(65000, 1000) {
 
             public void onTick(long millisUntilFinished) {
                 timeLeft.setText("seconds remaining: " + millisUntilFinished / 1000);
@@ -440,15 +601,14 @@ public class GameActivity extends AppCompatActivity {
 
             public void onFinish() {
                 socket.disconnect();
-                timer.cancel();
+//                timer.cancel();
                 timeLeft.setText("Time is up!");
+                isOver=true;
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-
                         startActivity(new Intent(getApplicationContext(), TabsActivity.class));//testing
                     }
-
                 },2000);
 
 //                handler.removeCallbacks(runnableCode);
@@ -458,7 +618,6 @@ public class GameActivity extends AppCompatActivity {
 //                } catch (InterruptedException e) {
 //                    e.printStackTrace();
 //                }
-                //TODO:move to the next page or something
 
             }
         }.start();
@@ -501,6 +660,7 @@ public class GameActivity extends AppCompatActivity {
 
             }
         };
+
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -521,9 +681,27 @@ public class GameActivity extends AppCompatActivity {
 
 
                 moles.get(moleNum).animate().translationYBy(-250).setDuration(500).withEndAction(endAction);
+                playerprogress.setProgress(player.getPoint()*2);
+                oppprogress.setProgress(opponentScore*2);
+                score.setText("ME: "+Integer.toString(player.getPoint())+"\nOpponent:"+opponentScore);
+                manaprogress.setProgress(player.getMana());
+
+
+
+
+
 
             }
         });
+
+
+            synchronized (lock){
+                if(player.getMana()>=50){
+                    System.out.println("i");lock.notifyAll();}}
+        System.out.println("am");
+
+
+
 
 //            moles.get(moleNum).setClickable(false);
 
@@ -554,6 +732,10 @@ public class GameActivity extends AppCompatActivity {
 
 
                 moles.get(moleNum).animate().translationYBy(-250).setDuration(500).withEndAction(endAction);
+                moles.get(moleNum).animate().translationYBy(-250).setDuration(500).withEndAction(endAction);
+                playerprogress.setProgress(player.getPoint()*2);
+                oppprogress.setProgress(opponentScore*2);
+                score.setText("ME: "+Integer.toString(player.getPoint())+"\nOpponent:"+opponentScore);
 //            moles.get(moleNum).setClickable(false);
 
             }
@@ -597,9 +779,10 @@ public class GameActivity extends AppCompatActivity {
 
 class PlayerThread extends Thread{
     private int point;
-    private int energy;
+    private int mana;
     private int health;
     private int status;
+
 //    int tempmole=0;
 //    final  Handler handler = new Handler();
 //    final Context context;
@@ -658,7 +841,7 @@ class PlayerThread extends Thread{
 
     public PlayerThread(final Context context){
         this.point=0;
-        this.energy=0;
+        this.mana=0;
         this.health=3;
     }
 //        this.context=context;
@@ -733,8 +916,8 @@ class PlayerThread extends Thread{
     int getHealth() {
         return health;
     }
-    int getEnergy() {
-        return energy;
+    int getMana() {
+        return mana;
     }
     int getPoint() {
         return point;
@@ -746,7 +929,7 @@ class PlayerThread extends Thread{
 
 
         gainPoint(1);
-        gainEnergy(20);
+        gainMana(10);
     }
 
     void kenaBomb() {
@@ -765,9 +948,13 @@ class PlayerThread extends Thread{
         this.health --;
     }
 
-    void gainEnergy(int amount) {
-        if (this.energy + amount > 100) { this.energy = 100; }
-        else { this.energy += amount; }
+    void gainMana(int amount) {
+        if (this.mana + amount > 100) { this.mana = 100; }
+        else { this.mana += amount; }
+    }
+    void loseMana(int amount){
+        if(this.mana>amount){
+        this.mana-=amount;}
     }
 
     void gainPoint(int amount) {

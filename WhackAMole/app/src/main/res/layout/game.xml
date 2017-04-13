@@ -10,6 +10,7 @@
     android:background="#b8b44e"
     tools:context="zouyun.com.example.whackamole.TabsActivity">
 
+
     <TextView
         android:text="GAME MODE"
         android:layout_width="fill_parent"

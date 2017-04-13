@@ -5,4 +5,5 @@
     <color name="colorAccent">#FF4081</color>
     <color name="grassBackground">#BFE5AE</color>
     <color name="black_overlay">#66000000</color>
+    <color name="menu_item">#aaa23c</color>
 </resources>

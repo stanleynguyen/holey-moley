@@ -55,7 +55,6 @@ public class WelcomeActivity extends Activity {
     private EditText Rkey2;
     private Button Rlogin;
     private Button Rregister;
-    private TextView Rtoken;
     private LinearLayout Rpopupview;
 
     public String theToken = "";
@@ -298,10 +297,13 @@ public class WelcomeActivity extends Activity {
 
                 try {
                     JSONObject obj = new JSONObject(result);
-                    startActivity(new Intent(WelcomeActivity.this, TabsActivity.class));
+                    Intent intent = new Intent(WelcomeActivity.this, TabsActivity.class);
 //                this.finish();
                     theToken = obj.getString("token");
-                    token.setText(obj.getString("token"));
+//                    token.setText(obj.getString("token"));
+
+                    intent.putExtra("LOGIN_TOKEN", theToken);
+                    startActivity(intent);
 
                 } catch (Exception e) {
                     e.printStackTrace();

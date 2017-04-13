@@ -58,23 +58,24 @@ public class Game extends Fragment {
         random.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                single.setClickable(false);
-                local.setClickable(false);
-                random.setVisibility(View.INVISIBLE);
-                randomtxt.setVisibility(View.INVISIBLE);
-                randomPB.setVisibility(View.VISIBLE);
-                new Handler().postDelayed(new Runnable() {
-
-                    @Override
-                    public void run() {
-                        randomPB.setVisibility(View.INVISIBLE);
-                        random.setVisibility(View.VISIBLE);
-                        randomtxt.setVisibility(View.VISIBLE);
-                        single.setClickable(!false);
-                        local.setClickable(!false);
-                    }
-
-                },5000);
+                startActivity(new Intent(getActivity(), GameActivity.class));
+//                single.setClickable(false);
+//                local.setClickable(false);
+//                random.setVisibility(View.INVISIBLE);
+//                randomtxt.setVisibility(View.INVISIBLE);
+//                randomPB.setVisibility(View.VISIBLE);
+//                new Handler().postDelayed(new Runnable() {
+//
+//                    @Override
+//                    public void run() {
+//                        randomPB.setVisibility(View.INVISIBLE);
+//                        random.setVisibility(View.VISIBLE);
+//                        randomtxt.setVisibility(View.VISIBLE);
+//                        single.setClickable(!false);
+//                        local.setClickable(!false);
+//                    }
+//
+//                },5000);
             }
         });
 
@@ -110,21 +111,21 @@ public class Game extends Fragment {
                 single.setClickable(false);
                 local.setVisibility(View.INVISIBLE);
                 localtxt.setVisibility(View.INVISIBLE);
-                localPB.setVisibility(View.VISIBLE);
-                startActivity(new Intent(getActivity(), GameActivity.class));
+              localPB.setVisibility(View.VISIBLE);
 
-//                new Handler().postDelayed(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        localPB.setVisibility(View.INVISIBLE);
-//                        local.setVisibility(View.VISIBLE);
-//                        localtxt.setVisibility(View.VISIBLE);
-//                        random.setClickable(true);
-//                        single.setClickable(true);
-//                        startActivity(new Intent(getActivity(), GameActivity.class));
-//                    }
-//
-//                },5000);
+
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        localPB.setVisibility(View.INVISIBLE);
+                        local.setVisibility(View.VISIBLE);
+                        localtxt.setVisibility(View.VISIBLE);
+                        random.setClickable(true);
+                        single.setClickable(true);
+                        startActivity(new Intent(getActivity(), GameActivity.class));
+                    }
+
+                },5000);
 
             }
         });

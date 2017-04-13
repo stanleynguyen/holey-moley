@@ -61,7 +61,7 @@ import io.socket.thread.EventThread;
 
 //TODO: lose all lives-->dead
 //TODO:add sound when pressing
-
+//TODO: in case the player died
 
 
 
@@ -877,6 +877,7 @@ class PlayerThread extends Thread{
         this.point=0;
         this.mana=0;
         this.health=3;
+        this.status=0;
     }
 //        this.context=context;
 //        this.runnableCode= new Runnable() {
@@ -979,6 +980,7 @@ class PlayerThread extends Thread{
     /////////////////////
 
     void deductHealth() {
+        if(this.health>0)
         this.health --;
     }
 
@@ -993,6 +995,9 @@ class PlayerThread extends Thread{
 
     void gainPoint(int amount) {
         point += amount;
+    }
+    int getStatus(){
+        return this.status;
     }
 
     void deductPoint(int amount) {

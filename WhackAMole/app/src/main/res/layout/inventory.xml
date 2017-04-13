@@ -22,6 +22,15 @@
         android:layout_centerHorizontal="true"
         android:textAlignment="center"/>
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="30dp"
+        android:textSize="20sp"
+        android:id="@+id/empty_inventory"
+        android:layout_below="@+id/inventorytxt"
+        android:text="Hmm, it seems like your inventory is empty... Buy more items at the shop!"/>
+
     <ProgressBar
         android:id="@+id/startProgressBar"
         android:layout_width="wrap_content"
@@ -35,89 +44,11 @@
         android:layout_height="match_parent"
         android:layout_below="@+id/inventorytxt"
         android:id="@+id/inventoryGrid"
+        android:layout_marginTop="20dp"
+        android:horizontalSpacing="10dp"
         android:numColumns="2"
         android:stretchMode="columnWidth"
         android:verticalSpacing="10dp"/>
 
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:weightSum="1"
-        android:layout_below="@+id/inventorytxt"
-        android:layout_marginTop="24dp">
-
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:srcCompat="@drawable/inventory_item"
-            android:id="@+id/itemLeft"
-            android:adjustViewBounds="true"
-            android:scaleType="centerInside"
-            android:background="@null"
-            android:paddingRight="8dp"
-            android:layout_weight="0.5"/>
-
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:srcCompat="@drawable/inventory_item"
-            android:id="@+id/itemRight"
-            android:adjustViewBounds="true"
-            android:scaleType="centerInside"
-            android:background="@null"
-            android:paddingLeft="8dp"
-            android:layout_weight="0.5"/>
-
-    </LinearLayout>
-
-    <android.support.v7.widget.AppCompatImageView
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        app:srcCompat="@drawable/game_freeze"
-        android:id="@+id/freezeicon"
-        android:adjustViewBounds="true"
-        android:scaleType="centerInside"
-        android:background="@null"
-        android:layout_alignParentStart="true"
-        android:layout_marginLeft="15dp"
-        android:layout_marginTop="40dp"
-        android:layout_below="@+id/inventorytxt" />
-
-    <android.support.v7.widget.AppCompatImageView
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        app:srcCompat="@drawable/game_bomb"
-        android:layout_alignBottom="@+id/freezeicon"
-        android:id="@+id/bombicon"
-        android:adjustViewBounds="true"
-        android:scaleType="centerInside"
-        android:background="@null"
-        android:layout_alignParentStart="true"
-        android:layout_marginLeft="187dp"
-        android:layout_marginTop="40dp"
-        android:layout_below="@+id/inventorytxt" />
-
-    <TextView
-        android:text=" X 2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/freezetxt"
-        android:textAlignment="center"
-        android:textSize="35dp"
-        android:layout_marginBottom="15dp"
-        android:layout_alignBottom="@+id/freezeicon"
-        android:layout_toEndOf="@+id/freezeicon" />
-
-    <TextView
-        android:text=" X 4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/bombtxt"
-        android:textAlignment="center"
-        android:textSize="35dp"
-        android:layout_alignBaseline="@+id/freezetxt"
-        android:layout_alignBottom="@+id/freezetxt"
-        android:layout_toEndOf="@+id/bombicon" />
 
 </RelativeLayout>

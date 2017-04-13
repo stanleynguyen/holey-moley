@@ -141,15 +141,15 @@
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="login"
-            android:id="@+id/Rloginbtn"
+            android:text="register"
+            android:id="@+id/Rregisterbtn"
             android:background="#e54e35"/>
 
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="register"
-            android:id="@+id/Rregisterbtn"
+            android:text="login"
+            android:id="@+id/Rloginbtn"
             android:background="#ea9232"/>
     </LinearLayout>
 

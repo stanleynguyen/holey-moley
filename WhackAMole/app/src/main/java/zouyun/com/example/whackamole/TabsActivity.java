@@ -78,8 +78,6 @@ public class TabsActivity extends AppCompatActivity {
         for (int i = 0; i < tabLayout.getTabCount(); i++) {
             tabLayout.getTabAt(i).setIcon(tabIcons[i]);
         }
-
-        new TabsActivity.AsyncInventory().execute();
     }
 
 
@@ -122,7 +120,10 @@ public class TabsActivity extends AppCompatActivity {
 //            return PlaceholderFragment.newInstance(position + 1);
             switch (position) {
                 case 1:
+                    Bundle b = new Bundle();
+                    b.putString("inventoryInfo",loginToken);
                     Inventory inventory = new Inventory();
+                    inventory.setArguments(b);
                     return inventory;
                 case 2:
                     Shop shop = new Shop();
@@ -158,83 +159,5 @@ public class TabsActivity extends AppCompatActivity {
             return null;
         }
     }
-
-    private class AsyncInventory extends AsyncTask<String, String, String> {
-        public static final int CONNECTION_TIMEOUT = 10000;
-        public static final int READ_TIMEOUT = 15000;
-        public Bundle inventoryBundle;
-
-        HttpURLConnection connection;
-        URL url = null;
-
-        @Override
-        protected String doInBackground(String... params) {
-            try {
-                // URL address to retrieve inventory information
-                url = new URL("http://holeymoley.herokuapp.com/api/user/info?token=" + loginToken);
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-                return "exception";
-            }
-
-            try {
-                connection = (HttpURLConnection) url.openConnection();
-                connection.setReadTimeout(READ_TIMEOUT);
-                connection.setConnectTimeout(CONNECTION_TIMEOUT);
-                connection.setRequestMethod("GET");
-
-                InputStream input = connection.getInputStream();
-                BufferedReader reader = new BufferedReader(
-                        new InputStreamReader(input));
-                StringBuilder result = new StringBuilder();
-                String line;
-
-                while ((line = reader.readLine()) != null) {
-                    result.append(line);
-                }
-
-                System.out.println("RESULT: " + result.toString());
-
-                // Pass data to onPostExecute method
-                return (result.toString());
-            } catch (IOException e) {
-                e.printStackTrace();
-                return "exception";
-            }
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-            try {
-                JSONObject obj = new JSONObject(result);
-
-                String inventory = obj.getString("inventory");
-                String equipped = obj.getString("equipped");
-                String[] inventoryInfo = {inventory,equipped};
-                System.out.println("INVENTORY: " + inventory);
-                System.out.println("EQUIPPED: " + equipped);
-
-                Bundle b = new Bundle();
-                b.putStringArray("inventoryInfo", inventoryInfo);
-
-                setInventory(b);
-
-                Inventory i = new Inventory();
-                i.setArguments(inventoryBundle);
-
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-
-        public Bundle getInventory() {
-            return inventoryBundle;
-        }
-
-        private void setInventory(Bundle b) {
-            this.inventoryBundle = b;
-        }
-    }
-
 
 }

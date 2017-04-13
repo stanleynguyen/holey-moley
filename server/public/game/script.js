@@ -5,8 +5,10 @@ if (!token) window.location = '/';
 // main
 const subsDisplay = document.querySelector('.drop .subtitle');
 const moles = document.querySelectorAll('.mole');
-const myScore = document.querySelector('#my-score');
-const opponentScore = document.querySelector('#opp-score');
+const myScore = document.querySelector('#my-score .score-num');
+const myScoreBar = document.querySelector('#my-score .score-bar');
+const opponentScore = document.querySelector('#opp-score .score-num');
+const opponentScoreBar = document.querySelector('#opp-score .score-bar');
 const manaBar = document.querySelector('.mana');
 const itemsBox = document.querySelector('.footer .items-box');
 let score = 0;
@@ -162,6 +164,7 @@ function hit(socket, e) {
   this.classList.remove('up');
   setTimeout(() => this.classList.remove('mole-hitted'), 500);
   myScore.textContent = score;
+  myScoreBar.style.width = score * 2 + '%';
   socket.emit('score');
 }
 
@@ -199,7 +202,10 @@ function kena(item) {
   }
 }
 
-function updateOppScore(score) { opponentScore.textContent = score; }
+function updateOppScore(score) { 
+  opponentScore.textContent = score; 
+  opponentScoreBar.style.width = score * 2 + '%';
+}
 
 function updateHealth(health) {
   if (health === 0) socket.emit('dead');

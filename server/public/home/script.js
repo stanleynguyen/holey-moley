@@ -8,6 +8,7 @@ const expBar = document.querySelector('#profile .exp-bar');
 const _gold = document.querySelector('#profile #gold');
 const _inventory = document.querySelector('#inventory');
 const _shop = document.querySelector('#shop');
+const _logoutBtn = document.querySelector('#logout');
 const token = localStorage.getItem('token');
 if (!token) window.location = '/';
 (function() {
@@ -20,6 +21,7 @@ if (!token) window.location = '/';
     .catch(handleError);
   navItems.forEach((i) => i.addEventListener('click', toggle.bind(i)));
   tabItems.forEach((i) => i.addEventListener('click', handleClick.bind(i)));
+  _logoutBtn.addEventListener('click', logOut);
 })();
 
 function toggle() {
@@ -176,6 +178,11 @@ function equipItem() {
 function handleError() {
   localStorage.removeItem('token');
   alert('Error! Redirecting back to login');
+  window.location = '/';
+}
+
+function logOut() {
+  localStorage.removeItem('token');
   window.location = '/';
 }
 

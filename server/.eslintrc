@@ -38,6 +38,11 @@
     "process": true,
     "global": true,
     "module": true,
-    "io": true
+    "io": true,
+    "before": true,
+    "beforeEach": true,
+    "afterEach": true,
+    "describe": true,
+    "it": true
   }
 }

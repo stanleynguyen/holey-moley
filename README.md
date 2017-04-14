@@ -1,1 +1,391 @@
 # Holey Moley
+
+Whac-A-Mole is a popular arcade redemption game invented in
+1976 by Aaron Fechter of Creative Engineering, Inc. We have
+all played this game at least once when we go to arcade game 
+shops with friends during our childhood. We attempted to 
+make it "multiplayer" by recording the score and compare 
+among our group of friends. What if we can make it truly 
+"multiplayer" and real-time? Introducing __Holey Moley__, 
+the true multiplayer Whack-A-Mole game implemented with 
+modern technologies. Maybe it's time to reconnect with that 
+long-lost friend over a game of __Holey Moley__? Play it 
+[NOW](https://holeymoley.herokuapp.com/)
+
+## Game Concept
+
+Our group want to create something that is retro with a 
+taste of modern technology. The aim of __Holey Moley__ is to 
+bring nostalgic feeling with more fun from the classic game
+of Whack-A-Mole. As such, he game can bridge the generation 
+gap, bringing family members of different generations 
+together to play a game that each one of them knows part of 
+it.
+
+As for the above concept, we decided to implement a 
+real-time online multi-player version of Whack-A-Mole that 
+can be played with smart phones. Inside __Holey Moley__, you 
+can battle other players in a Whack-A-Mole showdown where 
+you can use items to affect your opponent. Experience and 
+Gold can be earn through matches for acquiring more powerful 
+items.
+
+## Game Components
+
+The different components that make up our awesome __Holey 
+Moley__
+
+### Game Login
+
+![login1](/documentation/screenshots/login1.png)
+![login2](/documentation/screenshots/login2.png)
+![login3](/documentation/screenshots/login3.png)
+![login4](/documentation/screenshots/login4.png)
+
+This is where users can register for new accounts, or logging
+using their credentials.
+
+### Game Lobby
+
+![lobby1](/documentation/screenshots/lobby1.png)
+![lobby2](/documentation/screenshots/lobby2.png)
+![lobby3](/documentation/screenshots/lobby3.png)
+![lobby4](/documentation/screenshots/lobby4.png)
+
+This is where all the purchases, equipment of items, display 
+of user info are made. Users can also start games via the 
+game menu.
+
+### Gameplay
+
+![game1](/documentation/screenshots/game1.png)
+![game2](/documentation/screenshots/game2.png)
+![game3](/documentation/screenshots/game3.png)
+![game4](/documentation/screenshots/game4.png)
+
+This is where the actual game takes place, objective of the 
+game is score higher than your opponent, or out-live them 
+during the game. Users can hit mole to get more scores, 
+energy, use items to enhance their advantages or to sabotage 
+their opponents.
+
+## System Requirements
+
+### User Requirements
+
+- Users need to be able to join and play with another player in real time
+- Users need to transfer and receive data instantaneously during game
+- Users need a system (profiles, items, adds-on, etc) that is just right in term of complexity to have fun but not too steep learning curve for new players
+- Users want a game that is aesthetically pleasing and fast
+
+### Functional and Non-Functional Requirements
+
+#### Funtional Requirements:
+- *Concept*: Modern Whack-A-Mole game that is way more fun 
+to play but still easy and intuitive enough as its classic 
+counterpart
+- *Functionality*: The game should have a players system 
+with levels and gold for acquiring items to use in game. The 
+gameplay should be able to handle real-time user IO.
+- *IO Operations*: The game needs to be responsive and 
+reliable
+- *Logic*: The game should have logical and modularized 
+implementation
+
+#### Non-Functional Requirements:
+- *Responsiveness*: The game should be very responsive to 
+user interactions
+- *Reliability*: The game should be reliable and clean of 
+bugs
+- *Availability*: The game should be easily accessible and 
+available all the time
+- *Security*: The game should be secure. Users' data must be 
+protected. Third-party services should be trustable
+- *Cost*: The game should cost little to nothing
+
+### Use Cases and Use Case Diagrams
+
+#### Login
+
+*Insert All Info*
+
+#### Lobby
+
+*Insert All Info*
+
+#### Gameplay
+
+*Insert All Info*
+
+## System Design
+
+Clients (Users on Web Browsers or Phone App) communicate 
+with a server in 2 ways:
+- *HTTP*: For any users' data related requests like 
+login/logout, purchases of items, equip items
+- *WebSocket*: For in game interactions like signaling score 
+update, usage of items
+
+### Overall Architecture and Technologies Stack
+
+The server is written in [NodeJS](https://nodejs.org/) using 
+a minimal frameworks called 
+[Express](https://expressjs.com/).
+The database used is [MongoDB](https://www.mongodb.com/).
+The web application is in HTML, CSS, and Javascript without 
+any external library.The mobile application is written in 
+Java with [Android Studio](https://developer.android.com/studio/index.html).
+For  realtime communication, [Socket.io](https://socket.io/)
+is used.
+
+Below are the communication models:
+
+![Communication Model](/documentation/images/communicationmodel.png)
+
+### Web App Architecture
+
+#### Code Structure (inside /server folder)
+
+*Insert Image of file structure*
+
+The web app is structure based on the Model/View/Controllers
+pattern. Explanation for each folder is below:
+- */index.js*: entry point to start the application
+- */package.json*: records of dependencies and app scripts
+- */models*: data models for all users' data
+- */api*: implementation of all API endpoints
+- */controllers*: implementation of views rendering
+- */middlewares*: middlewares to ensure endpoints security
+- */routes*: routing actual endpoints to all implementation
+- */socket*: implementation of web socket
+- */views*: templates for views
+- */public*: all assets, stylesheets, and client-side
+javascript files served to users
+- */test*: all tests for application's components
+
+#### NodeJS backend
+
+Our choice of this backend technologies because of its 
+asynchronous nature, which makes it able to tens of 
+thousands of concurrent connections (this will be further 
+elaborated in [Concurrency](#concurrency) Section). The fact 
+that our game does not need much CPU-intensive computations 
+but rather than I/O supports makes NodeJS good option.
+
+#### MongoDB database
+
+We chose MongoDB as out database because of the flexible 
+nature of a NoSQL database. Since we don't have much time to 
+carefully craft the models but rather do it on the go as we 
+implement the app, this flexibility will help our database 
+to be change-tolerant and save our time as we carry out
+migrations
+
+#### Socket.io 
+
+> Socket.IO enables real-time bidirectional event-based 
+> communication.
+> It works on every platform, browser or device, focusing 
+> equally on reliability and speed.
+>
+> From Microsoft Office, Yammer, Zendesk, Trello... to 
+> hackathon winners and little startups.
+> 
+> One of the most powerful JavaScript frameworks on GitHub, 
+> and most depended-upon npm module.
+>
+> -- *Socket.io statement*
+
+Socket.io is a Node.js module, so it runs in-process with 
+Node. On the client side, it provides a library clients use 
+to connect to the server.
+
+![socket.io lib](/documentation/images/socketio.png)
+
+#### JSON Web Token
+
+> In authentication, when the user successfully logs in 
+> using their credentials, a JSON Web Token will be returned 
+> and must be saved locally (typically in local or session 
+> storage, but cookies can also be used), instead of the 
+> traditional approach of creating a session in the server 
+> and returning a cookie.
+>
+> This is a stateless authentication mechanism as the user 
+> state is never saved in server memory. The server's 
+> protected routes will check for a valid JWT in the 
+> Authorization header, and if it's present, the user will 
+> be allowed to access protected resources.
+>
+> -- *Wikipedia*
+
+We chose JSON Web Token to implement our users' logging as 
+it's a simple but secure, and easy to implement on other 
+platforms (such as the Android Native App)
+
+#### Front-end Technologies (HTML/CSS/JS)
+
+We choose to not use any third-party library but rather 
+browser native implementation because that way, our game will
+be more independent of any front-end vendor that constantly 
+change.
+
+> In Frontend Development, the only constant is change
+>
+> -- *Anonymous Author*
+
+#### Heroku
+
+> Invest in apps, not ops. Heroku handles the hard stuff — 
+> patching and upgrading, 24/7 ops and security, build 
+> systems, failovers, and more — so your developers can stay 
+> focused on building great apps.
+>
+> Choose Heroku for the same reasons disruptive startups do: 
+> it’s the best platform for building with modern 
+> architectures, innovating quickly, and scaling precisely 
+> to meet demand.
+>
+> -- *Heroku statement*
+
+We chose Heroku as our hosting because of its simplicity and 
+zero-cost. Heroku saves us time from devOps as we can easily
+deploy with a single-line command. Moreover, Heroku has 
+supports for HTTPS out-of-the-box as we care for our users'
+privacy and security.
+
+### Android App Architecture
+
+#### Code Structure (inside /WhackAMole folder)
+
+*Insert Image of file structure and explanations*
+
+#### Java
+
+We chose to implement using vanilla Java with Android Studio 
+rather than any third-party implementation like Unity as
+it's simple but elegant, enabling us to achieve more 
+understanding and customizations.
+
+## System Testing
+
+In this section, we will go through how to start the app, 
+the tests implementation, and rationale for each test
+
+### Web Application Testing
+
+All our unit tests for web application is implemented using 
+[Mocha](https://mochajs.org/) and 
+[Chai](http://chaijs.com/).   
+Mocha is a feature-rich JavaScript test framework running on 
+Node.js and in the browser, making asynchronous testing 
+simple and fun. Mocha tests run serially, allowing for 
+flexible and accurate reporting, while mapping uncaught 
+exceptions to the correct test cases.   
+Chai is a BDD / TDD 
+assertion library for Node and the browser that can be 
+delightfully paired with any Javascript testing framework.
+
+#### Getting Started
+
+The web app can be started with our preconfigured npm 
+scripts.  
+__Note__: Before starting the server, there will be a few
+environment variables that need to be set. This can be 
+achieve in *dev* mode using a `.env` file base on the sample 
+`.env.sample`
+
+```bash
+# script for starting server
+npm start
+# script for starting server in dev mode
+npm run dev
+# script for running test suite
+npm run test
+npm run test:watch # with watch mode
+```
+
+#### Test Cases
+
+Since our architecture is modularized, we can easily carry 
+out testing on each unit of implementations to cover all out 
+implementations. For the server and web app, we tested the 
+all our api endpoints, and socket implmentation. The below
+screenshot is 100% test coverage
+
+![test coverage](/documentation/screenshots/test.png)
+
+### Android App Testing
+
+*Insert whatever lib choice and explanation for it*
+
+#### Getting Started
+
+*Insert how to run the test*
+
+#### Test Cases
+
+*Insert the tests carried out with a screenshot of test 
+coverage*
+
+## Concurrency
+
+### Javascript/NodeJS
+
+Javascript offers an __asynchronous__ behavior by default 
+that sets it apart from other programming languages. In 
+asynchronous programs, you can have two lines of code (L1 
+followed by L2), where L1 schedules some task to be run in 
+the future, but L2 runs before that task completes. For 
+example, in a restaurant, if you order a steak, and then I 
+order a glass of water, I will likely receive my order 
+first, since it typically doesn't take as much time to serve 
+a glass of water as it does to prepare and serve a steak.   
+Note that asynchronous does __not__ mean the same thing as 
+concurrent or multi-threaded. JavaScript can have 
+asynchronous code, but it is generally __single-threaded__.
+
+![jsthreading](/documentation/images/jsthreading.png)
+
+#### Threading
+
+All operations in Javascript are thread-safe since Javascript
+programs are single-threaded, making it impossible for any 2 
+statement to execute at the same time.    
+Nevertheless, other than your code, everything else runs in 
+parallel which might cause problem at run-time. To tackle 
+this issue, we embrace [Functional 
+Programming](https://en.wikipedia.org/wiki/Functional_programming),
+encapsulating our operations into blocks that does not 
+affect the global environment (making them as "pure" as 
+possible).
+
+#### NodeJS's Non-Blocking I/O
+
+This is the secret sauce to NodeJS's high performance 
+despite the fact that NodeJS applications are 
+single-threaded. Much like Javascript in the browser, NodeJS 
+utilizes a fixed-size C++ thread pool behind the scene to 
+handle all blocking I/O tasks.    
+NodeJS server will accept requests from clients with a 
+single-threaded event loop and dispatch the task to C++ 
+worker threads for processing, freeing the main event loop 
+to accept new requests.
+
+![nodethreading](/documentation/images/nodejsthreading.png)
+
+#### Browser Javascript Asynchronousity
+
+Thanks to the asynchronous nature of Javascript, our 
+browsers like Google Chrome, Mozilla Fire fox can easily 
+executes multiple task while waiting for users' input but 
+still are very responsive to new user inputs/requests. This 
+is achieved by decoupling main thread listeners from worker 
+threads which do all the processing.
+
+![browserthreading](/documentation/images/browserthread.png)
+
+### Java/Android
+
+*Insert write-up for whatever is used for Android concurrency*
+

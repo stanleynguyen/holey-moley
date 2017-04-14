@@ -1,0 +1,78 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:background="#b8b44e"
+    tools:context="zouyun.com.example.whackamole.TabsActivity">
+
+
+    <TextView
+        android:text="PROFILE"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="26dp"
+        android:id="@+id/profiletxt"
+        android:textSize="60dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_centerHorizontal="true"
+        android:textAlignment="center"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/item_bg"
+        android:orientation="vertical"
+        android:layout_marginTop="13dp"
+        android:layout_below="@+id/profiletxt">
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:layout_margin="20dp"
+            android:src="@drawable/home_avatar"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:id="@+id/profile_username"
+            android:layout_marginBottom="10dp"
+            android:textSize="30sp"
+            android:text="Name"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="GOLD: 0"
+            android:id="@+id/profile_gold"
+            android:textSize="20sp"
+            android:textAlignment="center"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="LEVEL: 1"
+            android:textSize="20sp"
+            android:id="@+id/profile_level"
+            android:textAlignment="center"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="0/200"
+            android:layout_marginTop="10dp"
+            android:textSize="16sp"
+            android:id="@+id/profile_exp"
+            android:textAlignment="center"/>
+        <ProgressBar
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+            android:id="@+id/exp_bar"
+            android:layout_margin="20dp"/>
+
+    </LinearLayout>
+
+
+
+</RelativeLayout>

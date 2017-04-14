@@ -44,7 +44,7 @@
         android:layout_height="match_parent"
         android:layout_below="@+id/inventorytxt"
         android:id="@+id/inventoryGrid"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="13dp"
         android:horizontalSpacing="10dp"
         android:numColumns="2"
         android:stretchMode="columnWidth"

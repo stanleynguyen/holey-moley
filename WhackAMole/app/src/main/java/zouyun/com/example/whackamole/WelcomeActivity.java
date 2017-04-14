@@ -309,29 +309,6 @@ public class WelcomeActivity extends Activity {
                     e.printStackTrace();
                 }
             }
-
-
-
-//            if(result.equalsIgnoreCase("true"))
-//            {
-//                /* Here launching another activity when login successful. If you persist login state
-//                use sharedPreferences of Android. and logout button to clear sharedPreferences.
-//                 */
-//
-//                Intent intent = new Intent(WelcomeActivity.this,TabsActivity.class);
-//                startActivity(intent);
-//                WelcomeActivity.this.finish();
-//
-//            }else if (result.equalsIgnoreCase("false")){
-//
-//                // If username and password does not match display a error message
-//                Toast.makeText(getApplicationContext(), "Invalid email or password", Toast.LENGTH_LONG).show();
-//
-//            } else if (result.equalsIgnoreCase("exception") || result.equalsIgnoreCase("unsuccessful")) {
-//
-//                Toast.makeText(getApplicationContext(), "OOPs! Something went wrong. Connection Problem.", Toast.LENGTH_LONG).show();
-//
-//            }
         }
 
     }
@@ -343,17 +320,6 @@ public class WelcomeActivity extends Activity {
         ProgressDialog pdLoading = new ProgressDialog(WelcomeActivity.this);
         HttpURLConnection conn;
         URL url = null;
-
-//        @Override
-//        protected void onPreExecute() {
-//            super.onPreExecute();
-//
-//            //this method will be running on UI thread
-//            pdLoading.setMessage("\tLoading...");
-//            pdLoading.setCancelable(false);
-//            pdLoading.show();
-//
-//        }
 
         @Override
         protected String doInBackground(String... params) {
@@ -446,39 +412,8 @@ public class WelcomeActivity extends Activity {
         protected void onPostExecute(String result) {
 
             //this method will be running on UI thread
-
             pdLoading.dismiss();
-//            try {
-//                JSONObject obj = new JSONObject(result);
-//                token.setText(obj.getString("token"));
-//
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            }
 
-
-
-
-//            if(result.equalsIgnoreCase("true"))
-//            {
-//                /* Here launching another activity when login successful. If you persist login state
-//                use sharedPreferences of Android. and logout button to clear sharedPreferences.
-//                 */
-//
-//                Intent intent = new Intent(Login.this,TabsActivity.class);
-//                startActivity(intent);
-//                Login.this.finish();
-//
-//            }else if (result.equalsIgnoreCase("false")){
-//
-//                // If username and password does not match display a error message
-//                Toast.makeText(getApplicationContext(), "Invalid email or password", Toast.LENGTH_LONG).show();
-//
-//            } else if (result.equalsIgnoreCase("exception") || result.equalsIgnoreCase("unsuccessful")) {
-//
-//                Toast.makeText(getApplicationContext(), "OOPs! Something went wrong. Connection Problem.", Toast.LENGTH_LONG).show();
-//
-//            }
         }
 
     }

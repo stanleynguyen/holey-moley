@@ -1,7 +1,5 @@
 package zouyun.com.example.whackamole;
 
-import android.content.Intent;
-import android.os.AsyncTask;
 import android.support.design.widget.TabLayout;
 import android.support.v7.app.AppCompatActivity;
 
@@ -14,20 +12,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.Toast;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.sql.SQLOutput;
-import java.util.HashMap;
 
 public class TabsActivity extends AppCompatActivity {
 
@@ -45,8 +29,11 @@ public class TabsActivity extends AppCompatActivity {
      * The {@link ViewPager} that will host the section contents.
      */
     private ViewPager mViewPager;
-
     private String loginToken;
+    private String gold;
+    private String level;
+    private String exp_needed;
+    private String username;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -118,21 +105,23 @@ public class TabsActivity extends AppCompatActivity {
 //            // getItem is called to instantiate the fragment for the given page.
 //            // Return a PlaceholderFragment (defined as a static inner class below).
 //            return PlaceholderFragment.newInstance(position + 1);
+            Bundle b = new Bundle();
+            b.putString("token",loginToken);
             switch (position) {
                 case 1:
-                    Bundle b = new Bundle();
-                    b.putString("inventoryInfo",loginToken);
                     Inventory inventory = new Inventory();
                     inventory.setArguments(b);
                     return inventory;
                 case 2:
                     Shop shop = new Shop();
+                    shop.setArguments(b);
                     return shop;
                 case 0:
-                    Game game = new Game();
-                    return game;
+                    return new Game();
                 case 3:
-                    return new Settings();
+                    Profile settings = new Profile();
+                    settings.setArguments(b);
+                    return settings;
                 default:
                     return null;
             }
@@ -160,4 +149,35 @@ public class TabsActivity extends AppCompatActivity {
         }
     }
 
+    public String getGold() {
+        return gold;
+    }
+
+    public void setGold(String gold) {
+        this.gold = gold;
+    }
+
+    public String getLevel() {
+        return level;
+    }
+
+    public void setLevel(String level) {
+        this.level = level;
+    }
+
+    public String getExp_needed() {
+        return exp_needed;
+    }
+
+    public void setExp_needed(String exp_needed) {
+        this.exp_needed = exp_needed;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
 }

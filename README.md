@@ -2,7 +2,7 @@
 
 ![banner](/documentation/images/banner.png)
 
-Whac-A-Mole is a popular arcade redemption game invented in
+Whack-A-Mole is a popular arcade redemption game invented in
 1976 by Aaron Fechter of Creative Engineering, Inc. We have
 all played this game at least once when we go to arcade game 
 shops with friends during our childhood. We attempted to 
@@ -19,10 +19,9 @@ long-lost friend over a game of __Holey Moley__? Play it
 Our group want to create something that is retro with a 
 taste of modern technology. The aim of __Holey Moley__ is to 
 bring nostalgic feeling with more fun from the classic game
-of Whack-A-Mole. As such, he game can bridge the generation 
+of Whack-A-Mole. As such, the game can bridge the generation 
 gap, bringing family members of different generations 
-together to play a game that each one of them knows part of 
-it.
+together to play a game that each one of them knows.
 
 As for the above concept, we decided to implement a 
 real-time online multi-player version of Whack-A-Mole that 
@@ -44,7 +43,7 @@ Moley__
 ![login3](/documentation/screenshots/login3.png)
 ![login4](/documentation/screenshots/login4.png)
 
-This is where users can register for new accounts, or logging
+This is where users can register for new accounts, or log in
 using their credentials.
 
 ### Game Lobby
@@ -66,10 +65,10 @@ game menu.
 ![game4](/documentation/screenshots/game4.png)
 
 This is where the actual game takes place, objective of the 
-game is score higher than your opponent, or out-live them 
-during the game. Users can hit mole to get more scores, 
-energy, use items to enhance their advantages or to sabotage 
-their opponents.
+game is score higher, or out-live your opponents 
+during the game. Users can hit mole to get more points, and 
+energy to use items. These items enhances their advantages 
+or sabotages their opponents.
 
 ## System Requirements
 
@@ -78,7 +77,7 @@ their opponents.
 - Users need to be able to join and play with another player in real time
 - Users need to transfer and receive data instantaneously during game
 - Users need a system (profiles, items, adds-on, etc) that is just right in term of complexity to have fun but not too steep learning curve for new players
-- Users want a game that is aesthetically pleasing and fast
+- Users want a game that is aesthetically pleasing and responsive
 
 ### Functional and Non-Functional Requirements
 
@@ -220,8 +219,8 @@ javascript files served to users
 
 #### NodeJS backend
 
-Our choice of this backend technologies because of its 
-asynchronous nature, which makes it able to tens of 
+Our choice of this backend technology is because of its 
+asynchronous nature, which makes it able to handle tens of 
 thousands of concurrent connections (this will be further 
 elaborated in [Concurrency](#concurrency) Section). The fact 
 that our game does not need much CPU-intensive computations 

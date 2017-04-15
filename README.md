@@ -1,5 +1,7 @@
 # Holey Moley
 
+![banner](/documentation/images/banner.png)
+
 Whac-A-Mole is a popular arcade redemption game invented in
 1976 by Aaron Fechter of Creative Engineering, Inc. We have
 all played this game at least once when we go to arcade game 
@@ -105,17 +107,70 @@ protected. Third-party services should be trustable
 
 ### Use Cases and Use Case Diagrams
 
-#### Login
+#### Registration & Login
 
-*Insert All Info*
+__ID__ | HoleyMoley_registeringNewAccount
+:---:|---
+__Name__ | Registering Account
+__Objective__ | Registering new account to start playing Holey Moley
+__Pre-Condition__ | User must go to our landing page
+__Post-Condition__ | __Success__</br>a. Account successfully created</br>b. User redirected to lobby</br>__Failure__</br>a. Duplicate account</br>b. Registration fail
+__Actors__ | __Primary__</br>a. Player</br>__Secondary__</br>a. Backend Server
+__Trigger__ | "Register" button on landing page 
+__Normal Flow__ | 1. User click on "Register" button and the prompt appears</br>2. User fill in all required information (e.g. username, password)</br>3. Information checking by server</br>4. New account successfully registered
+__Alternative Flow__ | __Scenario 1:__</br>1. User enter information that doesn't satisfy conditions (e.g. duplicate username, not secure password)</br>2. Visual Warning on the page</br>3. User re-enter the information</br>__Scenario 2:__</br>1. Server Error</br>2. User is signified to try again later
+__Interacts With__ | Landing page, User checking use case
+__Open Issues__ | 1. How to signified to admin in case of server error?</br>2. User experience of filling information
+
+![Registration Diagram](/documentation/images/signupdiagram.png)
+
+__ID__ | HoleyMoley_loginToGame
+:---: | ---
+__Name__ | Login Account
+__Objective__ | Login to start playing Holey Moley 
+__Pre-Conditions__ | __Success__</br>a. Account successfully logged in</br>b. User is redirected to lobby</br>__Failure:__</br>a. Wrong credentials</br>b. Login fails 
+__Actors__ | __Primary__</br>a. Player</br>__Secondary__</br>a. Backend Server 
+__Trigger__ | "Login" button on landing page 
+__Normal Flow__ | 1. User click on "Login" button and the prompt appears</br>2. User fill in all requested information (e.g. username and password)</br>3. Information checking by server</br>4. Login successful
+__Alternative Flow__ | __Scenario 1:__</br>1. Wrong credentials</br>2. Visual warning on the page</br>3. User re-enter the information</br>__Scenario 2:__</br>1. Server Error</br>2. User is signified to try again later
+__Interacts With__ | Landing Page 
+__Open Issues__ | 1. How to signify admin in case of server error?</br>2. User experience of filling up information
+
+![Login Diagram](/documentation/images/logindiagram.png)
 
 #### Lobby
 
-*Insert All Info*
+__ID__ | HoleyMoley_buyingPowerUps
+:---: | ---
+__Name__ | Shopping
+__Objective__ | Getting power-ups to use inside game
+__Pre-Conditions__ | Player must have earned enough gold and have at least required level to buy the desired item 
+__Post-Conditions__ | __Success__</br>a. Payment went throught and item added to inventory</br>__Failure:__</br>a. Failed to pay or server error
+__Actors__ | __Primary__</br>a. Player
+__Trigger__ | "Shop" button in Game Lobby
+__Normal Flow__ | 1. Player goes inside shop by pressing "Shop" in lobby screen</br>2. Player looks for desired item by searching/filtering/sorting</br>3. Player presses on the item</br>Player receives item in Inventory
+__Alternative Flow__ | __Scenario 1:__</br>1. Not enough gold or level to buy</br>2. Player is signified that he/she doesn't have enough gold</br>__Scenario 2:__</br>1. Server Error</br>2. Player is signified that the transaction didn't go through and asked to try again later
+__Interacts With__ | User login
+__Open Issues__ | 1. How to prevent user from hacking gold?</br>2. How to notify admin when there's server error?
+
+![Shop Diagram](/documentation/images/shopdiagram.png)
 
 #### Gameplay
 
-*Insert All Info*
+__ID__ | HoleyMoley_gamePlay
+:---: | ---
+__Name__ | Playing Holey Moley
+__Objective__ | Getting most points before time's up or outliving your opponent
+__Pre-Conditions__ | There must be at least 2 players
+__Post-Conditions__ | __Success__</br>a. Time's up and winner is determined</br>__Failure__</br>a. Player leaves game before time's up
+__Actors__ | __Primary__</br>a. Players</br>__Secondary__</br>a. Backend server providing  real-time data
+__Trigger__ | "Random Match" button on game mode choosing screen 
+__Normal Flow__ | 1. Both players have equipped the desired power-ups and searching for random match</br>2. 2 Players will be matched against each other</br>3. Players can accumulate energy to use their power-ups (e.g. Spawn bombs to the opponent, freeze the opponent) to give them advantages</br>4. Time's up</br>Winner is determined. Experience and gold are earned
+__Alternative Flow__ | __Scenario 1:__</br>1. Player quits during them game</br>2. The other player is declared winner</br>3. The game is discontinued and the game room destroyed</br>__Scenario 2:__</br>1. Server Error</br>2. No penalty to players</br>3. Users are signified to try again later
+__Interacts With__ | User login, Joining game
+__Open Issues__ | 1. How strong the connection needs to be?</br>2. What is the penalty for in-game quitting?
+
+![Gameplay Diagram](/documentation/images/gameplaydiagram.png)
 
 ## System Design
 

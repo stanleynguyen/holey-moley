@@ -1,5 +1,6 @@
 package zouyun.com.example.whackamole;
 
+import android.os.AsyncTask;
 import android.support.design.widget.TabLayout;
 import android.support.v7.app.AppCompatActivity;
 
@@ -12,6 +13,24 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.GridView;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Objects;
 
 public class TabsActivity extends AppCompatActivity {
 
@@ -34,6 +53,9 @@ public class TabsActivity extends AppCompatActivity {
     private String level;
     private String exp_needed;
     private String username;
+    private String[] inventory;
+    private String[] equipped;
+    private String[] item_id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -179,5 +201,29 @@ public class TabsActivity extends AppCompatActivity {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public String[] getInventory() {
+        return inventory;
+    }
+
+    public void setInventory(String[] inventory) {
+        this.inventory = inventory;
+    }
+
+    public String[] getEquipped() {
+        return equipped;
+    }
+
+    public void setEquipped(String[] equipped) {
+        this.equipped = equipped;
+    }
+
+    public String[] getItem_id() {
+        return item_id;
+    }
+
+    public void setItem_id(String[] item_id) {
+        this.item_id = item_id;
     }
 }

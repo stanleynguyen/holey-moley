@@ -3,6 +3,7 @@ package zouyun.com.example.whackamole;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -59,6 +60,31 @@ public class Inventory extends Fragment {
         loginToken = getArguments().getString("token");
 
         new Inventory.AsyncInventory(loginToken, inventoryGrid).execute();
+        String[] inventory = ((TabsActivity) getActivity()).getInventory();
+        String[] equipped = ((TabsActivity) getActivity()).getEquipped();
+        final String[] item_id = ((TabsActivity) getActivity()).getItem_id();
+        startProgressbar.setVisibility(View.INVISIBLE);
+
+        // in the case of an empty inventory, show a message saying it's empty
+        if (inventory.length == 0) {
+            inventoryGrid.setVisibility(View.INVISIBLE);
+            emptyInventory.setVisibility(View.VISIBLE);
+        } else {
+            inventoryGrid.setVisibility(View.VISIBLE);
+
+            final InventoryAdapter inventoryAdapter = new InventoryAdapter(getContext(), inventory, equipped);
+            inventoryGrid.setAdapter(inventoryAdapter);
+
+            inventoryGrid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                    new Inventory.AsyncEquipped(inventoryAdapter).execute(item_id[i],loginToken);
+                    new Inventory.AsyncInventory(loginToken,inventoryGrid).execute();
+                }
+            });
+        }
+
+
 
         return rootView;
     }
@@ -121,10 +147,10 @@ public class Inventory extends Fragment {
                 final JSONArray inventory = obj.getJSONArray("inventory");
                 JSONArray equipped = obj.getJSONArray("equipped");
                 System.out.println(obj);
-                System.out.println("Your Gold: " + obj.getString("gold"));
-                System.out.println("Your Level: " + obj.getString("level"));
-                System.out.println("Experience needed: " + obj.getString("exp_needed"));
                 ((TabsActivity) getActivity()).setGold(obj.getString("gold"));
+                ((TabsActivity) getActivity()).setUsername(obj.getString("username"));
+                ((TabsActivity) getActivity()).setExp_needed(obj.getString("exp_needed"));
+                ((TabsActivity) getActivity()).setLevel(obj.getString("level"));
 
                 startProgressbar.setVisibility(View.INVISIBLE);
 

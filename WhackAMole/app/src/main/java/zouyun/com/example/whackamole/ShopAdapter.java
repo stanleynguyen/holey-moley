@@ -88,9 +88,6 @@ public class ShopAdapter extends BaseAdapter {
             shopLevel.setText(itemLevel);
             shopPrice.setText(itemPrice);
 
-            System.out.println("price: " + item.get("price").toString());
-            System.out.println("gold: " + gold);
-
             try {
                 if (Integer.parseInt(item.get("price").toString()) > Integer.parseInt(gold)) {
                     itemIcon.setAlpha(0.6f);

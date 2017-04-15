@@ -3,6 +3,7 @@ package zouyun.com.example.whackamole;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -121,10 +122,10 @@ public class Inventory extends Fragment {
                 final JSONArray inventory = obj.getJSONArray("inventory");
                 JSONArray equipped = obj.getJSONArray("equipped");
                 System.out.println(obj);
-                System.out.println("Your Gold: " + obj.getString("gold"));
-                System.out.println("Your Level: " + obj.getString("level"));
-                System.out.println("Experience needed: " + obj.getString("exp_needed"));
                 ((TabsActivity) getActivity()).setGold(obj.getString("gold"));
+                ((TabsActivity) getActivity()).setUsername(obj.getString("username"));
+                ((TabsActivity) getActivity()).setExp_needed(obj.getString("exp_needed"));
+                ((TabsActivity) getActivity()).setLevel(obj.getString("level"));
 
                 startProgressbar.setVisibility(View.INVISIBLE);
 

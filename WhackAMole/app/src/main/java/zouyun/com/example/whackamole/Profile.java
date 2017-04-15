@@ -45,7 +45,37 @@ public class Profile extends Fragment {
         username.setTypeface(custom_font);
         gold.setTypeface(custom_font);
         level.setTypeface(custom_font);
-        
+        experience.setTypeface(custom_font);
+
+        String username_get = ((TabsActivity) getActivity()).getUsername();
+        String gold_get = ((TabsActivity) getActivity()).getGold();
+        String level_get = ((TabsActivity) getActivity()).getLevel();
+        String experience_get = ((TabsActivity) getActivity()).getExp_needed();
+
+        System.out.println("username: " + username_get);
+        System.out.println("gold_get: " + gold_get);
+        System.out.println("level get: " + level_get);
+        System.out.println("experience get:" + experience_get);
+        String status = experience_get + " more to level up!";
+
+        username.setText(username_get);
+        gold.setText("GOLD: " + gold_get);
+        level.setText("LEVEL: " + level_get);
+        experience.setText(status);
+
+        int maxExp = 0;
+        try {
+            maxExp = Integer.parseInt(level_get) * 200;
+            exp_bar.setMax(maxExp);
+            exp_bar.setProgress(maxExp - Integer.parseInt(experience_get));
+        } catch (NumberFormatException w) {
+            System.out.println(w);
+            experience.setText("Error fetching exp...");
+        }
+
+
+
+
         return rootView;
     }
 }

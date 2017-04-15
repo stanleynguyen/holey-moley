@@ -60,31 +60,6 @@ public class Inventory extends Fragment {
         loginToken = getArguments().getString("token");
 
         new Inventory.AsyncInventory(loginToken, inventoryGrid).execute();
-        String[] inventory = ((TabsActivity) getActivity()).getInventory();
-        String[] equipped = ((TabsActivity) getActivity()).getEquipped();
-        final String[] item_id = ((TabsActivity) getActivity()).getItem_id();
-        startProgressbar.setVisibility(View.INVISIBLE);
-
-        // in the case of an empty inventory, show a message saying it's empty
-        if (inventory.length == 0) {
-            inventoryGrid.setVisibility(View.INVISIBLE);
-            emptyInventory.setVisibility(View.VISIBLE);
-        } else {
-            inventoryGrid.setVisibility(View.VISIBLE);
-
-            final InventoryAdapter inventoryAdapter = new InventoryAdapter(getContext(), inventory, equipped);
-            inventoryGrid.setAdapter(inventoryAdapter);
-
-            inventoryGrid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                    new Inventory.AsyncEquipped(inventoryAdapter).execute(item_id[i],loginToken);
-                    new Inventory.AsyncInventory(loginToken,inventoryGrid).execute();
-                }
-            });
-        }
-
-
 
         return rootView;
     }

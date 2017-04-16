@@ -166,7 +166,7 @@ public class GameActivity extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
         AssetManager am = getApplicationContext().getAssets();
         Typeface typeface1 = Typeface.createFromAsset(am,
-                String.format("fonts/moonflowerbold.ttf"));
+                String.format("fonts/MoonFlowerBold.ttf"));
         Typeface typeface2 = Typeface.createFromAsset(am,
                 String.format("fonts/big_noodle_titling.ttf"));
 
@@ -804,6 +804,14 @@ while(!isOver){
 
     void gameOver() {
 
+    }
+
+    public boolean getCanStart() {
+        return canStart;
+    }
+
+    public void setCanStart(boolean state) {
+        canStart = state;
     }
 
 

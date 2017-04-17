@@ -441,5 +441,11 @@ threads which do all the processing.
 
 ### Java/Android
 
-*Insert write-up for whatever is used for Android concurrency*
+The game requires multiple tasks to execute simultaneously, e.g. moving the mole up and down while informing server the special power employed. Since there are a lot of animations in fast pace, it is important to utilize resources effectively, hence multithreading is used to improve performance and avoid busy waiting. Multithreading is especially used to make sure that certain action is triggered only when certain requirement is fulfilled. By using wait() and notifyAll(), busy waiting is avoided and computational space is saved. For example, in our game design, we will need the user to accumulate certain amount of energy (mana) in order to enable a special power. Hence every time a mole is popping out, the energy level is checked and if it passes the basic requirement, notifyAll() will wake up every thread that is waiting on the lock, then subsequent action will be performed. The diagram can be seen below. 
+
+![browserthreading](/documentation/images/multithread_diagram.png)
+
+In the player thread, each method is synchronized to achieve thread-safety so that only one operation in the player thread is able to operate at a time. Since the operations in the player thread are mainly number calculation takes minimal time, starvation is unlikely to happen to affect the performance. 
+
+
 

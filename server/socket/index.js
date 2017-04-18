@@ -1,11 +1,10 @@
 const jwt = require('jsonwebtoken');
 const User = require('../models/user');
 let waitingQueue = [];
+let playerBook = {};
 
 module.exports = (server) => {
   const io = require('socket.io')(server);
-  
-  let playerBook = {};
   
   io.on('connection', (socket) => {
     
@@ -82,7 +81,7 @@ module.exports = (server) => {
   
 };
 
-function checkQ(io, playerBook) {
+function checkQ(io) {
   if (waitingQueue.length < 2) return;
   const player1 = waitingQueue[0];
   const player2 = waitingQueue[1];

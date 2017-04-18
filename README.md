@@ -398,12 +398,21 @@ screenshot is 100% test coverage
 ![test coverage](/documentation/screenshots/test.png)
 
 ### Android App Testing
-
-*Insert whatever lib choice and explanation for it*
+The unit test cases for Android App are implemented using [Android Instrumented Unit Tests](https://developer.android.com/training/testing/unit-testing/instrumented-unit-tests.html).
+Instrumented unit tests are tests that run on physical devices and emulators, and they can take advantage of the Android framework APIs and supporting APIs. Such unit tests are more reliable due to the fact that the they run on an instance of Android on a device or an emulator with access to the real device and its resources. However, the speed of execution is noticeably slower.
 
 #### Getting Started
 
-*Insert how to run the test*
+
+Before running the unit test cases, there are some run configurations to edit.
+1. Click __Run__ > __Edit Configurations__ from the main menu
+2. Click __Add New Configurations__ and select __Android Tests__
+3. In the __Name__ field, enter a name for your new configuration (eg.MyTest).
+4. In the __Module__ dropdown menu, select __app__
+5. For __Test__, select __All in Module__
+6. Click __OK__
+
+Now you can simply run the unit test cases by clicking __Run__.
 
 #### Test Cases
 

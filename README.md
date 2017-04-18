@@ -182,12 +182,14 @@ update, usage of items
 
 ### Overall Architecture and Technologies Stack
 
+![Overall Model](/documentation/images/overallmodel.png)
+
 The server is written in [NodeJS](https://nodejs.org/) using 
 a minimal frameworks called 
 [Express](https://expressjs.com/).
 The database used is [MongoDB](https://www.mongodb.com/).
 The web application is in HTML, CSS, and Javascript without 
-any external library.The mobile application is written in 
+any external library. The mobile application is written in 
 Java with [Android Studio](https://developer.android.com/studio/index.html).
 For  realtime communication, [Socket.io](https://socket.io/)
 is used.
@@ -199,8 +201,6 @@ Below are the communication models:
 ### Web App Architecture
 
 #### Code Structure (inside /server folder)
-
-*Insert Image of file structure*
 
 The web app is structure based on the Model/View/Controllers
 pattern. Explanation for each folder is below:
@@ -312,7 +312,35 @@ privacy and security.
 
 #### Code Structure (inside /WhackAMole folder)
 
-*Insert Image of file structure and explanations*
+__/app/src/main/java/zouyun/com/example/whackamole: contains 
+all our java codes for the activities__
+
+- *WelcomeActivity.java*: default page on open, for users to 
+login or register
+- *TabsActivity.java*: game lobby that implements fragments 
+for each page
+- *Game.java*: fragment that allows user to choose the game 
+mode
+- *Inventory.java*: fragment that allows user to view their 
+inventory and equip skills
+- *InventoryAdapter.java*: extends BaseAdapter to populate 
+the inventory
+- *Shop.java*: fragment that allows user to view the shop 
+and buy skills
+- *ShopAdapter.java*: extends BaseAdapter to populate the 
+shop
+- *Profile.java*: fragment that shows user their profile
+- *Parser.java*: a class to handle parsing of JSONArrays to 
+Java arrays
+- *GameActivity.java*: activity where the user plays the game
+
+__/app/src/main/res: contains our resources for the game__
+
+- */drawable*: contains assets in .png and .xml
+- */layout*: contains activity layouts
+- */values*: contains colour, dimensions, styles and string 
+values
+- */mipmap-**: contains our app logo
 
 #### Java
 
@@ -441,11 +469,57 @@ threads which do all the processing.
 
 ### Java/Android
 
-The game requires multiple tasks to execute simultaneously, e.g. moving the mole up and down while informing server the special power employed. Since there are a lot of animations in fast pace, it is important to utilize resources effectively, hence multithreading is used to improve performance and avoid busy waiting. Multithreading is especially used to make sure that certain action is triggered only when certain requirement is fulfilled. By using wait() and notifyAll(), busy waiting is avoided and computational space is saved. For example, in our game design, we will need the user to accumulate certain amount of energy (mana) in order to enable a special power. Hence every time a mole is popping out, the energy level is checked and if it passes the basic requirement, notifyAll() will wake up every thread that is waiting on the lock, then subsequent action will be performed. The diagram can be seen below. 
+#### Android Gameplay Concurrency
 
-![browserthreading](/documentation/images/multithread_diagram.png)
+The game requires multiple tasks to execute simultaneously, 
+e.g. moving the mole up and down while informing server the 
+special power employed. Since there are a lot of animations 
+in fast pace, it is important to utilize resources 
+effectively, hence multithreading is used to improve 
+performance and avoid busy waiting. Multithreading is 
+especially used to make sure that certain action is 
+triggered only when certain requirement is fulfilled. By 
+using wait() and notifyAll(), busy waiting is avoided and 
+computational space is saved. For example, in our game 
+design, we will need the user to accumulate certain amount 
+of energy (mana) in order to enable a special power. Hence 
+every time a mole is popping out, the energy level is 
+checked and if it passes the basic requirement, notifyAll() 
+will wake up every thread that is waiting on the lock, then 
+subsequent action will be performed. The diagram can be seen 
+below. 
 
-In the player thread, each method is synchronized to achieve thread-safety so that only one operation in the player thread is able to operate at a time. Since the operations in the player thread are mainly number calculation takes minimal time, starvation is unlikely to happen to affect the performance. 
+![game threading](/documentation/images/multithread_diagram.png)
 
+In the player thread, each method is synchronized to achieve 
+thread-safety so that only one operation in the player 
+thread is able to operate at a time. Since the operations in 
+the player thread are mainly number calculation takes 
+minimal time, starvation is unlikely to happen to affect the 
+performance. 
 
+#### Android UI Concurrency
 
+The user interface from the login page to the game lobby are 
+made concurrent using AsyncTask. AsyncTask enables proper 
+and easy use of the UI thread, allowing us to perform 
+background operations and publish results on the UI thread 
+without having to manipulate threads or handlers. 
+
+Information is fetched from the server in the background to 
+allow users to log in or register, as well as to get data to 
+populate the shop, inventory and user profile. Since the 
+fetching operation is expected to be short (depending on 
+network connection), AsyncTask would work well for our 
+application. 
+
+When the background computation finishes, the 
+onPostExecute() method will run, and the UI elements will be 
+updated. For instance, the game lobby activity will first 
+check for the user’s information in the background. During 
+this short period of checking, a loading spinner will be 
+shown while the inventory’s grid view is hidden. Once the 
+user data is received, the inventory’s grid view is populate 
+and shown to the user.
+
+![Android UI Concurrency](/documentation/images/androiduiconcurrency.png)

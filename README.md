@@ -540,6 +540,14 @@ and shown to the user.
 
 ![Android UI Concurrency](/documentation/images/androiduiconcurrency.png)
 
+## Team Members 
+
+*Team #11*
+- Kai Lue (1001779)
+- Ruth Wong (1001795)
+- Stanley Nguyen (1001692)
+- Zou Yun (1001831)
+
 ## Acknowledgement
 
 *SUTD 50.003 Elements of Software Construction Instructors 

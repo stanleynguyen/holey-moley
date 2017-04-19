@@ -414,12 +414,16 @@ Before running the unit test cases, there are some run configurations to edit.
 6. For __Deployment Target Options__ > __Target__, I suggest selecting __Open Select Deployment Target Dialog__
 7. Click __OK__
 
-Now you can simply run the unit test cases by clicking __Run__ and select the deployment target, which can be a connected Android device or an emulator.
+Now you can simply run the unit test cases by clicking __Run__ and select the deployment target, which can be a connected Android device or an emulator. <br/>
+__Note:__ Please ensure that the screen of the device is on at all time when running the test cases.
 
 #### Test Cases
+__Game Play__
+![test results](/documentation/images/gameplay&socket.PNG)
+<br/>
+__Server Login/Register__
+![test result2](/documentation/images/serverloginregister.PNG)
 
-*Insert the tests carried out with a screenshot of test 
-coverage*
 
 ## Concurrency
 

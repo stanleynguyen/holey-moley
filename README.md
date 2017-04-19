@@ -340,7 +340,7 @@ __/app/src/main/res: contains our resources for the game__
 - */layout*: contains activity layouts
 - */values*: contains colour, dimensions, styles and string 
 values
-- */mipmap-**: contains our app logo
+- _/mipmap-*_: contains our app logo
 
 #### Java
 
@@ -539,3 +539,13 @@ user data is received, the inventory’s grid view is populate
 and shown to the user.
 
 ![Android UI Concurrency](/documentation/images/androiduiconcurrency.png)
+
+## Acknowledgement
+
+*SUTD 50.003 Elements of Software Construction Instructors 
+and TAs:*
+
+- Prof. Sun Jun
+- Prof. Sudipta Chattopadhyay
+- Pham Hong Long 
+- Chen Yuqi

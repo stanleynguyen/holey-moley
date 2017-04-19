@@ -418,11 +418,12 @@ Now you can simply run the unit test cases by clicking __Run__ and select the de
 __Note:__ Please ensure that the screen of the device is on at all time when running the test cases.
 
 #### Test Cases
-__Game Play__
-![test results](/documentation/images/gameplay&socket.PNG)
-<br/>
-__Server Login/Register__
-![test result2](/documentation/images/serverloginregister.PNG)
+
+- __Game Play__
+![test results](/documentation/screenshots/gameplay&socket.PNG)
+
+- __Server Login/Register__
+![test result2](/documentation/screenshots/serverloginregister.PNG)
 
 
 ## Concurrency

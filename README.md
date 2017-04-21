@@ -29,7 +29,8 @@ can be played with smart phones. Inside __Holey Moley__, you
 can battle other players in a Whack-A-Mole showdown where 
 you can use items to affect your opponent. Experience and 
 Gold can be earn through matches for acquiring more powerful 
-items.
+items. This Gold-for-special-powers system is designed to 
+motivate the players to keep playing to accumulate Gold.
 
 ## Game Components
 
